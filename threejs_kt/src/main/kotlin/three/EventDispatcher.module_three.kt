@@ -28,7 +28,7 @@ external interface Event {
     operator fun set(attachment: String, value: Any)
 }
 
-external interface `T$0` {
+external interface `T$8` {
     var type: String
     @nativeGetter
     operator fun get(attachment: String): Any?
@@ -40,5 +40,5 @@ open external class EventDispatcher {
     open fun addEventListener(type: String, listener: (event: Event) -> Unit)
     open fun hasEventListener(type: String, listener: (event: Event) -> Unit): Boolean
     open fun removeEventListener(type: String, listener: (event: Event) -> Unit)
-    open fun dispatchEvent(event: `T$0`)
+    open fun dispatchEvent(event: `T$8`)
 }

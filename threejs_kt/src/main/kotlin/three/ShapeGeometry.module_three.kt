@@ -18,8 +18,8 @@ import org.w3c.workers.*
 import org.w3c.xhr.*
 
 open external class ShapeGeometry : Geometry {
-    constructor(shapes: Shape, curveSegments: Number)
-    constructor(shapes: Array<Shape>, curveSegments: Number)
+    constructor(shapes: Shape, curveSegments: Number = definedExternally)
+    constructor(shapes: Array<Shape>, curveSegments: Number = definedExternally)
     open fun addShapeList(shapes: Array<Shape>, options: Any): ShapeGeometry
     open fun addShape(shape: Shape, options: Any = definedExternally)
 }

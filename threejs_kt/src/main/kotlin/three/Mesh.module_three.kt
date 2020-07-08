@@ -17,7 +17,7 @@ import org.w3c.performance.*
 import org.w3c.workers.*
 import org.w3c.xhr.*
 
-external interface `T$20` {
+external interface `T$19` {
     @nativeGetter
     operator fun get(key: String): Number?
     @nativeSetter
@@ -25,14 +25,14 @@ external interface `T$20` {
 }
 
 open external class Mesh : Object3D {
-    constructor(geometry: Geometry, material: Material)
-    constructor(geometry: Geometry, material: Array<Material>)
-    constructor(geometry: BufferGeometry, material: Material)
-    constructor(geometry: BufferGeometry, material: Array<Material>)
+    constructor(geometry: Geometry = definedExternally, material: Material = definedExternally)
+    constructor(geometry: Geometry = definedExternally, material: Array<Material> = definedExternally)
+    constructor(geometry: BufferGeometry = definedExternally, material: Material = definedExternally)
+    constructor(geometry: BufferGeometry = definedExternally, material: Array<Material> = definedExternally)
     open var geometry: dynamic /* Geometry | BufferGeometry */
     open var material: dynamic /* Material | Array<Material> */
     open var morphTargetInfluences: Array<Number>
-    open var morphTargetDictionary: `T$20`
+    open var morphTargetDictionary: `T$19`
     open var isMesh: Boolean
     override var type: String
     open fun updateMorphTargets()

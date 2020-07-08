@@ -18,10 +18,10 @@ import org.w3c.workers.*
 import org.w3c.xhr.*
 
 open external class GridHelper : LineSegments {
-    constructor(size: Number, divisions: Number, color1: Color, color2: Color)
-    constructor(size: Number, divisions: Number, color1: Color, color2: Number)
-    constructor(size: Number, divisions: Number, color1: Number, color2: Color)
-    constructor(size: Number, divisions: Number, color1: Number, color2: Number)
+    constructor(size: Number, divisions: Number, color1: Color = definedExternally, color2: Color = definedExternally)
+    constructor(size: Number, divisions: Number, color1: Color = definedExternally, color2: Number = definedExternally)
+    constructor(size: Number, divisions: Number, color1: Number = definedExternally, color2: Color = definedExternally)
+    constructor(size: Number, divisions: Number, color1: Number = definedExternally, color2: Number = definedExternally)
     open fun setColors(color1: Color = definedExternally, color2: Color = definedExternally)
     open fun setColors(color1: Color = definedExternally, color2: Number = definedExternally)
     open fun setColors(color1: Number = definedExternally, color2: Color = definedExternally)

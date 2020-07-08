@@ -24,8 +24,8 @@ open external class PositionalAudio(listener: AudioListener) : Audio<PannerNode>
     open fun getRefDistance(): Number
     open fun setRolloffFactor(value: Number): PositionalAudio /* this */
     open fun getRolloffFactor(): Number
-    open fun setDistanceModel(value: String /* "linear" | "inverse" | "exponential" */): PositionalAudio /* this */
-    open fun getDistanceModel(): String /* "linear" | "inverse" | "exponential" */
+    open fun setDistanceModel(value: String /* "exponential" | "inverse" | "linear" */): PositionalAudio /* this */
+    open fun getDistanceModel(): String /* "exponential" | "inverse" | "linear" */
     open fun setMaxDistance(value: Number): PositionalAudio /* this */
     open fun getMaxDistance(): Number
     open fun setDirectionalCone(coneInnerAngle: Number, coneOuterAngle: Number, coneOuterGain: Number): PositionalAudio /* this */

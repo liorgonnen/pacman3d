@@ -43,14 +43,14 @@ open external class WebGLStencilBuffer {
     open fun reset()
 }
 
-external interface `T$9` {
+external interface `T$12` {
     var color: WebGLColorBuffer
     var depth: WebGLDepthBuffer
     var stencil: WebGLStencilBuffer
 }
 
 open external class WebGLState(gl: WebGLRenderingContext, extensions: WebGLExtensions, capabilities: WebGLCapabilities) {
-    open var buffers: `T$9`
+    open var buffers: `T$12`
     open fun initAttributes()
     open fun enableAttribute(attribute: Number)
     open fun enableAttributeAndDivisor(attribute: Number, meshPerAttribute: Number)

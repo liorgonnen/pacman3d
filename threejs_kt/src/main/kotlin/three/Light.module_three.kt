@@ -18,8 +18,8 @@ import org.w3c.workers.*
 import org.w3c.xhr.*
 
 open external class Light : Object3D {
-    constructor(hex: Number, intensity: Number)
-    constructor(hex: String, intensity: Number)
+    constructor(hex: Number = definedExternally, intensity: Number = definedExternally)
+    constructor(hex: String = definedExternally, intensity: Number = definedExternally)
     open var color: Color
     open var intensity: Number
     open var isLight: Boolean

@@ -41,7 +41,7 @@ external interface Intersection {
         set(value) = definedExternally
 }
 
-external interface `T$21` {
+external interface `T$20` {
     var threshold: Number
 }
 
@@ -49,13 +49,13 @@ external interface RaycasterParameters {
     var Mesh: Any?
         get() = definedExternally
         set(value) = definedExternally
-    var Line: `T$21`?
+    var Line: `T$20`?
         get() = definedExternally
         set(value) = definedExternally
     var LOD: Any?
         get() = definedExternally
         set(value) = definedExternally
-    var Points: `T$21`?
+    var Points: `T$20`?
         get() = definedExternally
         set(value) = definedExternally
     var Sprite: Any?
@@ -71,7 +71,7 @@ open external class Raycaster(origin: Vector3 = definedExternally, direction: Ve
     open var layers: Layers
     open var params: RaycasterParameters
     open fun set(origin: Vector3, direction: Vector3)
-    open fun setFromCamera(coords: `T$12`, camera: Camera)
+    open fun setFromCamera(coords: `T$3`, camera: Camera)
     open fun intersectObject(obj: Object3D, recursive: Boolean = definedExternally, optionalTarget: Array<Intersection> = definedExternally): Array<Intersection>
     open fun intersectObjects(objects: Array<Object3D>, recursive: Boolean = definedExternally, optionalTarget: Array<Intersection> = definedExternally): Array<Intersection>
 }

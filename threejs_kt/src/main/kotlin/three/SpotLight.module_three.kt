@@ -18,9 +18,9 @@ import org.w3c.workers.*
 import org.w3c.xhr.*
 
 open external class SpotLight : Light {
-    constructor(color: Color, intensity: Number, distance: Number, angle: Number, penumbra: Number, decay: Number)
-    constructor(color: String, intensity: Number, distance: Number, angle: Number, penumbra: Number, decay: Number)
-    constructor(color: Number, intensity: Number, distance: Number, angle: Number, penumbra: Number, decay: Number)
+    constructor(color: Color = definedExternally, intensity: Number = definedExternally, distance: Number = definedExternally, angle: Number = definedExternally, penumbra: Number = definedExternally, decay: Number = definedExternally)
+    constructor(color: String = definedExternally, intensity: Number = definedExternally, distance: Number = definedExternally, angle: Number = definedExternally, penumbra: Number = definedExternally, decay: Number = definedExternally)
+    constructor(color: Number = definedExternally, intensity: Number = definedExternally, distance: Number = definedExternally, angle: Number = definedExternally, penumbra: Number = definedExternally, decay: Number = definedExternally)
     open var target: Object3D
     override var intensity: Number
     open var distance: Number

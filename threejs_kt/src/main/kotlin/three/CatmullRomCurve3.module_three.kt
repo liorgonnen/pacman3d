@@ -17,17 +17,6 @@ import org.w3c.performance.*
 import org.w3c.workers.*
 import org.w3c.xhr.*
 
-external interface `T$25` {
-    var vertices: Array<Number>
-    var indices: Array<Number>
-    var radius: Number
-    var detail: Number
-}
-
-open external class PolyhedronBufferGeometry(vertices: Array<Number>, indices: Array<Number>, radius: Number = definedExternally, detail: Number = definedExternally) : BufferGeometry {
-    open var parameters: `T$25`
-}
-
-open external class PolyhedronGeometry(vertices: Array<Number>, indices: Array<Number>, radius: Number = definedExternally, detail: Number = definedExternally) : Geometry {
-    open var parameters: `T$25`
+open external class CatmullRomCurve3(points: Array<Vector3> = definedExternally, closed: Boolean = definedExternally, curveType: String = definedExternally, tension: Number = definedExternally) : Curve<Vector3> {
+    open var points: Array<Vector3>
 }

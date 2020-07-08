@@ -18,8 +18,8 @@ import org.w3c.workers.*
 import org.w3c.xhr.*
 
 open external class AmbientLightProbe : LightProbe {
-    constructor(color: Color, intensity: Number)
-    constructor(color: String, intensity: Number)
-    constructor(color: Number, intensity: Number)
+    constructor(color: Color = definedExternally, intensity: Number = definedExternally)
+    constructor(color: String = definedExternally, intensity: Number = definedExternally)
+    constructor(color: Number = definedExternally, intensity: Number = definedExternally)
     open var isAmbientLightProbe: Boolean
 }

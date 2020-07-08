@@ -18,10 +18,10 @@ import org.w3c.workers.*
 import org.w3c.xhr.*
 
 open external class LineLoop : Line {
-    constructor(geometry: Geometry, material: Material)
-    constructor(geometry: Geometry, material: Array<Material>)
-    constructor(geometry: BufferGeometry, material: Material)
-    constructor(geometry: BufferGeometry, material: Array<Material>)
+    constructor(geometry: Geometry = definedExternally, material: Material = definedExternally)
+    constructor(geometry: Geometry = definedExternally, material: Array<Material> = definedExternally)
+    constructor(geometry: BufferGeometry = definedExternally, material: Material = definedExternally)
+    constructor(geometry: BufferGeometry = definedExternally, material: Array<Material> = definedExternally)
     override var type: String /* 'LineLoop' */
     open var isLineLoop: Boolean
 }

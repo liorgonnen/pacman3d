@@ -17,17 +17,13 @@ import org.w3c.performance.*
 import org.w3c.workers.*
 import org.w3c.xhr.*
 
-external interface `T$25` {
-    var vertices: Array<Number>
-    var indices: Array<Number>
-    var radius: Number
-    var detail: Number
-}
-
-open external class PolyhedronBufferGeometry(vertices: Array<Number>, indices: Array<Number>, radius: Number = definedExternally, detail: Number = definedExternally) : BufferGeometry {
-    open var parameters: `T$25`
-}
-
-open external class PolyhedronGeometry(vertices: Array<Number>, indices: Array<Number>, radius: Number = definedExternally, detail: Number = definedExternally) : Geometry {
-    open var parameters: `T$25`
+open external class EllipseCurve(aX: Number, aY: Number, xRadius: Number, yRadius: Number, aStartAngle: Number, aEndAngle: Number, aClockwise: Boolean, aRotation: Number) : Curve<Vector2> {
+    open var aX: Number
+    open var aY: Number
+    open var xRadius: Number
+    open var yRadius: Number
+    open var aStartAngle: Number
+    open var aEndAngle: Number
+    open var aClockwise: Boolean
+    open var aRotation: Number
 }

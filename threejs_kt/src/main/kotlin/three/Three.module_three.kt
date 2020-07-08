@@ -39,3 +39,5 @@ external interface AnalyserNode
 external interface ArrayLike<T>
 
 external interface WebGL2RenderingContext
+
+external interface ProgresssEvent

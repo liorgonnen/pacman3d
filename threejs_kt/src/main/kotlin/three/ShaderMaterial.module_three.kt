@@ -79,7 +79,7 @@ external interface `T$40` {
 }
 
 open external class ShaderMaterial(parameters: ShaderMaterialParameters = definedExternally) : Material {
-    open var uniforms: `T$6`
+    open var uniforms: `T$7`
     open var vertexShader: String
     open var fragmentShader: String
     open var linewidth: Number

@@ -36,7 +36,7 @@ open external class PerspectiveCamera(fov: Number = definedExternally, aspect: N
     open var near: Number
     open var far: Number
     open var focus: Number
-    open var view: `T$45`
+    open var view: `T$45`?
     open var filmGauge: Number
     open var filmOffset: Number
     open fun setFocalLength(focalLength: Number)
@@ -48,6 +48,6 @@ open external class PerspectiveCamera(fov: Number = definedExternally, aspect: N
     open fun clearViewOffset()
     open fun updateProjectionMatrix()
     open fun toJSON(meta: Any = definedExternally): Any
-    override fun toJSON(meta: `T$5`): Any
+    override fun toJSON(meta: `T$0`): Any
     open fun setLens(focalLength: Number, frameHeight: Number = definedExternally)
 }

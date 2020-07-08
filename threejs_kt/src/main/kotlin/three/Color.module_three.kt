@@ -23,10 +23,11 @@ external interface HSL {
     var l: Number
 }
 
-open external class Color(r: Number, g: Number, b: Number) {
-    constructor(color: Color)
-    constructor(color: String)
-    constructor(color: Number)
+open external class Color {
+    constructor(color: Color = definedExternally)
+    constructor(color: String = definedExternally)
+    constructor(color: Number = definedExternally)
+    constructor(r: Number, g: Number, b: Number)
     open var isColor: Boolean
     open var r: Number
     open var g: Number

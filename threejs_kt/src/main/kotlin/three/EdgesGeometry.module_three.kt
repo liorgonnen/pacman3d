@@ -18,6 +18,6 @@ import org.w3c.workers.*
 import org.w3c.xhr.*
 
 open external class EdgesGeometry : BufferGeometry {
-    constructor(geometry: BufferGeometry, thresholdAngle: Number)
-    constructor(geometry: Geometry, thresholdAngle: Number)
+    constructor(geometry: BufferGeometry, thresholdAngle: Number = definedExternally)
+    constructor(geometry: Geometry, thresholdAngle: Number = definedExternally)
 }

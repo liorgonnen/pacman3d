@@ -17,7 +17,7 @@ import org.w3c.performance.*
 import org.w3c.workers.*
 import org.w3c.xhr.*
 
-external interface `T$6` {
+external interface `T$7` {
     @nativeGetter
     operator fun get(uniform: String): IUniform?
     @nativeSetter
@@ -25,7 +25,7 @@ external interface `T$6` {
 }
 
 external interface Shader {
-    var uniforms: `T$6`
+    var uniforms: `T$7`
     var vertexShader: String
     var fragmentShader: String
 }

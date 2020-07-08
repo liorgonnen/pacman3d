@@ -18,9 +18,9 @@ import org.w3c.workers.*
 import org.w3c.xhr.*
 
 open external class DirectionalLightHelper : Object3D {
-    constructor(light: DirectionalLight, size: Number, color: Color)
-    constructor(light: DirectionalLight, size: Number, color: String)
-    constructor(light: DirectionalLight, size: Number, color: Number)
+    constructor(light: DirectionalLight, size: Number = definedExternally, color: Color = definedExternally)
+    constructor(light: DirectionalLight, size: Number = definedExternally, color: String = definedExternally)
+    constructor(light: DirectionalLight, size: Number = definedExternally, color: Number = definedExternally)
     open var light: DirectionalLight
     open var lightPlane: Line
     open var targetLine: Line

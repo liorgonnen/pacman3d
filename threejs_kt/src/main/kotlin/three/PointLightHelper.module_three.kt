@@ -18,9 +18,9 @@ import org.w3c.workers.*
 import org.w3c.xhr.*
 
 open external class PointLightHelper : Object3D {
-    constructor(light: PointLight, sphereSize: Number, color: Color)
-    constructor(light: PointLight, sphereSize: Number, color: String)
-    constructor(light: PointLight, sphereSize: Number, color: Number)
+    constructor(light: PointLight, sphereSize: Number = definedExternally, color: Color = definedExternally)
+    constructor(light: PointLight, sphereSize: Number = definedExternally, color: String = definedExternally)
+    constructor(light: PointLight, sphereSize: Number = definedExternally, color: Number = definedExternally)
     open var light: PointLight
     open var color: dynamic /* Color? | String? | Number? */
     override var matrix: Matrix4

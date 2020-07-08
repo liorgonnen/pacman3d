@@ -17,7 +17,7 @@ import org.w3c.performance.*
 import org.w3c.workers.*
 import org.w3c.xhr.*
 
-external interface `T$22` {
+external interface `T$21` {
     var start: Number
     var materialIndex: Number
 }
@@ -33,7 +33,7 @@ open external class DirectGeometry {
     open var colors: Array<Color>
     open var uvs: Array<Vector2>
     open var uvs2: Array<Vector2>
-    open var groups: Array<`T$22`>
+    open var groups: Array<`T$21`>
     open var morphTargets: Array<MorphTarget>
     open var skinWeights: Array<Vector4>
     open var skinIndices: Array<Vector4>

@@ -21,7 +21,7 @@ open external class InterleavedBuffer(array: ArrayLike<Number>, stride: Number) 
     open var array: ArrayLike<Number>
     open var stride: Number
     open var usage: Usage
-    open var updateRange: `T$10`
+    open var updateRange: `T$1`
     open var version: Number
     open var length: Number
     open var count: Number

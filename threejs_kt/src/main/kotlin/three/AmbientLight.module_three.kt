@@ -18,9 +18,9 @@ import org.w3c.workers.*
 import org.w3c.xhr.*
 
 open external class AmbientLight : Light {
-    constructor(color: Color, intensity: Number)
-    constructor(color: String, intensity: Number)
-    constructor(color: Number, intensity: Number)
+    constructor(color: Color = definedExternally, intensity: Number = definedExternally)
+    constructor(color: String = definedExternally, intensity: Number = definedExternally)
+    constructor(color: Number = definedExternally, intensity: Number = definedExternally)
     override var castShadow: Boolean
     open var isAmbientLight: Boolean
 }

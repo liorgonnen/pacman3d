@@ -17,7 +17,7 @@ import org.w3c.performance.*
 import org.w3c.workers.*
 import org.w3c.xhr.*
 
-external interface `T$16` {
+external interface `T$15` {
     @nativeGetter
     operator fun get(name: String): dynamic /* BufferAttribute? | InterleavedBufferAttribute? */
     @nativeSetter
@@ -26,14 +26,14 @@ external interface `T$16` {
     operator fun set(name: String, value: InterleavedBufferAttribute)
 }
 
-external interface `T$17` {
+external interface `T$16` {
     @nativeGetter
     operator fun get(name: String): Array<dynamic /* BufferAttribute | InterleavedBufferAttribute */>?
     @nativeSetter
     operator fun set(name: String, value: Array<dynamic /* BufferAttribute | InterleavedBufferAttribute */>)
 }
 
-external interface `T$18` {
+external interface `T$17` {
     var start: Number
     var count: Number
     var materialIndex: Number?
@@ -41,7 +41,7 @@ external interface `T$18` {
         set(value) = definedExternally
 }
 
-external interface `T$19` {
+external interface `T$18` {
     var start: Number
     var count: Number
 }
@@ -52,13 +52,13 @@ open external class BufferGeometry : EventDispatcher {
     open var name: String
     open var type: String
     open var index: BufferAttribute?
-    open var attributes: `T$16`
-    open var morphAttributes: `T$17`
+    open var attributes: `T$15`
+    open var morphAttributes: `T$16`
     open var morphTargetsRelative: Boolean
-    open var groups: Array<`T$18`>
+    open var groups: Array<`T$17`>
     open var boundingBox: Box3?
     open var boundingSphere: Sphere?
-    open var drawRange: `T$19`
+    open var drawRange: `T$18`
     open var userData: Json
     open var isBufferGeometry: Boolean
     open fun getIndex(): BufferAttribute?

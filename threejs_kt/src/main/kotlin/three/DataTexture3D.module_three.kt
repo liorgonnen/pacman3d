@@ -17,4 +17,14 @@ import org.w3c.performance.*
 import org.w3c.workers.*
 import org.w3c.xhr.*
 
-open external class DataTexture3D(data: TypedArray, width: Number, height: Number, depth: Number) : Texture
+open external class DataTexture3D : Texture {
+    constructor(data: Int8Array, width: Number, height: Number, depth: Number)
+    constructor(data: Uint8Array, width: Number, height: Number, depth: Number)
+    constructor(data: Uint8ClampedArray, width: Number, height: Number, depth: Number)
+    constructor(data: Int16Array, width: Number, height: Number, depth: Number)
+    constructor(data: Uint16Array, width: Number, height: Number, depth: Number)
+    constructor(data: Int32Array, width: Number, height: Number, depth: Number)
+    constructor(data: Uint32Array, width: Number, height: Number, depth: Number)
+    constructor(data: Float32Array, width: Number, height: Number, depth: Number)
+    constructor(data: Float64Array, width: Number, height: Number, depth: Number)
+}

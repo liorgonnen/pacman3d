@@ -18,9 +18,9 @@ import org.w3c.workers.*
 import org.w3c.xhr.*
 
 open external class SpotLightHelper : Object3D {
-    constructor(light: Light, color: Color)
-    constructor(light: Light, color: String)
-    constructor(light: Light, color: Number)
+    constructor(light: Light, color: Color = definedExternally)
+    constructor(light: Light, color: String = definedExternally)
+    constructor(light: Light, color: Number = definedExternally)
     open var light: Light
     override var matrix: Matrix4
     override var matrixAutoUpdate: Boolean

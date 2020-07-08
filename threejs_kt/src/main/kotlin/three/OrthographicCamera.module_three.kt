@@ -21,7 +21,7 @@ open external class OrthographicCamera(left: Number, right: Number, top: Number,
     override var type: String /* 'OrthographicCamera' */
     open var isOrthographicCamera: Boolean
     open var zoom: Number
-    open var view: `T$45`
+    open var view: `T$45`?
     open var left: Number
     open var right: Number
     open var top: Number
@@ -32,5 +32,5 @@ open external class OrthographicCamera(left: Number, right: Number, top: Number,
     open fun setViewOffset(fullWidth: Number, fullHeight: Number, offsetX: Number, offsetY: Number, width: Number, height: Number)
     open fun clearViewOffset()
     open fun toJSON(meta: Any = definedExternally): Any
-    override fun toJSON(meta: `T$5`): Any
+    override fun toJSON(meta: `T$0`): Any
 }

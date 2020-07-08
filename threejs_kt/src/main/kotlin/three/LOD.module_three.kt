@@ -33,6 +33,6 @@ open external class LOD : Object3D {
     override fun raycast(raycaster: Raycaster, intersects: Array<Intersection>)
     open fun update(camera: Camera)
     open fun toJSON(meta: Any): Any
-    override fun toJSON(meta: `T$5`): Any
+    override fun toJSON(meta: `T$0`): Any
     open var objects: Array<Any>
 }

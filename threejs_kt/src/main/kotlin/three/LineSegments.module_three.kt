@@ -18,10 +18,10 @@ import org.w3c.workers.*
 import org.w3c.xhr.*
 
 open external class LineSegments : Line {
-    constructor(geometry: Geometry, material: Material, mode: Number)
-    constructor(geometry: Geometry, material: Array<Material>, mode: Number)
-    constructor(geometry: BufferGeometry, material: Material, mode: Number)
-    constructor(geometry: BufferGeometry, material: Array<Material>, mode: Number)
+    constructor(geometry: Geometry = definedExternally, material: Material = definedExternally, mode: Number = definedExternally)
+    constructor(geometry: Geometry = definedExternally, material: Array<Material> = definedExternally, mode: Number = definedExternally)
+    constructor(geometry: BufferGeometry = definedExternally, material: Material = definedExternally, mode: Number = definedExternally)
+    constructor(geometry: BufferGeometry = definedExternally, material: Array<Material> = definedExternally, mode: Number = definedExternally)
     override var type: String /* 'LineSegments' */
     open var isLineSegments: Boolean
 }

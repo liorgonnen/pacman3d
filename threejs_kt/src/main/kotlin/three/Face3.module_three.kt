@@ -17,10 +17,11 @@ import org.w3c.performance.*
 import org.w3c.workers.*
 import org.w3c.xhr.*
 
-open external class Face3(a: Number, b: Number, c: Number, normal: Vector3 = definedExternally, color: Color = definedExternally, materialIndex: Number = definedExternally) {
-    constructor(a: Number, b: Number, c: Number, normal: Vector3, vertexColors: Array<Color>, materialIndex: Number)
-    constructor(a: Number, b: Number, c: Number, vertexNormals: Array<Vector3>, color: Color, materialIndex: Number)
-    constructor(a: Number, b: Number, c: Number, vertexNormals: Array<Vector3>, vertexColors: Array<Color>, materialIndex: Number)
+open external class Face3 {
+    constructor(a: Number, b: Number, c: Number, normal: Vector3 = definedExternally, color: Color = definedExternally, materialIndex: Number = definedExternally)
+    constructor(a: Number, b: Number, c: Number, normal: Vector3 = definedExternally, vertexColors: Array<Color> = definedExternally, materialIndex: Number = definedExternally)
+    constructor(a: Number, b: Number, c: Number, vertexNormals: Array<Vector3> = definedExternally, color: Color = definedExternally, materialIndex: Number = definedExternally)
+    constructor(a: Number, b: Number, c: Number, vertexNormals: Array<Vector3> = definedExternally, vertexColors: Array<Color> = definedExternally, materialIndex: Number = definedExternally)
     open var a: Number
     open var b: Number
     open var c: Number

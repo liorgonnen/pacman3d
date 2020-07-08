@@ -26,6 +26,6 @@ open external class Scene : Object3D {
     open var environment: Texture?
     open var isScene: Boolean
     open fun toJSON(meta: Any = definedExternally): Any
-    override fun toJSON(meta: `T$5`): Any
+    override fun toJSON(meta: `T$0`): Any
     open fun dispose()
 }

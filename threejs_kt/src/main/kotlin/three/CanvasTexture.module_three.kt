@@ -18,7 +18,7 @@ import org.w3c.workers.*
 import org.w3c.xhr.*
 
 open external class CanvasTexture : Texture {
-    constructor(canvas: HTMLImageElement, mapping: Mapping, wrapS: Wrapping, wrapT: Wrapping, magFilter: TextureFilter, minFilter: TextureFilter, format: PixelFormat, type: TextureDataType, anisotropy: Number)
-    constructor(canvas: HTMLCanvasElement, mapping: Mapping, wrapS: Wrapping, wrapT: Wrapping, magFilter: TextureFilter, minFilter: TextureFilter, format: PixelFormat, type: TextureDataType, anisotropy: Number)
-    constructor(canvas: HTMLVideoElement, mapping: Mapping, wrapS: Wrapping, wrapT: Wrapping, magFilter: TextureFilter, minFilter: TextureFilter, format: PixelFormat, type: TextureDataType, anisotropy: Number)
+    constructor(canvas: HTMLImageElement, mapping: Mapping = definedExternally, wrapS: Wrapping = definedExternally, wrapT: Wrapping = definedExternally, magFilter: TextureFilter = definedExternally, minFilter: TextureFilter = definedExternally, format: PixelFormat = definedExternally, type: TextureDataType = definedExternally, anisotropy: Number = definedExternally)
+    constructor(canvas: HTMLCanvasElement, mapping: Mapping = definedExternally, wrapS: Wrapping = definedExternally, wrapT: Wrapping = definedExternally, magFilter: TextureFilter = definedExternally, minFilter: TextureFilter = definedExternally, format: PixelFormat = definedExternally, type: TextureDataType = definedExternally, anisotropy: Number = definedExternally)
+    constructor(canvas: HTMLVideoElement, mapping: Mapping = definedExternally, wrapS: Wrapping = definedExternally, wrapT: Wrapping = definedExternally, magFilter: TextureFilter = definedExternally, minFilter: TextureFilter = definedExternally, format: PixelFormat = definedExternally, type: TextureDataType = definedExternally, anisotropy: Number = definedExternally)
 }

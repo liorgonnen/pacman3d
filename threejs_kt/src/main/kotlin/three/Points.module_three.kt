@@ -18,13 +18,13 @@ import org.w3c.workers.*
 import org.w3c.xhr.*
 
 open external class Points : Object3D {
-    constructor(geometry: Geometry, material: Material)
-    constructor(geometry: Geometry, material: Array<Material>)
-    constructor(geometry: BufferGeometry, material: Material)
-    constructor(geometry: BufferGeometry, material: Array<Material>)
+    constructor(geometry: Geometry = definedExternally, material: Material = definedExternally)
+    constructor(geometry: Geometry = definedExternally, material: Array<Material> = definedExternally)
+    constructor(geometry: BufferGeometry = definedExternally, material: Material = definedExternally)
+    constructor(geometry: BufferGeometry = definedExternally, material: Array<Material> = definedExternally)
     override var type: String /* 'Points' */
     open var morphTargetInfluences: Array<Number>
-    open var morphTargetDictionary: `T$20`
+    open var morphTargetDictionary: `T$19`
     open var isPoints: Boolean
     open var geometry: dynamic /* Geometry | BufferGeometry */
     open var material: dynamic /* Material | Array<Material> */

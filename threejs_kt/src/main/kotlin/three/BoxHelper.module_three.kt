@@ -18,9 +18,9 @@ import org.w3c.workers.*
 import org.w3c.xhr.*
 
 open external class BoxHelper : LineSegments {
-    constructor(obj: Object3D, color: Color)
-    constructor(obj: Object3D, color: String)
-    constructor(obj: Object3D, color: Number)
+    constructor(obj: Object3D, color: Color = definedExternally)
+    constructor(obj: Object3D, color: String = definedExternally)
+    constructor(obj: Object3D, color: Number = definedExternally)
     open fun update(obj: Object3D = definedExternally)
     open fun setFromObject(obj: Object3D): BoxHelper /* this */
 }

@@ -34,8 +34,8 @@ open external class PropertyBinding(rootNode: Any, path: String, parsedPath: Any
     open fun setValue(sourceArray: Any, offset: Number)
     open fun bind()
     open fun unbind()
-    open var BindingType: `T$20`
-    open var Versioning: `T$20`
+    open var BindingType: `T$19`
+    open var Versioning: `T$19`
     open var GetterByBindingType: Array<Function<*>>
     open var SetterByBindingTypeAndVersioning: Array<Array<Function<*>>>
     open class Composite(targetGroup: Any, path: Any, parsedPath: Any = definedExternally) {

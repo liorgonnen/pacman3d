@@ -17,11 +17,11 @@ import org.w3c.performance.*
 import org.w3c.workers.*
 import org.w3c.xhr.*
 
-external interface `T$1` {
+external interface `T$22` {
     var width: Number
     var height: Number
 }
 
 open external class DepthTexture(width: Number, heighht: Number, type: TextureDataType = definedExternally, mapping: Mapping = definedExternally, wrapS: Wrapping = definedExternally, wrapT: Wrapping = definedExternally, magFilter: TextureFilter = definedExternally, minFilter: TextureFilter = definedExternally, anisotropy: Number = definedExternally) : Texture {
-    override var image: `T$1`
+    override var image: `T$22`
 }

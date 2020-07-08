@@ -18,10 +18,10 @@ import org.w3c.workers.*
 import org.w3c.xhr.*
 
 open external class SkinnedMesh : Mesh {
-    constructor(geometry: Geometry, material: Material, useVertexTexture: Boolean)
-    constructor(geometry: Geometry, material: Array<Material>, useVertexTexture: Boolean)
-    constructor(geometry: BufferGeometry, material: Material, useVertexTexture: Boolean)
-    constructor(geometry: BufferGeometry, material: Array<Material>, useVertexTexture: Boolean)
+    constructor(geometry: Geometry = definedExternally, material: Material = definedExternally, useVertexTexture: Boolean = definedExternally)
+    constructor(geometry: Geometry = definedExternally, material: Array<Material> = definedExternally, useVertexTexture: Boolean = definedExternally)
+    constructor(geometry: BufferGeometry = definedExternally, material: Material = definedExternally, useVertexTexture: Boolean = definedExternally)
+    constructor(geometry: BufferGeometry = definedExternally, material: Array<Material> = definedExternally, useVertexTexture: Boolean = definedExternally)
     open var bindMode: String
     open var bindMatrix: Matrix4
     open var bindMatrixInverse: Matrix4

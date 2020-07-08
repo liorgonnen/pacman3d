@@ -28,7 +28,7 @@ open external class FileLoader(manager: LoadingManager = definedExternally) : Lo
     open var mimeType: MimeType?
     open var responseType: String?
     open var withCredentials: String?
-    open var requestHeader: `T$44`
+    open var requestHeader: `T$44`?
     open fun load(url: String, onLoad: (response: dynamic /* String | ArrayBuffer */) -> Unit = definedExternally, onProgress: (request: ProgressEvent) -> Unit = definedExternally, onError: (event: ErrorEvent) -> Unit = definedExternally): Any
     open fun setMimeType(mimeType: MimeType): FileLoader
     open fun setResponseType(responseType: String): FileLoader

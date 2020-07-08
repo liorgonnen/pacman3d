@@ -17,12 +17,12 @@ import org.w3c.performance.*
 import org.w3c.workers.*
 import org.w3c.xhr.*
 
-external interface `T$7` {
+external interface `T$13` {
     var geometries: Number
     var textures: Number
 }
 
-external interface `T$8` {
+external interface `T$14` {
     var calls: Number
     var frame: Number
     var lines: Number
@@ -32,9 +32,9 @@ external interface `T$8` {
 
 open external class WebGLInfo(gl: WebGLRenderingContext) {
     open var autoReset: Boolean
-    open var memory: `T$7`
+    open var memory: `T$13`
     open var programs: Array<WebGLProgram>?
-    open var render: `T$8`
+    open var render: `T$14`
     open fun update(count: Number, mode: GLenum, instanceCount: Number)
     open fun reset()
 }

@@ -84,7 +84,7 @@ external interface MaterialParameters {
     var polygonOffsetUnits: Number?
         get() = definedExternally
         set(value) = definedExternally
-    var precision: dynamic /* String? | String? | String? */
+    var precision: String? /* 'highp' | 'mediump' | 'lowp' */
         get() = definedExternally
         set(value) = definedExternally
     var premultipliedAlpha: Boolean?
@@ -170,7 +170,7 @@ open external class Material : EventDispatcher {
     open var polygonOffset: Boolean
     open var polygonOffsetFactor: Number
     open var polygonOffsetUnits: Number
-    open var precision: dynamic /* String? | String? | String? */
+    open var precision: String /* 'highp' | 'mediump' | 'lowp' */
     open var premultipliedAlpha: Boolean
     open var dithering: Boolean
     open var flatShading: Boolean

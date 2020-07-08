@@ -18,8 +18,8 @@ import org.w3c.workers.*
 import org.w3c.xhr.*
 
 open external class FogExp2 : IFog {
-    constructor(hex: Number, density: Number)
-    constructor(hex: String, density: Number)
+    constructor(hex: Number, density: Number = definedExternally)
+    constructor(hex: String, density: Number = definedExternally)
     override var name: String
     override var color: Color
     open var density: Number

@@ -18,5 +18,5 @@ import org.w3c.workers.*
 import org.w3c.xhr.*
 
 open external class CompressedTexture(mipmaps: Array<ImageData>, width: Number, height: Number, format: CompressedPixelFormat = definedExternally, type: TextureDataType = definedExternally, mapping: Mapping = definedExternally, wrapS: Wrapping = definedExternally, wrapT: Wrapping = definedExternally, magFilter: TextureFilter = definedExternally, minFilter: TextureFilter = definedExternally, anisotropy: Number = definedExternally, encoding: TextureEncoding = definedExternally) : Texture {
-    override var image: `T$1`
+    override var image: `T$22`
 }

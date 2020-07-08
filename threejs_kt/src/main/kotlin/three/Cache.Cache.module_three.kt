@@ -17,17 +17,14 @@ import org.w3c.performance.*
 import org.w3c.workers.*
 import org.w3c.xhr.*
 
-external interface `T$25` {
-    var vertices: Array<Number>
-    var indices: Array<Number>
-    var radius: Number
-    var detail: Number
-}
+external var enabled: Boolean
 
-open external class PolyhedronBufferGeometry(vertices: Array<Number>, indices: Array<Number>, radius: Number = definedExternally, detail: Number = definedExternally) : BufferGeometry {
-    open var parameters: `T$25`
-}
+external var files: Any
 
-open external class PolyhedronGeometry(vertices: Array<Number>, indices: Array<Number>, radius: Number = definedExternally, detail: Number = definedExternally) : Geometry {
-    open var parameters: `T$25`
-}
+external fun add(key: String, file: Any)
+
+external fun get(key: String): Any
+
+external fun remove(key: String)
+
+external fun clear()

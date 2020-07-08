@@ -18,9 +18,9 @@ import org.w3c.workers.*
 import org.w3c.xhr.*
 
 open external class Texture : EventDispatcher {
-    constructor(image: HTMLImageElement, mapping: Mapping, wrapS: Wrapping, wrapT: Wrapping, magFilter: TextureFilter, minFilter: TextureFilter, format: PixelFormat, type: TextureDataType, anisotropy: Number, encoding: TextureEncoding)
-    constructor(image: HTMLCanvasElement, mapping: Mapping, wrapS: Wrapping, wrapT: Wrapping, magFilter: TextureFilter, minFilter: TextureFilter, format: PixelFormat, type: TextureDataType, anisotropy: Number, encoding: TextureEncoding)
-    constructor(image: HTMLVideoElement, mapping: Mapping, wrapS: Wrapping, wrapT: Wrapping, magFilter: TextureFilter, minFilter: TextureFilter, format: PixelFormat, type: TextureDataType, anisotropy: Number, encoding: TextureEncoding)
+    constructor(image: HTMLImageElement = definedExternally, mapping: Mapping = definedExternally, wrapS: Wrapping = definedExternally, wrapT: Wrapping = definedExternally, magFilter: TextureFilter = definedExternally, minFilter: TextureFilter = definedExternally, format: PixelFormat = definedExternally, type: TextureDataType = definedExternally, anisotropy: Number = definedExternally, encoding: TextureEncoding = definedExternally)
+    constructor(image: HTMLCanvasElement = definedExternally, mapping: Mapping = definedExternally, wrapS: Wrapping = definedExternally, wrapT: Wrapping = definedExternally, magFilter: TextureFilter = definedExternally, minFilter: TextureFilter = definedExternally, format: PixelFormat = definedExternally, type: TextureDataType = definedExternally, anisotropy: Number = definedExternally, encoding: TextureEncoding = definedExternally)
+    constructor(image: HTMLVideoElement = definedExternally, mapping: Mapping = definedExternally, wrapS: Wrapping = definedExternally, wrapT: Wrapping = definedExternally, magFilter: TextureFilter = definedExternally, minFilter: TextureFilter = definedExternally, format: PixelFormat = definedExternally, type: TextureDataType = definedExternally, anisotropy: Number = definedExternally, encoding: TextureEncoding = definedExternally)
     open var id: Number
     open var uuid: String
     open var name: String
@@ -34,7 +34,7 @@ open external class Texture : EventDispatcher {
     open var minFilter: TextureFilter
     open var anisotropy: Number
     open var format: PixelFormat
-    open var internalFormat: Any?
+    open var internalFormat: String /* 'ALPHA' | 'RGB' | 'RGBA' | 'LUMINANCE' | 'LUMINANCE_ALPHA' | 'RED_INTEGER' | 'R8' | 'R8_SNORM' | 'R8I' | 'R8UI' | 'R16I' | 'R16UI' | 'R16F' | 'R32I' | 'R32UI' | 'R32F' | 'RG8' | 'RG8_SNORM' | 'RG8I' | 'RG8UI' | 'RG16I' | 'RG16UI' | 'RG16F' | 'RG32I' | 'RG32UI' | 'RG32F' | 'RGB565' | 'RGB8' | 'RGB8_SNORM' | 'RGB8I' | 'RGB8UI' | 'RGB16I' | 'RGB16UI' | 'RGB16F' | 'RGB32I' | 'RGB32UI' | 'RGB32F' | 'RGB9_E5' | 'SRGB8' | 'R11F_G11F_B10F' | 'RGBA4' | 'RGBA8' | 'RGBA8_SNORM' | 'RGBA8I' | 'RGBA8UI' | 'RGBA16I' | 'RGBA16UI' | 'RGBA16F' | 'RGBA32I' | 'RGBA32UI' | 'RGBA32F' | 'RGB5_A1' | 'RGB10_A2' | 'RGB10_A2UI' | 'SRGB8_ALPHA8' | 'DEPTH_COMPONENT16' | 'DEPTH_COMPONENT24' | 'DEPTH_COMPONENT32F' | 'DEPTH24_STENCIL8' | 'DEPTH32F_STENCIL8' */
     open var type: TextureDataType
     open var offset: Vector2
     open var repeat: Vector2

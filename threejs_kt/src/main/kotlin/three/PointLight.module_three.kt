@@ -18,9 +18,9 @@ import org.w3c.workers.*
 import org.w3c.xhr.*
 
 open external class PointLight : Light {
-    constructor(color: Color, intensity: Number, distance: Number, decay: Number)
-    constructor(color: String, intensity: Number, distance: Number, decay: Number)
-    constructor(color: Number, intensity: Number, distance: Number, decay: Number)
+    constructor(color: Color = definedExternally, intensity: Number = definedExternally, distance: Number = definedExternally, decay: Number = definedExternally)
+    constructor(color: String = definedExternally, intensity: Number = definedExternally, distance: Number = definedExternally, decay: Number = definedExternally)
+    constructor(color: Number = definedExternally, intensity: Number = definedExternally, distance: Number = definedExternally, decay: Number = definedExternally)
     override var intensity: Number
     open var distance: Number
     open var decay: Number
