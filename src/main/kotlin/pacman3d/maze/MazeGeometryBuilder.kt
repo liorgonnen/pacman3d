@@ -24,6 +24,45 @@ class MazeGeometryBuilder {
     private val mazePieces = ArrayList<Geometry>()
     
     private val currentPosition = Vector2(0, 0)
+
+    fun build(): Geometry {
+        mazeFrameOuterBounds()
+        mazeFrameInnerBounds()
+
+        // First row islands
+        square(2, 5, 5, 7)
+        square(7, 5, 11, 7)
+        square(16, 5, 20, 7)
+        square(22, 5, 25, 7)
+
+        // Second row islands
+        square(2, 9, 5, 10)
+        square(22, 9, 25, 10)
+
+        // Vertical islands
+        square(7, 18, 8, 22)
+        square(19, 18, 20, 22)
+
+        square(7, 24, 11, 25)
+        square(16, 24, 20, 25)
+
+        horizontalTWall(10, 9)
+        horizontalTWall(10, 21)
+        horizontalTWall(10, 27)
+
+        verticalTWallLeft()
+        verticalTWallRight()
+
+        flipTWallLeft()
+        flipTWallRight()
+
+        flipLWallLeft()
+        flipLWallRight()
+
+        ghostHouse()
+
+        return mazePieces.fold(Geometry()) { maze, wall -> maze.apply { merge(wall) } }
+    }
     
     private fun moveTo(pos: Vector2) { currentPosition.copy(pos) }
     
@@ -49,6 +88,23 @@ class MazeGeometryBuilder {
         if (needsHLines) wallTo(Maze.Pos[x1, y2].mr)
         curveTo(Maze.Pos[x1, y2].tm)
         if (needsVLines) wallTo(Maze.Pos[x1, y1].bm)
+    }
+
+    private fun horizontalTWall(x: Int, y: Int) {
+        moveTo(Maze.Pos[x, y].bm)
+        curveTo(Maze.Pos[x, y].mr, true)
+        wallTo(Maze.Pos[x + 7, y].ml)
+        curveTo(Maze.Pos[x + 7, y].bm)
+        curveTo(Maze.Pos[x + 7, y + 1].ml, true)
+        wallTo(Maze.Pos[x + 4, y + 1].mr)
+        curveTo(Maze.Pos[x + 4, y + 1].bm)
+        wallTo(Maze.Pos[x + 4, y + 4].tm)
+        curveTo(Maze.Pos[x + 4, y + 4].ml, true)
+        curveTo(Maze.Pos[x + 3, y + 4].tm)
+        wallTo(Maze.Pos[x + 3, y + 1].bm)
+        curveTo(Maze.Pos[x + 3, y + 1].ml, true)
+        wallTo(Maze.Pos[x, y + 1].mr)
+        curveTo(Maze.Pos[x, y + 1].tm)
     }
     
     private fun corner(from: Vector2, to: Vector2, flip: Boolean): Geometry {
@@ -99,7 +155,25 @@ class MazeGeometryBuilder {
         else -> error("Not a vertical or horizontal wall")
     }
 
-    fun build(): Geometry {
+    private fun ghostHouse() {
+        // Ghost house - Outer
+        moveTo(Maze.Pos[15, 15].ml)
+        wallTo(Maze.Pos[17, 15].mm)
+        wallTo(Maze.Pos[17, 19].mm)
+        wallTo(Maze.Pos[10, 19].mm)
+        wallTo(Maze.Pos[10, 15].mm)
+        wallTo(Maze.Pos[12, 15].mr)
+
+        // Ghost house - Inner
+        moveTo(Maze.Pos[15, 15].bl)
+        wallTo(Maze.Pos[17, 15].bl)
+        wallTo(Maze.Pos[17, 19].tl)
+        wallTo(Maze.Pos[10, 19].tr)
+        wallTo(Maze.Pos[10, 15].br)
+        wallTo(Maze.Pos[12, 15].br)
+    }
+
+    private fun mazeFrameOuterBounds() {
         moveTo(Maze.Pos[0, 3].bl)
         curveTo(Maze.Pos[0, 3].tr, true)
 
@@ -142,7 +216,9 @@ class MazeGeometryBuilder {
         wallTo(Maze.Pos[0, 12].br)
         curveTo(Maze.Pos[0, 12].tl)
         wallTo(Maze.Pos[0, 4].tl)
+    }
 
+    private fun mazeFrameInnerBounds() {
         // Main inner bounds
         moveTo(Maze.Pos[0, 3].bm)
         curveTo(Maze.Pos[0, 3].mr, true)
@@ -170,6 +246,15 @@ class MazeGeometryBuilder {
         curveTo(Maze.Pos[22, 22].mr, true)
         wallTo(Maze.Pos[27, 22].ml)
         curveTo(Maze.Pos[27, 22].bm)
+
+        wallTo(Maze.Pos[27, 27].tm)
+        curveTo(Maze.Pos[27, 27].ml, true)
+        wallTo(Maze.Pos[25, 27].mr)
+        curveTo(Maze.Pos[25, 27].bm)
+        curveTo(Maze.Pos[25, 28].mr, true)
+        wallTo(Maze.Pos[27, 28].ml)
+        curveTo(Maze.Pos[27, 28].bm)
+
         wallTo(Maze.Pos[27, 33].tm)
         curveTo(Maze.Pos[27, 33].ml, true)
         wallTo(Maze.Pos[0, 33].mr)
@@ -197,39 +282,101 @@ class MazeGeometryBuilder {
         wallTo(Maze.Pos[0, 12].mr)
         curveTo(Maze.Pos[0, 12].tm)
         wallTo(Maze.Pos[0, 3].bm)
+    }
 
-        // First row islands
-        square(2, 5, 5, 7)
-        square(7, 5, 11, 7)
-        square(16, 5, 20, 7)
-        square(22, 5, 25, 7)
+    private fun verticalTWallLeft() {
+        moveTo(Maze.Pos[7, 9].bm)
+        curveTo(Maze.Pos[7, 9].mr, true)
+        curveTo(Maze.Pos[8, 9].bm)
+        wallTo(Maze.Pos[8, 12].tm)
+        curveTo(Maze.Pos[8, 12].mr, true)
+        wallTo(Maze.Pos[11, 12].ml)
+        curveTo(Maze.Pos[11, 12].bm)
+        curveTo(Maze.Pos[11, 13].ml, true)
+        wallTo(Maze.Pos[8, 13].mr)
+        curveTo(Maze.Pos[8, 13].bm)
+        wallTo(Maze.Pos[8, 16].tm)
+        curveTo(Maze.Pos[8, 16].ml, true)
+        curveTo(Maze.Pos[7, 16].tm)
+        wallTo(Maze.Pos[7, 9].bm)
+    }
 
-        square(2, 9, 5, 10)
-        square(22, 9, 25, 10)
+    private fun verticalTWallRight() {
+        moveTo(Maze.Pos[19, 9].bm)
+        curveTo(Maze.Pos[19, 9].mr, true)
+        curveTo(Maze.Pos[20, 9].bm)
+        wallTo(Maze.Pos[20, 16].tm)
+        curveTo(Maze.Pos[20, 16].ml, true)
+        curveTo(Maze.Pos[19, 16].tm)
+        wallTo(Maze.Pos[19, 13].bm)
+        curveTo(Maze.Pos[19, 13].ml, true)
+        wallTo(Maze.Pos[16, 13].mr)
+        curveTo(Maze.Pos[16, 13].tm)
+        curveTo(Maze.Pos[16, 12].mr, true)
+        wallTo(Maze.Pos[19, 12].ml)
+        curveTo(Maze.Pos[19, 12].tm)
+        wallTo(Maze.Pos[19, 9].bm)
+    }
 
-        square(7, 18, 8, 22)
-        square(19, 18, 20, 22)
+    private fun flipTWallLeft() {
+        moveTo(Maze.Pos[2, 30].bm)
+        curveTo(Maze.Pos[2, 30].mr, true)
+        wallTo(Maze.Pos[7, 30].ml)
+        curveTo(Maze.Pos[7, 30].tm)
+        wallTo(Maze.Pos[7, 27].bm)
+        curveTo(Maze.Pos[7, 27].mr, true)
+        curveTo(Maze.Pos[8, 27].bm)
+        wallTo(Maze.Pos[8, 30].tm)
+        curveTo(Maze.Pos[8, 30].mr, true)
+        wallTo(Maze.Pos[11, 30].ml)
+        curveTo(Maze.Pos[11, 30].bm)
+        curveTo(Maze.Pos[11, 31].ml, true)
+        wallTo(Maze.Pos[2, 31].mr)
+        curveTo(Maze.Pos[2, 31].tm)
+    }
 
-        square(7, 24, 11, 25)
-        square(16, 24, 20, 25)
+    private fun flipTWallRight() {
+        moveTo(Maze.Pos[16, 30].bm)
+        curveTo(Maze.Pos[16, 30].mr, true)
+        wallTo(Maze.Pos[19, 30].ml)
+        curveTo(Maze.Pos[19, 30].tm)
+        wallTo(Maze.Pos[19, 27].bm)
+        curveTo(Maze.Pos[19, 27].mr, true)
+        curveTo(Maze.Pos[20, 27].bm)
+        wallTo(Maze.Pos[20, 30].tm)
+        curveTo(Maze.Pos[20, 30].mr, true)
+        wallTo(Maze.Pos[25, 30].ml)
+        curveTo(Maze.Pos[25, 30].bm)
+        curveTo(Maze.Pos[25, 31].ml, true)
+        wallTo(Maze.Pos[16, 31].mr)
+        curveTo(Maze.Pos[16, 31].tm)
+    }
 
+    private fun flipLWallLeft() {
+        moveTo(Maze.Pos[2, 24].bm)
+        curveTo(Maze.Pos[2, 24].mr, true)
+        wallTo(Maze.Pos[5, 24].ml)
+        curveTo(Maze.Pos[5, 24].bm)
+        wallTo(Maze.Pos[5, 28].tm)
+        curveTo(Maze.Pos[5, 28].ml, true)
+        curveTo(Maze.Pos[4, 28].tm)
+        wallTo(Maze.Pos[4, 25].bm)
+        curveTo(Maze.Pos[4, 25].ml, true)
+        wallTo(Maze.Pos[2, 25].mr)
+        curveTo(Maze.Pos[2, 25].tm)
+    }
 
-        // Ghost house - Outer
-        moveTo(Maze.Pos[15, 15].ml)
-        wallTo(Maze.Pos[17, 15].mm)
-        wallTo(Maze.Pos[17, 19].mm)
-        wallTo(Maze.Pos[10, 19].mm)
-        wallTo(Maze.Pos[10, 15].mm)
-        wallTo(Maze.Pos[12, 15].mr)
-
-        // Ghost house - Inner
-        moveTo(Maze.Pos[15, 15].bl)
-        wallTo(Maze.Pos[17, 15].bl)
-        wallTo(Maze.Pos[17, 19].tl)
-        wallTo(Maze.Pos[10, 19].tr)
-        wallTo(Maze.Pos[10, 15].br)
-        wallTo(Maze.Pos[12, 15].br)
-
-        return mazePieces.fold(Geometry()) { maze, wall -> maze.apply { merge(wall) } }
+    private fun flipLWallRight() {
+        moveTo(Maze.Pos[22, 24].bm)
+        curveTo(Maze.Pos[22, 24].mr, true)
+        wallTo(Maze.Pos[25, 24].ml)
+        curveTo(Maze.Pos[25, 24].bm)
+        curveTo(Maze.Pos[25, 25].ml, true)
+        wallTo(Maze.Pos[23, 25].mr)
+        curveTo(Maze.Pos[23, 25].bm)
+        wallTo(Maze.Pos[23, 28].tm)
+        curveTo(Maze.Pos[23, 28].ml, true)
+        curveTo(Maze.Pos[22, 28].tm)
+        wallTo(Maze.Pos[22, 24].bm)
     }
 }
