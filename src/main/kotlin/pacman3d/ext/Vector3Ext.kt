@@ -1,5 +1,6 @@
  package pacman3d.ext
 
+import three.js.LineCurve3
 import three.js.Quaternion
 import three.js.Vector3
 import kotlin.math.atan2
@@ -49,3 +50,5 @@ fun Vector3.rotate90CW() = apply {
      z = x.toDouble()
      x = -temp
  }
+
+ infix fun Vector3.lineCurveTo(other: Vector3) = LineCurve3(this, other)
