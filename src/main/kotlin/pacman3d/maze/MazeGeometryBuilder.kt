@@ -61,7 +61,7 @@ class MazeGeometryBuilder {
 
         ghostHouse()
 
-        return mazePieces.fold(Geometry()) { maze, wall -> maze.apply { merge(wall) } }
+        return mazePieces.fold(Geometry()) { maze, wall -> maze.apply { merge(wall) } }.apply { mergeVertices() }
     }
     
     private fun moveTo(pos: Vector2) { currentPosition.copy(pos) }
@@ -130,7 +130,7 @@ class MazeGeometryBuilder {
 
         // TODO: Make a helper class for this and hold a single instance
         val options = object : ExtrudeGeometryOptions {
-            override var steps: Number? = 10
+            override var steps: Number? = 20
             override var depth: Number? = WALL_HEIGHT
             override var bevelEnabled: Boolean? = false
         }

@@ -9,7 +9,7 @@ import three.js.*
 class Game {
     private val clock = Clock()
     private val camera = PerspectiveCamera(75, window.aspectRatio, 0.1, 1000).apply {
-        position.set(0, 25, 0)
+        position.set(0, 25, 20)
         lookAt(0, 0, 0)
     }
 
@@ -32,7 +32,7 @@ class Game {
     private val maze = Mesh(MazeGeometryBuilder().build(), 0x0000ff.toMeshPhongMaterial())
 
     private val scene = Scene().apply {
-        //add(plane)
+        add(plane)
         add(maze)
 
         add(DirectionalLight(0xffffff, 1).apply { position.set(-1, 2, 4) })
