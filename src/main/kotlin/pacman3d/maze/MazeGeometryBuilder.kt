@@ -36,9 +36,22 @@ class MazeGeometryBuilder {
         mazePieces += corner(currentPosition, pos, flip)
         moveTo(pos)
     }
+
+    private fun square(x1: Int, y1: Int, x2: Int, y2: Int) {
+        val needsHLines = x2 - x1 > 1
+        val needsVLines = y2 - y1 > 1
+        moveTo(Maze.Pos[x1, y1].bm)
+        curveTo(Maze.Pos[x1, y1].mr, true)
+        if (needsHLines) wallTo(Maze.Pos[x2, y1].ml)
+        curveTo(Maze.Pos[x2, y1].bm)
+        if (needsVLines) wallTo(Maze.Pos[x2, y2].tm)
+        curveTo(Maze.Pos[x2, y2].ml, true)
+        if (needsHLines) wallTo(Maze.Pos[x1, y2].mr)
+        curveTo(Maze.Pos[x1, y2].tm)
+        if (needsVLines) wallTo(Maze.Pos[x1, y1].bm)
+    }
     
     private fun corner(from: Vector2, to: Vector2, flip: Boolean): Geometry {
-
         val shape = Shape().apply {
             val dx = to.x - from.x.toDouble()
             val dy = to.y - from.y.toDouble()
@@ -59,6 +72,7 @@ class MazeGeometryBuilder {
             }
         }
 
+        // TODO: Make a helper class for this and hold a single instance
         val options = object : ExtrudeGeometryOptions {
             override var steps: Number? = 10
             override var depth: Number? = WALL_HEIGHT
@@ -183,19 +197,39 @@ class MazeGeometryBuilder {
         wallTo(Maze.Pos[0, 12].mr)
         curveTo(Maze.Pos[0, 12].tm)
         wallTo(Maze.Pos[0, 3].bm)
-//        moveTo(Maze.Pos[2, 6].mm)
-//        wallTo(Maze.Pos[5, 6].mm)
-//        wallTo(Maze.Pos[5, 8].mm)
-//        wallTo(Maze.Pos[2, 8].mm)
 
-//        // Q1
-//        corner(Maze.Pos[3, 28].mm, Maze.Pos[4, 29].mm),
-//
-//        // Q4
-//        corner(Maze.Pos[3, 29].mm, Maze.Pos[4, 30].mm, false),
-//
-//        corner(Maze.Pos[3, 27].mm, Maze.Pos[4, 26].mm),
-//        corner(Maze.Pos[3, 26].mm, Maze.Pos[4, 25].mm, false),
+        // First row islands
+        square(2, 5, 5, 7)
+        square(7, 5, 11, 7)
+        square(16, 5, 20, 7)
+        square(22, 5, 25, 7)
+
+        square(2, 9, 5, 10)
+        square(22, 9, 25, 10)
+
+        square(7, 18, 8, 22)
+        square(19, 18, 20, 22)
+
+        square(7, 24, 11, 25)
+        square(16, 24, 20, 25)
+
+
+        // Ghost house - Outer
+        moveTo(Maze.Pos[15, 15].ml)
+        wallTo(Maze.Pos[17, 15].mm)
+        wallTo(Maze.Pos[17, 19].mm)
+        wallTo(Maze.Pos[10, 19].mm)
+        wallTo(Maze.Pos[10, 15].mm)
+        wallTo(Maze.Pos[12, 15].mr)
+
+        // Ghost house - Inner
+        moveTo(Maze.Pos[15, 15].bl)
+        wallTo(Maze.Pos[17, 15].bl)
+        wallTo(Maze.Pos[17, 19].tl)
+        wallTo(Maze.Pos[10, 19].tr)
+        wallTo(Maze.Pos[10, 15].br)
+        wallTo(Maze.Pos[12, 15].br)
+
         return mazePieces.fold(Geometry()) { maze, wall -> maze.apply { merge(wall) } }
     }
 }
