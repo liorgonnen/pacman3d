@@ -8,4 +8,5 @@ package pacman3d.state
  */
 class GameState {
 
+    private val maze = MazeState()
 }

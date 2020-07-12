@@ -79,14 +79,22 @@ class MazeGeometryBuilder {
     private fun square(x1: Int, y1: Int, x2: Int, y2: Int) {
         val needsHLines = x2 - x1 > 1
         val needsVLines = y2 - y1 > 1
+
         moveTo(Maze.Pos[x1, y1].bm)
         curveTo(Maze.Pos[x1, y1].mr, true)
+
         if (needsHLines) wallTo(Maze.Pos[x2, y1].ml)
+
         curveTo(Maze.Pos[x2, y1].bm)
+
         if (needsVLines) wallTo(Maze.Pos[x2, y2].tm)
+
         curveTo(Maze.Pos[x2, y2].ml, true)
+
         if (needsHLines) wallTo(Maze.Pos[x1, y2].mr)
+
         curveTo(Maze.Pos[x1, y2].tm)
+
         if (needsVLines) wallTo(Maze.Pos[x1, y1].bm)
     }
 

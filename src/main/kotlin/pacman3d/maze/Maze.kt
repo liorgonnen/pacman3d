@@ -1,15 +1,16 @@
 package pacman3d.maze
 
+import pacman3d.dots.Dots
 import three.js.Vector2
 
 object Maze {
 
-    const val EMPTY: Byte = 0
-    const val VALID: Byte = 1
+    const val INVALID: Byte = 0
+    const val EMPTY: Byte = 1
     const val DOT: Byte = 2
     const val PILL: Byte = 3
     
-    private const val V = VALID
+    private const val E = EMPTY
     private const val D = DOT
     private const val P = PILL
 
@@ -26,21 +27,21 @@ object Maze {
         0,D,0,0,0,0,D,0,0,D,0,0,0,0,0,0,0,0,D,0,0,D,0,0,0,0,D,0,
         0,D,0,0,0,0,D,0,0,D,0,0,0,0,0,0,0,0,D,0,0,D,0,0,0,0,D,0,
         0,D,D,D,D,D,D,0,0,D,D,D,D,0,0,D,D,D,D,0,0,D,D,D,D,D,D,0,
-        0,0,0,0,0,0,D,0,0,0,0,0,V,0,0,V,0,0,0,0,0,D,0,0,0,0,0,0,
-        0,0,0,0,0,0,D,0,0,0,0,0,V,0,0,V,0,0,0,0,0,D,0,0,0,0,0,0,
-        0,0,0,0,0,0,D,0,0,V,V,V,V,V,V,V,V,V,V,0,0,D,0,0,0,0,0,0,
-        0,0,0,0,0,0,D,0,0,V,0,0,0,0,0,0,0,0,V,0,0,D,0,0,0,0,0,0,
-        0,0,0,0,0,0,D,0,0,V,0,0,0,0,0,0,0,0,V,0,0,D,0,0,0,0,0,0,
-        V,V,V,V,V,V,D,V,V,V,0,0,0,0,0,0,0,0,V,V,V,D,V,V,V,V,V,V,
-        0,0,0,0,0,0,D,0,0,V,0,0,0,0,0,0,0,0,V,0,0,D,0,0,0,0,0,0,
-        0,0,0,0,0,0,D,0,0,V,0,0,0,0,0,0,0,0,V,0,0,D,0,0,0,0,0,0,
-        0,0,0,0,0,0,D,0,0,V,V,V,V,V,V,V,V,V,V,0,0,D,0,0,0,0,0,0,
-        0,0,0,0,0,0,D,0,0,V,0,0,0,0,0,0,0,0,V,0,0,D,0,0,0,0,0,0,
-        0,0,0,0,0,0,D,0,0,V,0,0,0,0,0,0,0,0,V,0,0,D,0,0,0,0,0,0,
+        0,0,0,0,0,0,D,0,0,0,0,0,E,0,0,E,0,0,0,0,0,D,0,0,0,0,0,0,
+        0,0,0,0,0,0,D,0,0,0,0,0,E,0,0,E,0,0,0,0,0,D,0,0,0,0,0,0,
+        0,0,0,0,0,0,D,0,0,E,E,E,E,E,E,E,E,E,E,0,0,D,0,0,0,0,0,0,
+        0,0,0,0,0,0,D,0,0,E,0,0,0,0,0,0,0,0,E,0,0,D,0,0,0,0,0,0,
+        0,0,0,0,0,0,D,0,0,E,0,0,0,0,0,0,0,0,E,0,0,D,0,0,0,0,0,0,
+        E,E,E,E,E,E,D,E,E,E,0,0,0,0,0,0,0,0,E,E,E,D,E,E,E,E,E,E,
+        0,0,0,0,0,0,D,0,0,E,0,0,0,0,0,0,0,0,E,0,0,D,0,0,0,0,0,0,
+        0,0,0,0,0,0,D,0,0,E,0,0,0,0,0,0,0,0,E,0,0,D,0,0,0,0,0,0,
+        0,0,0,0,0,0,D,0,0,E,E,E,E,E,E,E,E,E,E,0,0,D,0,0,0,0,0,0,
+        0,0,0,0,0,0,D,0,0,E,0,0,0,0,0,0,0,0,E,0,0,D,0,0,0,0,0,0,
+        0,0,0,0,0,0,D,0,0,E,0,0,0,0,0,0,0,0,E,0,0,D,0,0,0,0,0,0,
         0,D,D,D,D,D,D,D,D,D,D,D,D,0,0,D,D,D,D,D,D,D,D,D,D,D,D,0,
         0,D,0,0,0,0,D,0,0,0,0,0,D,0,0,D,0,0,0,0,0,D,0,0,0,0,D,0,
         0,D,0,0,0,0,D,0,0,0,0,0,D,0,0,D,0,0,0,0,0,D,0,0,0,0,D,0,
-        0,P,D,D,0,0,D,D,D,D,D,D,D,V,V,D,D,D,D,D,D,D,0,0,D,D,P,0,
+        0,P,D,D,0,0,D,D,D,D,D,D,D,E,E,D,D,D,D,D,D,D,0,0,D,D,P,0,
         0,0,0,D,0,0,D,0,0,D,0,0,0,0,0,0,0,0,D,0,0,D,0,0,D,0,0,0,
         0,0,0,D,0,0,D,0,0,D,0,0,0,0,0,0,0,0,D,0,0,D,0,0,D,0,0,0,
         0,D,D,D,D,D,D,0,0,D,D,D,D,0,0,D,D,D,D,0,0,D,D,D,D,D,D,0,
@@ -51,7 +52,7 @@ object Maze {
     )
 
     const val WIDTH_UNITS = 28
-    private const val LENGTH_UNITS = 36
+    const val LENGTH_UNITS = 36
 
     const val WALL_HEIGHT = 2.0
     const val WALL_THICKNESS = 0.2
@@ -67,7 +68,7 @@ object Maze {
 
     object Pos {
         init {
-            require(MAZE_LAYOUT.count { v -> v == D || v == P } == 244)
+            require(MAZE_LAYOUT.count { v -> v == D || v == P } == Dots.MAX_COUNT)
         }
 
         private const val HALF_WIDTH = WIDTH / 2
