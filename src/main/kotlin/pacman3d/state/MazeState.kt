@@ -16,7 +16,7 @@ class MazeState {
     var dotsLeft = state.count { it.isDotOrPill }
         private set
 
-    private inline fun stateAt(x: Int, y: Int) = state[y * Maze.WIDTH_UNITS + x]
+    private fun stateAt(x: Int, y: Int) = state[y * Maze.WIDTH_UNITS + x]
 
     fun isValid(x: Int, y: Int) = stateAt(x, y) != INVALID
 
@@ -26,9 +26,9 @@ class MazeState {
 
     fun isPill(x: Int, y: Int) = stateAt(x, y).isPill
 
-    fun forEach(func: (x: Int, y: Int) -> Unit) {
-        for (y in 4 until Maze.LENGTH_UNITS)
+    fun forEachTile(func: (state: MazeState, x: Int, y: Int) -> Unit) {
+        for (y in Maze.FIRST_EFFECTIVE_LINE until Maze.LAST_EFFECTIVE_LINE)
             for (x in 0 until Maze.WIDTH_UNITS)
-                func(x, y)
+                func(this, x, y)
     }
 }
