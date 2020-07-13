@@ -18,7 +18,7 @@ class Game {
         lookAt(0, 0, 0)
     }
 
-    private val renderer = WebGLRenderer().init()
+    private val renderer = WebGLRenderer().init(clearColor = 0x333333)
 
     private val dots = Dots()
 
@@ -34,11 +34,11 @@ class Game {
         }
     }
 
-    private val plane = Mesh(PlaneGeometry(Maze.WIDTH, Maze.LENGTH, 5), MeshPhongMaterial().apply { color = Color(0x666666) }).apply {
+    private val plane = Mesh(PlaneGeometry(Maze.WIDTH, Maze.EFFECTIVE_LENGTH, 5), MeshPhongMaterial().apply { color = Color(0) }).apply {
         rotateX(-HALF_PI)
     }
 
-    private val maze = Mesh(MazeGeometryBuilder().build(), 0x0000ff.toMeshPhongMaterial())
+    private val maze = Mesh(MazeGeometryBuilder().build(), 0x151FCD.toMeshPhongMaterial())
 
     private val scene = Scene().apply {
         add(plane)
