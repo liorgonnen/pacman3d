@@ -1,4 +1,4 @@
-package pacman3d.primitives
+package pacman3d.gameobjects
 
 import pacman3d.state.GameState
 import three.js.Object3D

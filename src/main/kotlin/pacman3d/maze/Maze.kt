@@ -1,6 +1,6 @@
 package pacman3d.maze
 
-import pacman3d.dots.Dots
+import pacman3d.gameobjects.Dots
 import three.js.Vector2
 
 object Maze {

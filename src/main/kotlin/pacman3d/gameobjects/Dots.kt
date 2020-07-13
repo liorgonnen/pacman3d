@@ -1,11 +1,10 @@
-package pacman3d.dots
+package pacman3d.gameobjects
 
 import pacman3d.ext.toMeshPhongMaterial
 import pacman3d.maze.Maze
 import pacman3d.maze.Maze.DOT_SIZE
 import pacman3d.maze.Maze.PILL_SIZE
 import pacman3d.maze.Maze.Pos.mm
-import pacman3d.primitives.GameObject
 import pacman3d.state.GameState
 import three.js.*
 

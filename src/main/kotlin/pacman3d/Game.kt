@@ -2,7 +2,7 @@ package pacman3d
 
 import kotlinx.browser.document
 import kotlinx.browser.window
-import pacman3d.dots.Dots
+import pacman3d.gameobjects.Dots
 import pacman3d.ext.*
 import pacman3d.maze.Maze
 import pacman3d.maze.MazeGeometryBuilder
