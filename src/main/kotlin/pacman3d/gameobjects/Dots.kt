@@ -2,8 +2,6 @@ package pacman3d.gameobjects
 
 import pacman3d.ext.toMeshPhongMaterial
 import pacman3d.maze.Maze
-import pacman3d.maze.Maze.DOT_SIZE
-import pacman3d.maze.Maze.PILL_SIZE
 import pacman3d.maze.Maze.Pos.mm
 import pacman3d.state.GameState
 import three.js.*
@@ -11,6 +9,9 @@ import three.js.*
 class Dots : GameObject() {
 
     companion object {
+        const val DOT_SIZE = 0.2 * Maze.UNIT_SIZE
+        const val PILL_SIZE = 1.0 * Maze.UNIT_SIZE
+
         const val NUM_DOTS = 240
         const val NUM_PILLS = 4
         const val COUNT = NUM_DOTS + NUM_PILLS

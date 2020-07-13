@@ -93,3 +93,84 @@ open external class BufferAttribute(array: ArrayLike<Number>, itemSize: Number, 
     open fun setXYZW(index: Number, x: Number, y: Number, z: Number, w: Number): BufferAttribute /* this */
     open fun toJSON(): `T$6`
 }
+
+external open class Int8Attribute(array: Any, itemSize: Number) : BufferAttribute
+
+external open class Uint8Attribute(array: Any, itemSize: Number) : BufferAttribute
+
+external open class Uint8ClampedAttribute(array: Any, itemSize: Number) : BufferAttribute
+
+external open class Int16Attribute(array: Any, itemSize: Number) : BufferAttribute
+
+external open class Uint16Attribute(array: Any, itemSize: Number) : BufferAttribute
+
+external open class Int32Attribute(array: Any, itemSize: Number) : BufferAttribute
+
+external open class Uint32Attribute(array: Any, itemSize: Number) : BufferAttribute
+
+external open class Float32Attribute(array: Any, itemSize: Number) : BufferAttribute
+
+external open class Float64Attribute(array: Any, itemSize: Number) : BufferAttribute
+
+external open class Int8BufferAttribute : BufferAttribute {
+    constructor(array: Iterable<Number>, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: ArrayLike<Number>, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: ArrayBuffer, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: Number, itemSize: Number, normalized: Boolean = definedExternally)
+}
+
+external open class Uint8BufferAttribute : BufferAttribute {
+    constructor(array: Iterable<Number>, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: ArrayLike<Number>, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: ArrayBuffer, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: Number, itemSize: Number, normalized: Boolean = definedExternally)
+}
+
+external open class Uint8ClampedBufferAttribute : BufferAttribute {
+    constructor(array: Iterable<Number>, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: ArrayLike<Number>, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: ArrayBuffer, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: Number, itemSize: Number, normalized: Boolean = definedExternally)
+}
+
+external open class Int16BufferAttribute : BufferAttribute {
+    constructor(array: Iterable<Number>, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: ArrayLike<Number>, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: ArrayBuffer, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: Number, itemSize: Number, normalized: Boolean = definedExternally)
+}
+
+external open class Uint16BufferAttribute : BufferAttribute {
+    constructor(array: Iterable<Number>, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: ArrayLike<Number>, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: ArrayBuffer, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: Number, itemSize: Number, normalized: Boolean = definedExternally)
+}
+
+external open class Int32BufferAttribute : BufferAttribute {
+    constructor(array: Iterable<Number>, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: ArrayLike<Number>, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: ArrayBuffer, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: Number, itemSize: Number, normalized: Boolean = definedExternally)
+}
+
+external open class Uint32BufferAttribute : BufferAttribute {
+    constructor(array: Iterable<Number>, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: ArrayLike<Number>, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: ArrayBuffer, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: Number, itemSize: Number, normalized: Boolean = definedExternally)
+}
+
+external open class Float32BufferAttribute : BufferAttribute {
+    constructor(array: Iterable<Number>, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: ArrayLike<Number>, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: ArrayBuffer, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: Number, itemSize: Number, normalized: Boolean = definedExternally)
+}
+
+external open class Float64BufferAttribute : BufferAttribute {
+    constructor(array: Iterable<Number>, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: ArrayLike<Number>, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: ArrayBuffer, itemSize: Number, normalized: Boolean = definedExternally)
+    constructor(array: Number, itemSize: Number, normalized: Boolean = definedExternally)
+}

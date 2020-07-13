@@ -2,6 +2,7 @@ package pacman3d.maze
 
 import pacman3d.gameobjects.Dots
 import three.js.Vector2
+import three.js.Vector3
 
 object Maze {
 
@@ -61,10 +62,7 @@ object Maze {
     const val WALL_THICKNESS = 0.2
     const val HALF_WALL_THICKNESS = WALL_THICKNESS / 2
 
-    private const val UNIT_SIZE = 1.0
-
-    const val DOT_SIZE = 0.2 * UNIT_SIZE
-    const val PILL_SIZE = 1.0 * UNIT_SIZE
+    const val UNIT_SIZE = 1.0
 
     private const val HALF_UNIT_SIZE = UNIT_SIZE / 2.0
 
@@ -110,5 +108,7 @@ object Maze {
         val Vector2.bl get() = add(BL)
         val Vector2.bm get() = add(BM)
         val Vector2.br get() = add(BR)
+
+        fun Vector2.toVector3(yPosition: Double = 0.0) = Vector3(x, yPosition, y)
     }
 }

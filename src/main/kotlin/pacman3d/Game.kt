@@ -4,6 +4,7 @@ import kotlinx.browser.document
 import kotlinx.browser.window
 import pacman3d.gameobjects.Dots
 import pacman3d.ext.*
+import pacman3d.gameobjects.Pacman
 import pacman3d.maze.Maze
 import pacman3d.maze.MazeGeometryBuilder
 import pacman3d.state.GameState
@@ -14,13 +15,16 @@ class Game {
     private val clock = Clock()
 
     private val camera = PerspectiveCamera(75, window.aspectRatio, 0.1, 1000).apply {
-        position.set(0, 25, 20)
+        position.set(0, 20, 20)
         lookAt(0, 0, 0)
     }
 
     private val renderer = WebGLRenderer().init(clearColor = 0x333333)
 
-    private val dots = Dots()
+    private val gameObjects = arrayOf(
+        Dots(),
+        Pacman()
+    )
 
     private val gameState = GameState()
 
@@ -43,7 +47,8 @@ class Game {
     private val scene = Scene().apply {
         add(plane)
         add(maze)
-        add(dots)
+
+        gameObjects.forEach { add(it) }
 
         add(DirectionalLight(0xffffff, 1).apply { position.set(-1, 2, 4) })
         add(AmbientLight(0x404040, 1))
@@ -55,11 +60,13 @@ class Game {
             renderer.onResize()
         }
 
-        dots.setup(gameState)
+        gameObjects.forEach { it.setup(gameState) }
     }
 
     fun animate() {
         stats.begin()
+
+        gameObjects.forEach { it.update(gameState) }
 
         renderer.render(scene, camera)
 
