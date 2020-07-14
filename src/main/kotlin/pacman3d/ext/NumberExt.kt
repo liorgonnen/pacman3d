@@ -10,6 +10,9 @@ import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
+const val TWO_PI = PI * 2.0
+const val HALF_PI = PI / 2.0
+
 inline val Number.absValue get() = abs(toDouble())
 
 fun randomAngle(rangeInRadians: Double) = Random.nextDouble(-1.0, 1.0) * rangeInRadians

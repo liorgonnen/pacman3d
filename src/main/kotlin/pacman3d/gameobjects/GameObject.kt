@@ -9,5 +9,5 @@ abstract class GameObject {
 
     abstract fun setup(state: GameState)
 
-    abstract fun update(state: GameState)
+    abstract fun update(state: GameState, time: Double)
 }

@@ -1,10 +1,9 @@
 package pacman3d.gameobjects
 
-import pacman3d.ext.plus
+import pacman3d.ext.Z_AXIS
 import pacman3d.ext.toMeshPhongMaterial
 import pacman3d.maze.Maze
-import pacman3d.maze.Maze.Pos.mr
-import pacman3d.maze.Maze.Pos.toVector3
+import pacman3d.state.Direction.*
 import pacman3d.state.GameState
 import three.js.Mesh
 import three.js.SphereBufferGeometry
@@ -15,12 +14,13 @@ class Pacman : GameObject() {
     companion object {
         private const val SIZE = 1.6 * Maze.UNIT_SIZE
         private const val MAX_MOUTH_ANGLE = 60.0 * PI / 180
+        private const val SEGMENTS = 30
     }
 
     private val mouthOpenGeometry = SphereBufferGeometry(
         radius = SIZE / 2,
-        widthSegments = 30,
-        heightSegments = 30,
+        widthSegments = SEGMENTS,
+        heightSegments = SEGMENTS,
         phiStart = MAX_MOUTH_ANGLE / 2,
         phiLength = 2 * PI - MAX_MOUTH_ANGLE,
         thetaStart = PI,
@@ -29,8 +29,8 @@ class Pacman : GameObject() {
 
     private val geometry = SphereBufferGeometry(
             radius = SIZE / 2,
-            widthSegments = 30,
-            heightSegments = 30,
+            widthSegments = SEGMENTS,
+            heightSegments = SEGMENTS,
             phiStart = 0,
             phiLength = 2 * PI,
             thetaStart = PI,
@@ -39,26 +39,36 @@ class Pacman : GameObject() {
         morphAttributes.asDynamic().position = arrayOf(mouthOpenGeometry.getAttribute("position"))
     }
 
-    private var mouthOpenDirection = 0.15
+    private var mouthOpenSpeed = 0.15
     private var mouthOpenInfluence = 0.0 // range: 0 - 1.0
 
     override val sceneObject = Mesh(geometry, 0xFFFE54.toMeshPhongMaterial().apply { morphTargets = true })
 
     override fun setup(state: GameState) {
-        sceneObject.position.copy(Maze.Pos[13, 26].mr.toVector3(SIZE))
+        sceneObject.position.set(state.pacman.position.x, SIZE, state.pacman.position.y)
     }
 
-    override fun update(state: GameState) {
-        mouthOpenInfluence += mouthOpenDirection
+    override fun update(state: GameState, time: Double) = with (state.pacman) {
+        mouthOpenInfluence += mouthOpenSpeed
         if (mouthOpenInfluence >= 1.0) {
             mouthOpenInfluence = 1.0
-            mouthOpenDirection = -mouthOpenDirection
+            mouthOpenSpeed = -mouthOpenSpeed
         }
         else if (mouthOpenInfluence <= 0) {
             mouthOpenInfluence = 0.0
-            mouthOpenDirection = -mouthOpenDirection
+            mouthOpenSpeed = -mouthOpenSpeed
         }
 
         sceneObject.morphTargetInfluences[0] = mouthOpenInfluence
+
+        sceneObject.position.x = position.x
+        sceneObject.position.z = position.y
+
+        sceneObject.setRotationFromAxisAngle(Z_AXIS, when (direction) {
+            DOWN -> 1.5 * PI
+            RIGHT -> 0
+            UP -> PI / 2
+            LEFT -> PI
+        })
     }
 }

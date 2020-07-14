@@ -1,5 +1,8 @@
 package pacman3d.maze
 
+import pacman3d.ZERO2
+import pacman3d.ext.plus
+import pacman3d.ext.times
 import pacman3d.gameobjects.Dots
 import three.js.Vector2
 import three.js.Vector3
@@ -109,6 +112,30 @@ object Maze {
         val Vector2.bm get() = add(BM)
         val Vector2.br get() = add(BR)
 
-        fun Vector2.toVector3(yPosition: Double = 0.0) = Vector3(x, yPosition, y)
+
+        /**
+         * Map Maze 2D coordinates in maze size units to 3D space
+         * Sets only the x and z components for a 3D vector. The y component is left unchanged
+         * @param mazeCoordinates
+         */
+        fun Vector3.setXZFromMazeCoordinates(mazeCoordinates: Vector2) = apply {
+            x = -HALF_WIDTH + mazeCoordinates.x * UNIT_SIZE + HALF_UNIT_SIZE
+            z = -HALF_LENGTH + mazeCoordinates.y * UNIT_SIZE + HALF_UNIT_SIZE
+        }
+
+        /**
+         * Set this Vector2 to world coordinates represented by the given [mazeCoordinates]
+         * The values will be shifted by the [subStep] value.
+         *
+         * Since maze coordinates represent the center of a tile, subStep coordinates should be in the range of
+         * -0.5..0.5
+         *
+         * @param mazeCoordinates
+         * @param subStep
+         */
+        fun Vector2.setFromMazeCoordinates(mazeCoordinates: Vector2, subStep: Vector2 = ZERO2) = apply {
+            x = -HALF_WIDTH + (mazeCoordinates.x + subStep.x.toDouble() + 0.5) * UNIT_SIZE
+            y = -HALF_LENGTH + (mazeCoordinates.y + subStep.y.toDouble() + 0.5) * UNIT_SIZE
+        }
     }
 }

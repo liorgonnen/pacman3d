@@ -51,4 +51,3 @@ fun Vector3.rotate90CW() = apply {
      x = -temp
  }
 
- infix fun Vector3.lineCurveTo(other: Vector3) = LineCurve3(this, other)

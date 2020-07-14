@@ -39,7 +39,7 @@ class Dots : GameObject() {
         }
     }
 
-    override fun update(state: GameState) {
+    override fun update(state: GameState, time: Double) {
 
     }
 }

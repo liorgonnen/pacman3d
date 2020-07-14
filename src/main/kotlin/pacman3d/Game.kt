@@ -61,12 +61,18 @@ class Game {
         }
 
         gameObjects.forEach { it.setup(gameState) }
+
+        document.onkeydown = gameState::keyboardHandler
     }
 
     fun animate() {
         stats.begin()
 
-        gameObjects.forEach { it.update(gameState) }
+        val time = clock.getDelta().toDouble()
+
+        gameState.update(time)
+
+        gameObjects.forEach { it.update(gameState, time) }
 
         renderer.render(scene, camera)
 
