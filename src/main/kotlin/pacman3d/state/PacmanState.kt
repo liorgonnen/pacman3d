@@ -29,10 +29,10 @@ class PacmanState(val maze: MazeState) {
         // Cornering is the technique of moving the joystick in the direction one wishes to go well before reaching the
         // center of a turn, ensuring Pac-Man will take the turn as quickly as possible.
         //
-        private const val CORNERING_THRESHOLD = 0.2 // Must be between 0 - SUBSTEP_MAX
+        private const val CORNERING_THRESHOLD = 0.1 // Must be between 0 - SUBSTEP_MAX
     }
 
-    private val speed = 2.0
+    private val speed = 5.0
 
     private val position = MazeCoordinates(13, 26)
 
@@ -45,13 +45,12 @@ class PacmanState(val maze: MazeState) {
     val worldPosition = position.mm.add(subStepPosition)
 
     private fun isInCorneringThreshold(threshold: Double) =
-        if (direction.isHorizontal) subStepPosition.y.absValue <= threshold
-        else subStepPosition.x.absValue <= threshold
+        (if (direction.isHorizontal) subStepPosition.x else subStepPosition.y).absValue <= threshold
 
-    internal fun requestDirection(requestedDirection: Direction) {
-        this.requestedDirection = requestedDirection
+    internal fun requestDirection(newDirection: Direction) {
+        requestedDirection = newDirection
 
-        if (requestedDirection == direction) return
+        if (newDirection == direction) return
 
         // When the player is pressing the arrow key at real time, we allow them to do pre-turns
         // and post-turns
@@ -66,9 +65,13 @@ class PacmanState(val maze: MazeState) {
     }
 
     private fun maybeUpdateDirection(corneringThreshold: Double) {
-        if (direction == requestedDirection ||
-            !isInCorneringThreshold(corneringThreshold) ||
-            !isTileValidInDirection(requestedDirection)) return
+        if (requestedDirection == direction) return
+
+        val differentDirectionality = requestedDirection.isHorizontal != direction.isHorizontal
+
+        if (differentDirectionality && !isInCorneringThreshold(corneringThreshold)) return
+
+        if (!isTileValidInDirection(requestedDirection)) return
 
         direction = requestedDirection
         if (direction.isHorizontal) subStepPosition.y = 0 else subStepPosition.x = 0
@@ -76,7 +79,7 @@ class PacmanState(val maze: MazeState) {
 
     fun update(time: Double) {
         // If the player pressed the arrow keys way ahead of time, we don't allow any cornering
-        maybeUpdateDirection(0.0)
+        maybeUpdateDirection(0.1)
 
         val distance = speed * time * direction.multiplier
         val isNextTileAvailable = isTileValidInDirection(direction)

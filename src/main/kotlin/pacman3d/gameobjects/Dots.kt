@@ -13,6 +13,7 @@ class Dots : GameObject() {
     companion object {
         const val DOT_SIZE = 0.2 * Maze.UNIT_SIZE
         const val PILL_SIZE = 1.0 * Maze.UNIT_SIZE
+        const val DOT_Y_POSITION = 0.5
 
         const val NUM_DOTS = 240
         const val NUM_PILLS = 4
@@ -35,7 +36,7 @@ class Dots : GameObject() {
         state.maze.forEachTile { maze, x, y ->
             if (maze[x, y].isDotOrPill) {
                 val position = MazeCoordinates(x, y).mm
-                val matrix = Matrix4().makeTranslation(position.x, 0.6, position.y)
+                val matrix = Matrix4().makeTranslation(position.x, DOT_Y_POSITION, position.y)
                 if (maze[x, y].isDot) dotMesh.setMatrixAt(dotIndex++, matrix) else pillMesh.setMatrixAt(pillIndex++, matrix)
             }
         }

@@ -44,13 +44,13 @@ class Pacman : GameObject() {
 
     override val sceneObject = Mesh(geometry, 0xFFFE54.toMeshPhongMaterial().apply {
         morphTargets = true
-
         // TODO: Can I import constants correctly?
         //asDynamic()["side"] = 2
     })
 
     override fun setup(state: GameState) {
         sceneObject.position.set(state.pacman.worldPosition.x, SIZE, state.pacman.worldPosition.y)
+        sceneObject.renderOrder = -1
     }
 
     override fun update(state: GameState, time: Double) = with (state.pacman) {
