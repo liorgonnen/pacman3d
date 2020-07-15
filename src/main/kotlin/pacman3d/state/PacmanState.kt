@@ -34,7 +34,7 @@ class PacmanState(val maze: MazeState) {
 
     private val speed = 5.0
 
-    private val position = MazeCoordinates(13, 26)
+    internal val position = MazeCoordinates(13, 26)
 
     private val subStepPosition = Vector2(0.0, 0)
 

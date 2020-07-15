@@ -1,8 +1,7 @@
 package pacman3d.state
 
-import pacman3d.ext.times
 import pacman3d.maze.Maze
-import three.js.Vector2
+import pacman3d.maze.MazeCoordinates
 
 class MazeState {
 
@@ -11,8 +10,9 @@ class MazeState {
     var dotsLeft = state.count { it.isDotOrPill }
         private set
 
-    operator fun get(x: Int, y: Int): Byte = state[y * Maze.WIDTH_UNITS + x]
-    //operator fun get(pos: Vector2): Byte = state[pos.y * Maze.WIDTH_UNITS.toDouble() + pos.x]
+    operator fun get(x: Int, y: Int): Byte = state[Maze.indexOf(x, y)]
+    operator fun get(pos: MazeCoordinates): Byte = this[pos.x, pos.y]
+    operator fun set(pos: MazeCoordinates, value: Byte) { state[Maze.indexOf(pos.x, pos.y)] = value }
 
     fun forEachTile(func: (state: MazeState, x: Int, y: Int) -> Unit) {
         for (y in Maze.FIRST_EFFECTIVE_LINE until Maze.LAST_EFFECTIVE_LINE)

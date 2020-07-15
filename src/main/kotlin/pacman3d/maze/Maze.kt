@@ -2,6 +2,9 @@ package pacman3d.maze
 
 object Maze {
 
+    fun indexOf(x: Int, y: Int) = y * WIDTH_UNITS + x
+    fun indexOf(pos: MazeCoordinates) = pos.y * WIDTH_UNITS + pos.x
+
     const val WIDTH_UNITS = 28
     const val LENGTH_UNITS = 36
 

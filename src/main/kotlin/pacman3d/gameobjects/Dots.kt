@@ -1,19 +1,27 @@
 package pacman3d.gameobjects
 
+import pacman3d.ext.plusAssign
 import pacman3d.ext.toMeshLambertMaterial
-import pacman3d.ext.toMeshPhongMaterial
 import pacman3d.maze.Maze
 import pacman3d.maze.MazeCoordinates
+import pacman3d.maze.setFromMazeCoordinates
 import pacman3d.state.GameState
 import pacman3d.state.MazeState.Companion.isDot
 import pacman3d.state.MazeState.Companion.isDotOrPill
-import three.js.*
+import three.js.BoxGeometry
+import three.js.Group
+import three.js.Mesh
+import three.js.SphereGeometry
+import kotlin.collections.mutableMapOf
+import kotlin.collections.set
 
 class Dots : GameObject() {
 
     companion object {
+        const val DOT_COLOR = 0xF5BCB2
         const val DOT_SIZE = 0.2 * Maze.UNIT_SIZE
         const val PILL_SIZE = 1.0 * Maze.UNIT_SIZE
+        const val PILL_SEGMENTS = 16
         const val DOT_Y_POSITION = 0.5
 
         const val NUM_DOTS = 240
@@ -22,28 +30,30 @@ class Dots : GameObject() {
     }
 
     private val dotGeometry = BoxGeometry(DOT_SIZE, DOT_SIZE, DOT_SIZE)
-    private val dotMaterial = 0xF5BCB2.toMeshLambertMaterial()
-    private val dotMesh = InstancedMesh(dotGeometry, dotMaterial, NUM_DOTS)
+    private val dotMaterial = DOT_COLOR.toMeshLambertMaterial()
 
-    private val pillGeometry = SphereGeometry(PILL_SIZE / 2, 16, 16)
-    private val pillMaterial = 0xF5BCB2.toMeshLambertMaterial()
-    private val pillMesh = InstancedMesh(pillGeometry, pillMaterial, NUM_PILLS)
+    private val pillGeometry = SphereGeometry(PILL_SIZE / 2, PILL_SEGMENTS, PILL_SEGMENTS)
 
-    override val sceneObject = Group().apply { add(dotMesh, pillMesh) }
+    private val group = Group()
+
+    override val sceneObject = group
+
+    private val mazeCoordinatesToDotMap = mutableMapOf<Int, Mesh>()
 
     override fun setup(state: GameState) {
-        var dotIndex = 0
-        var pillIndex = 0
         state.maze.forEachTile { maze, x, y ->
             if (maze[x, y].isDotOrPill) {
-                val position = MazeCoordinates(x, y).mm
-                val matrix = Matrix4().makeTranslation(position.x, DOT_Y_POSITION, position.y)
-                if (maze[x, y].isDot) dotMesh.setMatrixAt(dotIndex++, matrix) else pillMesh.setMatrixAt(pillIndex++, matrix)
+                group += Mesh(if (maze[x, y].isDot) dotGeometry else pillGeometry, dotMaterial).apply {
+                    position.setFromMazeCoordinates(MazeCoordinates(x, y), y = DOT_Y_POSITION)
+                    mazeCoordinatesToDotMap[Maze.indexOf(x, y)] = this
+                }
             }
         }
     }
 
     override fun update(state: GameState, time: Double) {
-
+        state.lastEatenDotIndex?.let { index ->
+            mazeCoordinatesToDotMap.remove(index)?.let { group.remove(it) }
+        }
     }
 }

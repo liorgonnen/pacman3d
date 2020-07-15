@@ -8,6 +8,8 @@ import three.js.Vector3
 
 class MazeCoordinates(var x: Int, var y: Int) {
 
+    val index get() = Maze.indexOf(x, y)
+
     // Top
     private val TM = Vector2(Maze.HALF_UNIT_SIZE, 0)
     private val TR = Vector2(Maze.UNIT_SIZE, 0)
@@ -42,9 +44,10 @@ class MazeCoordinates(var x: Int, var y: Int) {
  * Sets only the x and z components for a 3D vector. The y component is left unchanged
  * @param mazeCoordinates
  */
-fun Vector3.setXZFromMazeCoordinates(mazeCoordinates: MazeCoordinates) = apply {
-    x = -Maze.HALF_WIDTH + mazeCoordinates.x * Maze.UNIT_SIZE + Maze.HALF_UNIT_SIZE
-    z = -Maze.HALF_LENGTH + mazeCoordinates.y * Maze.UNIT_SIZE + Maze.HALF_UNIT_SIZE
+fun Vector3.setFromMazeCoordinates(mazeCoordinates: MazeCoordinates, y: Double = 0.0) = let {
+    it.x = -Maze.HALF_WIDTH + mazeCoordinates.x * Maze.UNIT_SIZE + Maze.HALF_UNIT_SIZE
+    it.y = y
+    it.z = -Maze.HALF_LENGTH + mazeCoordinates.y * Maze.UNIT_SIZE + Maze.HALF_UNIT_SIZE
 }
 
 /**

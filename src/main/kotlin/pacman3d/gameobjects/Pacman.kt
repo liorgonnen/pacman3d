@@ -3,7 +3,6 @@ package pacman3d.gameobjects
 import pacman3d.ext.HALF_PI
 import pacman3d.ext.Y_AXIS
 import pacman3d.ext.toMeshLambertMaterial
-import pacman3d.ext.toMeshPhongMaterial
 import pacman3d.maze.Maze
 import pacman3d.state.Direction.*
 import pacman3d.state.GameState
@@ -17,7 +16,7 @@ class Pacman : GameObject() {
     companion object {
         private const val SIZE = 1.6 * Maze.UNIT_SIZE
         private const val MAX_MOUTH_ANGLE = 90.0 * PI / 180
-        private const val SEGMENTS = 30
+        private const val SEGMENTS = 16
 
         // TODO: Can I import constants correctly?
         private const val FrontSide = 0
