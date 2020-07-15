@@ -15,7 +15,7 @@ class Game {
     private val clock = Clock()
 
     private val camera = PerspectiveCamera(75, window.aspectRatio, 0.1, 1000).apply {
-        position.set(0, Maze.LENGTH * 0.7, Maze.LENGTH * 0.5)
+        position.set(0, Maze.LENGTH * 0.6, Maze.LENGTH * 0.5)
         lookAt(0, 0, 0)
     }
 
@@ -38,11 +38,11 @@ class Game {
         }
     }
 
-    private val plane = Mesh(PlaneGeometry(Maze.WIDTH, Maze.EFFECTIVE_LENGTH, 5), MeshPhongMaterial().apply { color = Color(0) }).apply {
+    private val plane = Mesh(PlaneGeometry(Maze.WIDTH, Maze.EFFECTIVE_LENGTH, 5), 0.toMeshLambertMaterial()).apply {
         rotateX(-HALF_PI)
     }
 
-    private val maze = Mesh(MazeGeometryBuilder().build(), 0x151FCD.toMeshPhongMaterial())
+    private val maze = Mesh(MazeGeometryBuilder().build(), 0x151FCD.toMeshLambertMaterial())
 
     private val scene = Scene().apply {
         add(plane)
@@ -50,8 +50,9 @@ class Game {
 
         gameObjects.forEach { add(it) }
 
-        add(DirectionalLight(0xffffff, 1).apply { position.set(-1, 2, 4) })
-        add(AmbientLight(0x404040, 1))
+        add(DirectionalLight(0xffffff, 1).apply { position.set(-Maze.WIDTH, 40, Maze.LENGTH) })
+        add(HemisphereLight(0xffffff, 0xffffff, 0.5))
+        //add(AmbientLight(0x555555))
     }
 
     init {

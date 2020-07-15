@@ -60,6 +60,7 @@ fun Number.truncate(decimalDigits: Int) = 10.0.pow(decimalDigits).let { pow -> (
 
 fun Number.toMeshPhongMaterial() = let { materialColor -> MeshPhongMaterial().apply { color = Color(materialColor) } }
 fun Number.toLineBasicMaterial() = let { materialColor -> LineBasicMaterial().apply { color = Color(materialColor) } }
+fun Number.toMeshLambertMaterial() = let { materialColor -> MeshPhongMaterial().apply { color = Color(materialColor) }}
 
 val Number.normalized get() = if (this < 0.0) -1.0 else if (this > 0.0) 1.0 else 0.0
 

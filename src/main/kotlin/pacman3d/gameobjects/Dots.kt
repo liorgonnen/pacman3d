@@ -1,5 +1,6 @@
 package pacman3d.gameobjects
 
+import pacman3d.ext.toMeshLambertMaterial
 import pacman3d.ext.toMeshPhongMaterial
 import pacman3d.maze.Maze
 import pacman3d.maze.MazeCoordinates
@@ -21,11 +22,11 @@ class Dots : GameObject() {
     }
 
     private val dotGeometry = BoxGeometry(DOT_SIZE, DOT_SIZE, DOT_SIZE)
-    private val dotMaterial = 0xF5BCB2.toMeshPhongMaterial()
+    private val dotMaterial = 0xF5BCB2.toMeshLambertMaterial()
     private val dotMesh = InstancedMesh(dotGeometry, dotMaterial, NUM_DOTS)
 
     private val pillGeometry = SphereGeometry(PILL_SIZE / 2, 16, 16)
-    private val pillMaterial = 0xF5BCB2.toMeshPhongMaterial()
+    private val pillMaterial = 0xF5BCB2.toMeshLambertMaterial()
     private val pillMesh = InstancedMesh(pillGeometry, pillMaterial, NUM_PILLS)
 
     override val sceneObject = Group().apply { add(dotMesh, pillMesh) }
