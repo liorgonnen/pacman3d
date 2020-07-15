@@ -17,7 +17,7 @@ class GameState {
 
     val maze = MazeState()
 
-    val pacman = PacmanState()
+    val pacman = PacmanState(maze)
 
     fun update(time: Double) {
         pacman.update(time)
@@ -26,10 +26,10 @@ class GameState {
     // TODO: This is just temporarily here to test things out.
     fun keyboardHandler(event: KeyboardEvent) {
         when (event.keyCode) {
-            KEY_ARROW_UP ->  pacman.direction = UP
-            KEY_ARROW_DOWN -> pacman.direction = DOWN
-            KEY_ARROW_LEFT -> pacman.direction = LEFT
-            KEY_ARROW_RIGHT -> pacman.direction = RIGHT
+            KEY_ARROW_UP ->  pacman.requestDirection(UP)
+            KEY_ARROW_DOWN -> pacman.requestDirection(DOWN)
+            KEY_ARROW_LEFT -> pacman.requestDirection(LEFT)
+            KEY_ARROW_RIGHT -> pacman.requestDirection(RIGHT)
         }
     }
 }

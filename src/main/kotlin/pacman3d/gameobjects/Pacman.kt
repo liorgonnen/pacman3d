@@ -12,7 +12,7 @@ import kotlin.math.PI
 class Pacman : GameObject() {
 
     companion object {
-        private const val SIZE = 1.6 * Maze.UNIT_SIZE
+        private const val SIZE = 1.0 * Maze.UNIT_SIZE
         private const val MAX_MOUTH_ANGLE = 60.0 * PI / 180
         private const val SEGMENTS = 30
     }
@@ -42,10 +42,15 @@ class Pacman : GameObject() {
     private var mouthOpenSpeed = 0.15
     private var mouthOpenInfluence = 0.0 // range: 0 - 1.0
 
-    override val sceneObject = Mesh(geometry, 0xFFFE54.toMeshPhongMaterial().apply { morphTargets = true })
+    override val sceneObject = Mesh(geometry, 0xFFFE54.toMeshPhongMaterial().apply {
+        morphTargets = true
+
+        // TODO: Can I import constants correctly?
+        //asDynamic()["side"] = 2
+    })
 
     override fun setup(state: GameState) {
-        sceneObject.position.set(state.pacman.position.x, SIZE, state.pacman.position.y)
+        sceneObject.position.set(state.pacman.worldPosition.x, SIZE, state.pacman.worldPosition.y)
     }
 
     override fun update(state: GameState, time: Double) = with (state.pacman) {
@@ -61,10 +66,10 @@ class Pacman : GameObject() {
 
         sceneObject.morphTargetInfluences[0] = mouthOpenInfluence
 
-        sceneObject.position.x = position.x
-        sceneObject.position.z = position.y
+        sceneObject.position.x = worldPosition.x
+        sceneObject.position.z = worldPosition.y
 
-        sceneObject.setRotationFromAxisAngle(Z_AXIS, when (direction) {
+        sceneObject.setRotationFromAxisAngle(Z_AXIS, when (state.pacman.direction) {
             DOWN -> 1.5 * PI
             RIGHT -> 0
             UP -> PI / 2

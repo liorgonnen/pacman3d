@@ -2,8 +2,10 @@ package pacman3d.gameobjects
 
 import pacman3d.ext.toMeshPhongMaterial
 import pacman3d.maze.Maze
-import pacman3d.maze.Maze.Pos.mm
+import pacman3d.maze.MazeCoordinates
 import pacman3d.state.GameState
+import pacman3d.state.MazeState.Companion.isDot
+import pacman3d.state.MazeState.Companion.isDotOrPill
 import three.js.*
 
 class Dots : GameObject() {
@@ -31,10 +33,10 @@ class Dots : GameObject() {
         var dotIndex = 0
         var pillIndex = 0
         state.maze.forEachTile { maze, x, y ->
-            if (maze.isDotOrPill(x, y)) {
-                val position = Maze.Pos[x, y].mm
+            if (maze[x, y].isDotOrPill) {
+                val position = MazeCoordinates(x, y).mm
                 val matrix = Matrix4().makeTranslation(position.x, 0.6, position.y)
-                if (maze.isDot(x, y)) dotMesh.setMatrixAt(dotIndex++, matrix) else pillMesh.setMatrixAt(pillIndex++, matrix)
+                if (maze[x, y].isDot) dotMesh.setMatrixAt(dotIndex++, matrix) else pillMesh.setMatrixAt(pillIndex++, matrix)
             }
         }
     }
