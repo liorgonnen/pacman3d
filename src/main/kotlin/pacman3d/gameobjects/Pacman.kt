@@ -22,7 +22,7 @@ class Pacman : GameObject() {
         widthSegments = SEGMENTS,
         heightSegments = SEGMENTS,
         phiStart = MAX_MOUTH_ANGLE / 2,
-        phiLength = 2 * PI - MAX_MOUTH_ANGLE,
+        phiLength = TWO_PI - MAX_MOUTH_ANGLE,
         thetaStart = PI,
         thetaLength = PI,
     ).apply {
@@ -34,7 +34,7 @@ class Pacman : GameObject() {
             widthSegments = SEGMENTS,
             heightSegments = SEGMENTS,
             phiStart = 0,
-            phiLength = 2 * PI,
+            phiLength = TWO_PI,
             thetaStart = PI,
             thetaLength = PI,
     ).apply {
