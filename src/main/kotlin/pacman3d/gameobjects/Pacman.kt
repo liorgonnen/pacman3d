@@ -1,8 +1,6 @@
 package pacman3d.gameobjects
 
-import pacman3d.ext.HALF_PI
-import pacman3d.ext.Y_AXIS
-import pacman3d.ext.toMeshLambertMaterial
+import pacman3d.ext.*
 import pacman3d.maze.Maze
 import pacman3d.state.Direction.*
 import pacman3d.state.GameState
@@ -17,10 +15,6 @@ class Pacman : GameObject() {
         private const val SIZE = 1.6 * Maze.UNIT_SIZE
         private const val MAX_MOUTH_ANGLE = 90.0 * PI / 180
         private const val SEGMENTS = 16
-
-        // TODO: Can I import constants correctly?
-        private const val FrontSide = 0
-        private const val BackSide = 1
     }
 
     private val mouthOpenGeometry = SphereBufferGeometry(
@@ -53,12 +47,12 @@ class Pacman : GameObject() {
 
     private val outsideMaterial = 0xFFFE54.toMeshLambertMaterial().apply {
         morphTargets = true
-        asDynamic()["side"] = BackSide
+        materialSide = BackSide
     }
 
     private val insideMaterial = 0x887E29.toMeshLambertMaterial().apply {
         morphTargets = true
-        asDynamic()["side"] = FrontSide
+        materialSide = FrontSide
     }
 
     private val insideMesh = Mesh(geometry, insideMaterial)

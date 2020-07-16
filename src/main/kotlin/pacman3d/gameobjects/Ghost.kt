@@ -5,8 +5,10 @@ import pacman3d.maze.Maze
 import pacman3d.state.GameState
 import three.js.Group
 import three.js.Mesh
+import three.js.Side
 import kotlin.math.PI
 import kotlin.math.cos
+import kotlin.math.min
 import kotlin.math.sin
 
 class Ghost : GameObject() {
@@ -31,7 +33,7 @@ class Ghost : GameObject() {
             v < WAVE_FRACTION -> p.set(
                 x = cos(a) * RADIUS,
                 z = sin(a) * RADIUS,
-                y = HEIGHT * WAVE_FRACTION * sin(a * 4)
+                y = (v + (WAVE_FRACTION - v) * sin(a * 4)) * HEIGHT
             )
             // Middle part, simply a tube
             v >= WAVE_FRACTION && v < HEAD_FRACTION -> p.set(
@@ -53,8 +55,8 @@ class Ghost : GameObject() {
     }
 
     override val sceneObject = Group().add(
-            Mesh(bodyGeometry, 0xff0000.toMeshLambertMaterial().apply { asDynamic()["side"] = 2 }).apply { position.set(0, 5, 0) }
-    )
+            Mesh(bodyGeometry, 0xff0000.toMeshLambertMaterial().apply { materialSide = DoubleSide })
+    ).apply { position.set(0, 5, 0) }
 
     override fun setup(state: GameState) {
 

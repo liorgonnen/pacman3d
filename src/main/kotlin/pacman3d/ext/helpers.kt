@@ -46,3 +46,12 @@ class ExtrudeOptions(
     override var bevelSegments: Number? = bevelSegments
     override var UVGenerator: UVGenerator? = uvGenerator
 }
+
+// TODO: Can I import constants correctly?
+const val FrontSide = 0
+const val BackSide = 1
+const val DoubleSide = 2
+
+var Material.materialSide: Int
+    set(value) { asDynamic()["side"] = value }
+    get() = asDynamic()["side"] as Int
