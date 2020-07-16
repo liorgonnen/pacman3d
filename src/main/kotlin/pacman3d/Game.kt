@@ -2,8 +2,10 @@ package pacman3d
 
 import kotlinx.browser.document
 import kotlinx.browser.window
+import pacman3d.camera.CameraAnimator
 import pacman3d.ext.*
 import pacman3d.gameobjects.Dots
+import pacman3d.gameobjects.Ghost
 import pacman3d.gameobjects.Pacman
 import pacman3d.maze.Maze
 import pacman3d.maze.MazeGeometryBuilder
@@ -15,15 +17,18 @@ class Game {
     private val clock = Clock()
 
     private val camera = PerspectiveCamera(75, window.aspectRatio, 0.1, 1000).apply {
-        position.set(0, Maze.LENGTH * 0.6, Maze.LENGTH * 0.5)
+        position.set(0, Maze.LENGTH * 0.3, Maze.LENGTH * 0.5)
         lookAt(0, 0, 0)
     }
+
+    private val cameraAnimator = CameraAnimator(camera)
 
     private val renderer = WebGLRenderer().init(clearColor = 0x333333)
 
     private val gameObjects = arrayOf(
         Dots(),
-        Pacman()
+        Pacman(),
+        Ghost()
     )
 
     private val gameState = GameState()
@@ -74,6 +79,8 @@ class Game {
         gameState.update(time)
 
         gameObjects.forEach { it.update(gameState, time) }
+
+        //cameraAnimator.update(time)
 
         renderer.render(scene, camera)
 
