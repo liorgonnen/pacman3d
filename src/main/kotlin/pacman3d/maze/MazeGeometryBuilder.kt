@@ -1,5 +1,6 @@
 package pacman3d.maze
 
+import pacman3d.ext.ExtrudeOptions
 import pacman3d.ext.absValue
 import pacman3d.ext.minus
 import pacman3d.ext.plus
@@ -15,6 +16,8 @@ class MazeGeometryBuilder {
     private val mazePieces = ArrayList<Geometry>()
     
     private val currentPosition = Vector2(0, 0)
+
+    private val extrudeOptions = ExtrudeOptions(steps = 20, depth = WALL_HEIGHT, bevelEnabled = false)
 
     fun build(): Geometry {
         mazeFrameOuterBounds()
@@ -127,14 +130,7 @@ class MazeGeometryBuilder {
             }
         }
 
-        // TODO: Make a helper class for this and hold a single instance
-        val options = object : ExtrudeGeometryOptions {
-            override var steps: Number? = 20
-            override var depth: Number? = WALL_HEIGHT
-            override var bevelEnabled: Boolean? = false
-        }
-
-        return ExtrudeGeometry(shape, options).apply {
+        return ExtrudeGeometry(shape, extrudeOptions).apply {
             rotateX(-PI / 2)
             translate(from.x, -WALL_HEIGHT / 2, from.y)
         }

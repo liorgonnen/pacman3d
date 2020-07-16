@@ -3,6 +3,7 @@ package pacman3d.gameobjects
 import pacman3d.ext.*
 import pacman3d.maze.Maze
 import pacman3d.state.GameState
+import three.js.Group
 import three.js.Mesh
 import kotlin.math.PI
 import kotlin.math.cos
@@ -23,7 +24,7 @@ class Ghost : GameObject() {
         private const val STACKS = 20
     }
 
-    private val geometry = parametricGeometry(SLICES, STACKS) { u, v, p ->
+    private val bodyGeometry = parametricGeometry(SLICES, STACKS) { u, v, p ->
         val a = u * 2 * PI
         when {
             // Lower-wavy part
@@ -51,9 +52,9 @@ class Ghost : GameObject() {
         }
     }
 
-    override val sceneObject = Mesh(geometry, 0xff0000.toMeshLambertMaterial().apply { asDynamic()["side"] = 2 }).apply {
-        position.set(0, 5, 0)
-    }
+    override val sceneObject = Group().add(
+            Mesh(bodyGeometry, 0xff0000.toMeshLambertMaterial().apply { asDynamic()["side"] = 2 }).apply { position.set(0, 5, 0) }
+    )
 
     override fun setup(state: GameState) {
 
