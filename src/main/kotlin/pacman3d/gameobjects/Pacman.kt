@@ -1,8 +1,8 @@
 package pacman3d.gameobjects
 
 import pacman3d.ext.*
+import pacman3d.logic.Direction.*
 import pacman3d.maze.Maze
-import pacman3d.state.Direction.*
 import pacman3d.state.GameState
 import three.js.Group
 import three.js.Mesh

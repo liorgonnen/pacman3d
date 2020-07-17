@@ -1,5 +1,7 @@
 package pacman3d.state
 
+import pacman3d.logic.Direction
+import pacman3d.logic.Direction.*
 import pacman3d.maze.Maze
 import pacman3d.maze.MazeCoordinates
 
@@ -18,6 +20,13 @@ class MazeState {
         for (y in Maze.FIRST_EFFECTIVE_LINE until Maze.LAST_EFFECTIVE_LINE)
             for (x in 0 until Maze.WIDTH_UNITS)
                 func(this, x, y)
+    }
+
+    fun isTileValidInDirection(position: MazeCoordinates, direction: Direction) = when (direction) {
+        UP -> this[position.x, position.y - 1].isValid
+        DOWN -> this[position.x, position.y + 1].isValid
+        LEFT -> this[position.x - 1, position.y].isValid
+        RIGHT -> this[position.x + 1, position.y].isValid
     }
 
     companion object {

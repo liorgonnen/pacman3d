@@ -5,9 +5,8 @@ import pacman3d.KEY_ARROW_DOWN
 import pacman3d.KEY_ARROW_LEFT
 import pacman3d.KEY_ARROW_RIGHT
 import pacman3d.KEY_ARROW_UP
-import pacman3d.maze.Maze
+import pacman3d.logic.Direction.*
 import pacman3d.maze.MazeCoordinates
-import pacman3d.state.Direction.*
 import pacman3d.state.GhostId.*
 import pacman3d.state.MazeState.Companion.EMPTY
 import pacman3d.state.MazeState.Companion.isDot
@@ -45,7 +44,8 @@ class GameState {
     fun update(time: Double) {
         lastEatenDotIndex = null
 
-        pacman.update(time)
+        pacman.update(this, time)
+        ghosts.forEach { it.update(this, time) }
 
         val tile = maze[pacman.position]
         if (tile.isDotOrPill) {

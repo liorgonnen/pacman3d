@@ -15,7 +15,7 @@ class Game {
     private val clock = Clock()
 
     private val camera = PerspectiveCamera(75, window.aspectRatio, 0.1, 1000).apply {
-        position.set(0, Maze.LENGTH * 0.5, Maze.LENGTH * 0.5)
+        position.set(0, Maze.LENGTH * 0.6, Maze.LENGTH * 0.6)
         lookAt(0, 0, 0)
     }
 
