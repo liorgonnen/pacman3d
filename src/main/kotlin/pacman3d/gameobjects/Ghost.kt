@@ -7,12 +7,13 @@ import pacman3d.maze.Maze
 import pacman3d.maze.MazeCoordinates
 import pacman3d.maze.setFromMazeCoordinates
 import pacman3d.state.GameState
+import pacman3d.state.GhostId
 import three.js.*
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-class Ghost : GameObject() {
+abstract class Ghost(val id: GhostId, color: Int) : GameObject() {
 
     private sealed class GazeDirection(val multiplier: Double) {
         object LEFT : GazeDirection(1.0)
@@ -23,10 +24,10 @@ class Ghost : GameObject() {
         // The percentage the wavy part of the ghost spans out of its entire height
         private const val WAVE_FRACTION = 0.1
         private const val HEAD_FRACTION = 0.5
-        private const val EYE_FRACTION = 0.6
+        private const val EYE_FRACTION = 0.7
 
         private const val WIDTH = Maze.UNIT_SIZE * 1.6
-        private const val HEIGHT = WIDTH
+        private const val HEIGHT = WIDTH * 1.2
         private const val RADIUS = WIDTH / 2.0
         private const val EYE_DEPTH = 0.01
         private const val EYE_HEIGHT = EYE_FRACTION * HEIGHT
@@ -69,7 +70,7 @@ class Ghost : GameObject() {
         }
     }
 
-    private val bodyMaterial = 0xff0000.toMeshLambertMaterial().apply { materialSide = DoubleSide }
+    private val bodyMaterial = color.toMeshLambertMaterial().apply { materialSide = DoubleSide }
 
     private val eyeballShape = Shape().apply {
         add(EllipseCurve(0, 0, EYE_WIDTH_RADIUS, EYE_HEIGHT_RADIUS, 0, TWO_PI, false, 0))
@@ -109,7 +110,7 @@ class Ghost : GameObject() {
             },
             leftIris,
             rightIris,
-    ).apply { position.setFromMazeCoordinates(MazeCoordinates(18, 26), WAVE_FRACTION * HEIGHT) }
+    )
 
     private fun look(direction: GazeDirection) {
         val center = EYE_SPACING / 2 + EYE_WIDTH_RADIUS
@@ -120,9 +121,20 @@ class Ghost : GameObject() {
 
     override fun setup(state: GameState) {
         look(RIGHT)
+        val ghostState = state.ghosts[id.ordinal]
+        sceneObject.position.set(ghostState.worldPosition.x, WAVE_FRACTION * HEIGHT, ghostState.worldPosition.y)
     }
 
     override fun update(state: GameState, time: Double) {
     
     }
 }
+
+// TODO: I might be able to simply create these instances in the game class, depending on where the logic will be
+class Blinky : Ghost(id = GhostId.Blinky, color = 0xFE0000)
+
+class Pinky : Ghost(id = GhostId.Pinky, color = 0xFFBBFF)
+
+class Inky : Ghost(id = GhostId.Inky, color = 0x00D4D4)
+
+class Clyde : Ghost(id = GhostId.Clyde, color = 0xFFB950)

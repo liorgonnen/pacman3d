@@ -6,7 +6,9 @@ import pacman3d.KEY_ARROW_LEFT
 import pacman3d.KEY_ARROW_RIGHT
 import pacman3d.KEY_ARROW_UP
 import pacman3d.maze.Maze
+import pacman3d.maze.MazeCoordinates
 import pacman3d.state.Direction.*
+import pacman3d.state.GhostId.*
 import pacman3d.state.MazeState.Companion.EMPTY
 import pacman3d.state.MazeState.Companion.isDot
 import pacman3d.state.MazeState.Companion.isDotOrPill
@@ -25,7 +27,14 @@ class GameState {
 
     val maze = MazeState()
 
-    val pacman = PacmanState(maze)
+    val pacman = PacmanState(maze, initialPosition = MazeCoordinates(14, 25))
+
+    val ghosts = arrayOf(
+        GhostState(id = Blinky, initialPosition = MazeCoordinates(14, 14)),
+        GhostState(id = Inky, initialPosition = MazeCoordinates(12, 17)),
+        GhostState(id = Pinky, initialPosition = MazeCoordinates(14, 17)),
+        GhostState(id = Clyde, initialPosition = MazeCoordinates(16, 17)),
+    )
 
     /**
      * Holds the maze index of the dot or pill that's been eaten in the last update or null otherwise

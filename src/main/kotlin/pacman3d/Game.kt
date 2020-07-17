@@ -4,9 +4,7 @@ import kotlinx.browser.document
 import kotlinx.browser.window
 import pacman3d.camera.CameraAnimator
 import pacman3d.ext.*
-import pacman3d.gameobjects.Dots
-import pacman3d.gameobjects.Ghost
-import pacman3d.gameobjects.Pacman
+import pacman3d.gameobjects.*
 import pacman3d.maze.Maze
 import pacman3d.maze.MazeGeometryBuilder
 import pacman3d.state.GameState
@@ -17,7 +15,7 @@ class Game {
     private val clock = Clock()
 
     private val camera = PerspectiveCamera(75, window.aspectRatio, 0.1, 1000).apply {
-        position.set(0, Maze.LENGTH * 0.3, Maze.LENGTH * 0.5)
+        position.set(0, Maze.LENGTH * 0.5, Maze.LENGTH * 0.5)
         lookAt(0, 0, 0)
     }
 
@@ -28,7 +26,10 @@ class Game {
     private val gameObjects = arrayOf(
         Dots(),
         Pacman(),
-        Ghost()
+        Blinky(),
+        Pinky(),
+        Inky(),
+        Clyde(),
     )
 
     private val gameState = GameState()

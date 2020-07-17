@@ -19,7 +19,7 @@ sealed class Direction(val multiplier: Double) {
     val isVertical get() = this == UP || this == DOWN
 }
 
-class PacmanState(val maze: MazeState) {
+class PacmanState(val maze: MazeState, val initialPosition: MazeCoordinates) : BaseState(initialPosition) {
 
     companion object {
         private const val SUBSTEP_MIN = -0.5
@@ -34,15 +34,9 @@ class PacmanState(val maze: MazeState) {
 
     private val speed = 5.0
 
-    internal val position = MazeCoordinates(13, 26)
-
-    private val subStepPosition = Vector2(0.0, 0)
-
     private var requestedDirection: Direction = DOWN
 
     var direction: Direction = DOWN
-
-    val worldPosition = position.mm.add(subStepPosition)
 
     private fun isInCorneringThreshold(threshold: Double) =
         (if (direction.isHorizontal) subStepPosition.x else subStepPosition.y).absValue <= threshold
