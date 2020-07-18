@@ -29,11 +29,21 @@ class GameState {
     val pacman = PacmanState(maze, initialPosition = MazeCoordinates(14, 25))
 
     val ghosts = arrayOf(
+        // Order matters
         GhostState(id = Blinky, initialPosition = MazeCoordinates(14, 14)),
         GhostState(id = Inky, initialPosition = MazeCoordinates(12, 17)),
         GhostState(id = Pinky, initialPosition = MazeCoordinates(14, 17)),
         GhostState(id = Clyde, initialPosition = MazeCoordinates(16, 17)),
     )
+
+    init {
+        reset()
+    }
+
+    fun reset() {
+        pacman.reset(this)
+        ghosts.forEach { it.reset(this) }
+    }
 
     /**
      * Holds the maze index of the dot or pill that's been eaten in the last update or null otherwise

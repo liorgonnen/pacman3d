@@ -14,11 +14,6 @@ abstract class BaseState(internal val position: MazeCoordinates) {
         private const val SUBSTEP_MIN = -0.5
         private const val SUBSTEP_MAX = 0.5
         private const val SUBSTEP_CENTER = 0.0
-
-        // Cornering is the technique of moving the joystick in the direction one wishes to go well before reaching the
-        // center of a turn, ensuring Pac-Man will take the turn as quickly as possible.
-        //
-        private const val CORNERING_THRESHOLD = 0.1 // Must be between 0 - SUBSTEP_MAX
     }
 
     protected val subStepPosition = Vector2(0, 0)
@@ -26,17 +21,31 @@ abstract class BaseState(internal val position: MazeCoordinates) {
     val worldPosition = position.ml.add(subStepPosition)
 
     var direction: Direction = DOWN
+        set(value) {
+            if (field == value) return
+            field = value
+            if (value.isHorizontal) subStepPosition.y = 0 else subStepPosition.x = 0
+            onDirectionChanged()
+        }
 
     var speed = 5.0
         protected set
 
+    open fun reset(gameState: GameState) = Unit
+
     open fun update(gameState: GameState, time: Double) {
-        updatePosition(gameState.maze, time)
+        val mazePositionChanged = updatePosition(gameState.maze, time)
+        if (mazePositionChanged) onMazePositionChanged(gameState, time)
     }
 
-    protected open fun updatePosition(maze: MazeState, time: Double) {
+    protected open fun onMazePositionChanged(gameState: GameState, time: Double) = Unit
+
+    protected open fun onDirectionChanged() = Unit
+
+    protected open fun updatePosition(maze: MazeState, time: Double): Boolean {
         val distance = speed * time * direction.multiplier
         val isNextTileAvailable = maze.isTileValidInDirection(position, direction)
+        var mazePositionChanged = false
 
         if (direction.isHorizontal) subStepPosition.x += distance else subStepPosition.y += distance
 
@@ -47,6 +56,7 @@ abstract class BaseState(internal val position: MazeCoordinates) {
                         if (subStepPosition.y < SUBSTEP_MIN) {
                             position.y--
                             subStepPosition.y = SUBSTEP_MAX
+                            mazePositionChanged = true
                         }
                     }
                     else {
@@ -61,6 +71,7 @@ abstract class BaseState(internal val position: MazeCoordinates) {
                         if (subStepPosition.y > SUBSTEP_MAX) {
                             position.y++
                             subStepPosition.y = SUBSTEP_MIN
+                            mazePositionChanged = true
                         }
                     }
                     else {
@@ -75,6 +86,7 @@ abstract class BaseState(internal val position: MazeCoordinates) {
                         if (subStepPosition.x < SUBSTEP_MIN) {
                             position.x--
                             subStepPosition.x = SUBSTEP_MAX
+                            mazePositionChanged = true
                         }
                     }
                     else {
@@ -89,6 +101,7 @@ abstract class BaseState(internal val position: MazeCoordinates) {
                         if (subStepPosition.x > SUBSTEP_MAX) {
                             position.x++
                             subStepPosition.x = SUBSTEP_MIN
+                            mazePositionChanged = true
                         }
                     }
                     else {
@@ -100,5 +113,7 @@ abstract class BaseState(internal val position: MazeCoordinates) {
 
         // TODO: Move this to the game object so that the state is completely decoupled from any rendering specifics
         worldPosition.setFromMazeCoordinates(position, subStepPosition)
+
+        return mazePositionChanged
     }
 }

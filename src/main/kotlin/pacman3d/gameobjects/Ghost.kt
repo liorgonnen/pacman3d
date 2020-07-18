@@ -3,9 +3,8 @@ package pacman3d.gameobjects
 import pacman3d.ext.*
 import pacman3d.gameobjects.Ghost.GazeDirection.LEFT
 import pacman3d.gameobjects.Ghost.GazeDirection.RIGHT
+import pacman3d.logic.Direction
 import pacman3d.maze.Maze
-import pacman3d.maze.MazeCoordinates
-import pacman3d.maze.setFromMazeCoordinates
 import pacman3d.state.GameState
 import pacman3d.state.GhostId
 import three.js.*
@@ -15,9 +14,10 @@ import kotlin.math.sin
 
 abstract class Ghost(val id: GhostId, color: Int) : GameObject() {
 
+    // TODO: Remove this in favor of [Direction]
     private sealed class GazeDirection(val multiplier: Double) {
-        object LEFT : GazeDirection(1.0)
-        object RIGHT : GazeDirection(-1.0)
+        object LEFT : GazeDirection(-1.0)
+        object RIGHT : GazeDirection(1.0)
     }
 
     companion object {
@@ -62,9 +62,9 @@ abstract class Ghost(val id: GhostId, color: Int) : GameObject() {
                 val headHeight = 1.0 - HEAD_FRACTION
                 val h = PI / 2 * (v - HEAD_FRACTION) / headHeight // Remap v to 0..PI/2
                 p.set(
-                        x = RADIUS * cos(h) * cos(a),
-                        z = RADIUS * cos(h) * sin(a),
-                        y = HEAD_FRACTION * HEIGHT + sin(h) * headHeight * HEIGHT
+                    x = RADIUS * cos(h) * cos(a),
+                    z = RADIUS * cos(h) * sin(a),
+                    y = HEAD_FRACTION * HEIGHT + sin(h) * headHeight * HEIGHT
                 )
             }
         }
@@ -126,7 +126,12 @@ abstract class Ghost(val id: GhostId, color: Int) : GameObject() {
     }
 
     override fun update(state: GameState, time: Double) {
-    
+        val ghost = state.ghosts[id.ordinal]
+        sceneObject.position.x = ghost.worldPosition.x
+        sceneObject.position.z = ghost.worldPosition.y
+
+        if (ghost.direction == Direction.LEFT) look(LEFT)
+        if (ghost.direction == Direction.RIGHT) look(RIGHT)
     }
 }
 

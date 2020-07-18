@@ -39,7 +39,6 @@ class PacmanState(val maze: MazeState, val initialPosition: MazeCoordinates) : B
         if (!maze.isTileValidInDirection(position, requestedDirection)) return
 
         direction = requestedDirection
-        if (direction.isHorizontal) subStepPosition.y = 0 else subStepPosition.x = 0
     }
 
     override fun update(gameState: GameState, time: Double) {

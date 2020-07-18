@@ -4,10 +4,7 @@ import three.js.Color
 import three.js.LineBasicMaterial
 import three.js.MeshPhongMaterial
 import three.js.Vector3
-import kotlin.math.PI
-import kotlin.math.abs
-import kotlin.math.pow
-import kotlin.math.roundToInt
+import kotlin.math.*
 import kotlin.random.Random
 
 const val TWO_PI = PI * 2.0
@@ -31,6 +28,8 @@ operator fun Double.minus(other: Number) = this - other.toDouble()
 operator fun Double.plus(other: Number) = this + other.toDouble()
 
 inline val Double.sqr get() = this * this
+inline val Int.sqr get() = this * this
+inline val Int.sqrt get(): Double = sqrt(this.toDouble())
 
 // For debug only. Allocates a new object
 fun Double.toSpeedVector() = Vector3().setXZFromAngle(this)
