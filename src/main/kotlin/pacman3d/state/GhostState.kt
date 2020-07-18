@@ -1,5 +1,6 @@
 package pacman3d.state
 
+import pacman3d.ext.compareTo
 import pacman3d.logic.Direction
 import pacman3d.logic.Direction.*
 import pacman3d.maze.MazeCoordinates
@@ -19,6 +20,8 @@ class GhostState(val id: GhostId, initialPosition: MazeCoordinates) : BaseState(
     private var lookAheadDirection: Direction = LEFT
     private val lookAheadPosition = MazeCoordinates()
 
+    private var directionChangePending = false
+
     override fun reset(gameState: GameState) {
         super.reset(gameState)
 
@@ -27,25 +30,14 @@ class GhostState(val id: GhostId, initialPosition: MazeCoordinates) : BaseState(
     }
 
     override fun onMazePositionChanged(gameState: GameState, time: Double) {
-        console.log("position changed to: $position")
         // Make sure we reached where we were planning to go
-        console.log("pos=$position, lookAhead=$lookAheadPosition")
         require(position == lookAheadPosition)
 
-        direction = lookAheadDirection
-
-        updateLookAheadPosition()
-
-        lookAheadDirection = findNextDirection(gameState.maze)
-    }
-
-    override fun onDirectionChanged() {
-        console.log("direction changed to: $direction")
+        directionChangePending = true
     }
 
     private fun updateLookAheadPosition() {
         lookAheadPosition.copy(position).move(direction)
-        console.log("Look ahead changed to: $lookAheadPosition")
     }
 
     private fun findNextDirection(maze: MazeState): Direction {
@@ -80,5 +72,29 @@ class GhostState(val id: GhostId, initialPosition: MazeCoordinates) : BaseState(
 
         // TODO: Remove
         return LEFT
+    }
+
+    private fun maybeUpdateDirection(maze: MazeState) {
+        val directionChangeAllowed = when (direction) {
+            UP -> subStepPosition.y <= SUBSTEP_CENTER
+            DOWN -> subStepPosition.y >= SUBSTEP_CENTER
+            LEFT -> subStepPosition.x <= SUBSTEP_CENTER
+            RIGHT -> subStepPosition.x >= SUBSTEP_CENTER
+        }
+
+        if (directionChangeAllowed && directionChangePending) {
+            directionChangePending = false
+            direction = lookAheadDirection
+
+            updateLookAheadPosition()
+
+            lookAheadDirection = findNextDirection(maze)
+        }
+    }
+
+    override fun update(gameState: GameState, time: Double) {
+        maybeUpdateDirection(gameState.maze)
+
+        super.update(gameState, time)
     }
 }

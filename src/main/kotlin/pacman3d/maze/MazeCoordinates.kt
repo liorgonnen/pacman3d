@@ -2,7 +2,6 @@ package pacman3d.maze
 
 import pacman3d.ZERO2
 import pacman3d.ext.sqr
-import pacman3d.ext.sqrt
 import pacman3d.logic.Direction
 import pacman3d.logic.Direction.*
 import three.js.Vector2

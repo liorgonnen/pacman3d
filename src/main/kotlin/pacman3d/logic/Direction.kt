@@ -9,20 +9,14 @@ sealed class Direction(
         val x: Int,
         val y: Int,
         val isHorizontal: Boolean,
-        private val oppositeDirectionFunc: DirectionFunc,
-        private val leftFunc: DirectionFunc,
-        private val rightFunc: DirectionFunc) {
+        private val oppositeDirectionFunc: DirectionFunc) {
 
-    object UP : Direction("Up", 0, -1, 0, -1, false, { DOWN }, { LEFT }, { RIGHT })
-    object DOWN : Direction("Down", 1, 1, 0, 1, false, { UP }, { RIGHT }, { LEFT })
-    object LEFT : Direction("Left", 2, -1, -1, 0, true, { RIGHT }, { DOWN }, { UP })
-    object RIGHT : Direction("Right", 3, 1, 1, 0, true, { LEFT }, { UP }, { DOWN })
+    object UP : Direction("Up", 0, -1, 0, -1, false, { DOWN })
+    object DOWN : Direction("Down", 1, 1, 0, 1, false, { UP })
+    object LEFT : Direction("Left", 2, -1, -1, 0, true, { RIGHT })
+    object RIGHT : Direction("Right", 3, 1, 1, 0, true, { LEFT })
 
     val oppositeDirection get() = oppositeDirectionFunc()
 
-    val left get() = leftFunc()
-
-    val right get() = rightFunc()
-
-    override fun toString(): String = str
+    override fun toString() = str
 }

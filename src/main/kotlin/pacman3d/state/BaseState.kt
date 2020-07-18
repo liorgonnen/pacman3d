@@ -11,9 +11,9 @@ import three.js.Vector2
 abstract class BaseState(internal val position: MazeCoordinates) {
 
     companion object {
-        private const val SUBSTEP_MIN = -0.5
-        private const val SUBSTEP_MAX = 0.5
-        private const val SUBSTEP_CENTER = 0.0
+        protected const val SUBSTEP_MIN = -0.5
+        protected const val SUBSTEP_MAX = 0.5
+        protected const val SUBSTEP_CENTER = 0.0
     }
 
     protected val subStepPosition = Vector2(0, 0)
@@ -25,7 +25,6 @@ abstract class BaseState(internal val position: MazeCoordinates) {
             if (field == value) return
             field = value
             if (value.isHorizontal) subStepPosition.y = 0 else subStepPosition.x = 0
-            onDirectionChanged()
         }
 
     var speed = 5.0
@@ -39,8 +38,6 @@ abstract class BaseState(internal val position: MazeCoordinates) {
     }
 
     protected open fun onMazePositionChanged(gameState: GameState, time: Double) = Unit
-
-    protected open fun onDirectionChanged() = Unit
 
     protected open fun updatePosition(maze: MazeState, time: Double): Boolean {
         val distance = speed * time * direction.multiplier
