@@ -63,7 +63,7 @@ class Pacman : GameObject() {
     }
 
     override fun setup(state: GameState) {
-        sceneObject.position.set(state.pacman.worldPosition.x, SIZE, state.pacman.worldPosition.y)
+        sceneObject.position.set(state.pacman.position.worldX, SIZE / 2, state.pacman.position.worldY)
     }
 
     override fun update(state: GameState, time: Double) = with (state.pacman) {
@@ -80,8 +80,8 @@ class Pacman : GameObject() {
         insideMesh.morphTargetInfluences[0] = mouthOpenInfluence
         outsideMesh.morphTargetInfluences[0] = mouthOpenInfluence
 
-        sceneObject.position.x = worldPosition.x
-        sceneObject.position.z = worldPosition.y
+        sceneObject.position.x = position.worldX
+        sceneObject.position.z = position.worldY
 
         sceneObject.setRotationFromAxisAngle(Y_AXIS, when (state.pacman.direction) {
             DOWN -> 1.5 * PI

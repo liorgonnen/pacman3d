@@ -5,9 +5,9 @@ import pacman3d.KEY_ARROW_DOWN
 import pacman3d.KEY_ARROW_LEFT
 import pacman3d.KEY_ARROW_RIGHT
 import pacman3d.KEY_ARROW_UP
+import pacman3d.logic.ActorPosition
 import pacman3d.logic.Direction.*
-import pacman3d.maze.MazeCoordinates
-import pacman3d.state.GhostId.*
+import pacman3d.logic.GhostId.*
 import pacman3d.state.MazeState.Companion.EMPTY
 import pacman3d.state.MazeState.Companion.isDot
 import pacman3d.state.MazeState.Companion.isDotOrPill
@@ -26,21 +26,37 @@ class GameState {
 
     val maze = MazeState()
 
-    val pacman = PacmanState(maze, initialPosition = MazeCoordinates(14, 25))
+    val pacman = PacmanState(maze, initialPosition = ActorPosition(13.5, 26.5))
 
     val ghosts = arrayOf(
         // Order matters
-        GhostState(id = Blinky, initialPosition = MazeCoordinates(14, 14)),
-        GhostState(id = Inky, initialPosition = MazeCoordinates(12, 17)),
-        GhostState(id = Pinky, initialPosition = MazeCoordinates(14, 17)),
-        GhostState(id = Clyde, initialPosition = MazeCoordinates(16, 17)),
+        GhostState(
+                id = Blinky,
+                initialPosition = ActorPosition(14.0, 14.5),
+                scatterTargetTile = ActorPosition(26, 0)
+        ),
+        GhostState(
+                id = Inky,
+                initialPosition = ActorPosition(12.0, 17.5),
+                scatterTargetTile = ActorPosition(27, 35)
+        ),
+        GhostState(
+                id = Pinky,
+                initialPosition = ActorPosition(14.0, 17.5),
+                scatterTargetTile = ActorPosition(1, 0)
+        ),
+        GhostState(
+                id = Clyde,
+                initialPosition = ActorPosition(15.5, 17.5),
+                scatterTargetTile = ActorPosition(0, 35)
+        ),
     )
 
     init {
         reset()
     }
 
-    fun reset() {
+    private fun reset() {
         pacman.reset(this)
         ghosts.forEach { it.reset(this) }
     }
@@ -61,8 +77,8 @@ class GameState {
         if (tile.isDotOrPill) {
             if (tile.isDot) points += 10
             if (tile.isPill) points += 50
-            maze[pacman.position] = EMPTY
-            lastEatenDotIndex = pacman.position.index
+            maze[pacman.initialPosition] = EMPTY
+            lastEatenDotIndex = pacman.position.mazeIndex
         }
     }
 

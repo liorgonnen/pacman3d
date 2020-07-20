@@ -4,9 +4,13 @@ import pacman3d.ext.*
 import pacman3d.gameobjects.Ghost.GazeDirection.LEFT
 import pacman3d.gameobjects.Ghost.GazeDirection.RIGHT
 import pacman3d.logic.Direction
+import pacman3d.logic.GhostId
+import pacman3d.logic.GhostId.Blinky
+import pacman3d.logic.GhostId.Clyde
+import pacman3d.logic.GhostId.Inky
+import pacman3d.logic.GhostId.Pinky
 import pacman3d.maze.Maze
 import pacman3d.state.GameState
-import pacman3d.state.GhostId
 import three.js.*
 import kotlin.math.PI
 import kotlin.math.cos
@@ -122,13 +126,13 @@ abstract class Ghost(val id: GhostId, color: Int) : GameObject() {
     override fun setup(state: GameState) {
         look(RIGHT)
         val ghostState = state.ghosts[id.ordinal]
-        sceneObject.position.set(ghostState.worldPosition.x, WAVE_FRACTION * HEIGHT, ghostState.worldPosition.y)
+        sceneObject.position.set(ghostState.position.worldX, WAVE_FRACTION * HEIGHT, ghostState.position.worldY)
     }
 
     override fun update(state: GameState, time: Double) {
         val ghost = state.ghosts[id.ordinal]
-        sceneObject.position.x = ghost.worldPosition.x
-        sceneObject.position.z = ghost.worldPosition.y
+        sceneObject.position.x = ghost.position.worldX
+        sceneObject.position.z = ghost.position.worldY
 
         if (ghost.direction == Direction.LEFT) look(LEFT)
         if (ghost.direction == Direction.RIGHT) look(RIGHT)
@@ -136,10 +140,10 @@ abstract class Ghost(val id: GhostId, color: Int) : GameObject() {
 }
 
 // TODO: I might be able to simply create these instances in the game class, depending on where the logic will be
-class Blinky : Ghost(id = GhostId.Blinky, color = 0xFE0000)
+class Blinky : Ghost(id = Blinky, color = 0xFE0000)
 
-class Pinky : Ghost(id = GhostId.Pinky, color = 0xFFBBFF)
+class Pinky : Ghost(id = Pinky, color = 0xFFBBFF)
 
-class Inky : Ghost(id = GhostId.Inky, color = 0x00D4D4)
+class Inky : Ghost(id = Inky, color = 0x00D4D4)
 
-class Clyde : Ghost(id = GhostId.Clyde, color = 0xFFB950)
+class Clyde : Ghost(id = Clyde, color = 0xFFB950)

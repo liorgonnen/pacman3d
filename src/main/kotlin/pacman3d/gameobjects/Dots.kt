@@ -2,9 +2,8 @@ package pacman3d.gameobjects
 
 import pacman3d.ext.plusAssign
 import pacman3d.ext.toMeshLambertMaterial
+import pacman3d.logic.ActorPosition
 import pacman3d.maze.Maze
-import pacman3d.maze.MazeCoordinates
-import pacman3d.maze.setFromMazeCoordinates
 import pacman3d.state.GameState
 import pacman3d.state.MazeState.Companion.isDot
 import pacman3d.state.MazeState.Companion.isDotOrPill
@@ -12,7 +11,6 @@ import three.js.BoxGeometry
 import three.js.Group
 import three.js.Mesh
 import three.js.SphereGeometry
-import kotlin.collections.mutableMapOf
 import kotlin.collections.set
 
 class Dots : GameObject() {
@@ -44,7 +42,8 @@ class Dots : GameObject() {
         state.maze.forEachTile { maze, x, y ->
             if (maze[x, y].isDotOrPill) {
                 group += Mesh(if (maze[x, y].isDot) dotGeometry else pillGeometry, dotMaterial).apply {
-                    position.setFromMazeCoordinates(MazeCoordinates(x, y), y = DOT_Y_POSITION)
+                    val pos = ActorPosition(x, y)
+                    position.set(x = pos.worldX, z = pos.worldY, y = DOT_Y_POSITION)
                     mazeCoordinatesToDotMap[Maze.indexOf(x, y)] = this
                 }
             }

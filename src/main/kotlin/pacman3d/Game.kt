@@ -12,6 +12,9 @@ import stats.js.Stats
 import three.js.*
 
 class Game {
+
+    private var paused = false
+
     private val clock = Clock()
 
     private val camera = PerspectiveCamera(75, window.aspectRatio, 0.1, 1000).apply {
@@ -65,14 +68,30 @@ class Game {
         window.onresize = {
             camera.onResize()
             renderer.onResize()
+            updateScene()
         }
+
+        window.onblur = { pause() }
+
+        window.onfocus = { resume() }
 
         gameObjects.forEach { it.setup(gameState) }
 
         document.onkeydown = gameState::keyboardHandler
     }
 
-    fun animate() {
+    private fun pause() {
+        clock.stop()
+        paused = true
+    }
+
+    private fun resume() {
+        paused = false
+        clock.start()
+        animate()
+    }
+
+    private fun updateScene() {
         stats.begin()
 
         val time = clock.getDelta().toDouble()
@@ -86,7 +105,11 @@ class Game {
         renderer.render(scene, camera)
 
         stats.end()
+    }
 
-        window.requestAnimationFrame { animate() }
+    fun animate() {
+        updateScene()
+
+        if (!paused) window.requestAnimationFrame { animate() }
     }
 }
