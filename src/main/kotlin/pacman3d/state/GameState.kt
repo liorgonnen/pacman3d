@@ -32,22 +32,22 @@ class GameState {
         // Order matters
         GhostState(
                 id = Blinky,
-                initialPosition = ActorPosition(14.0, 14.5),
+                initialPosition = ActorPosition(14.0, 14.0),
                 scatterTargetTile = ActorPosition(26, 0)
         ),
         GhostState(
                 id = Inky,
-                initialPosition = ActorPosition(12.0, 17.5),
+                initialPosition = ActorPosition(12.0, 17.0),
                 scatterTargetTile = ActorPosition(27, 35)
         ),
         GhostState(
                 id = Pinky,
-                initialPosition = ActorPosition(14.0, 17.5),
+                initialPosition = ActorPosition(14.0, 18.0),
                 scatterTargetTile = ActorPosition(1, 0)
         ),
         GhostState(
                 id = Clyde,
-                initialPosition = ActorPosition(15.5, 17.5),
+                initialPosition = ActorPosition(16.0, 17.0),
                 scatterTargetTile = ActorPosition(0, 35)
         ),
     )
@@ -57,8 +57,8 @@ class GameState {
     }
 
     private fun reset() {
-        pacman.reset(this)
-        ghosts.forEach { it.reset(this) }
+        pacman.init(this)
+        ghosts.forEach { it.init(this) }
     }
 
     /**

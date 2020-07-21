@@ -6,10 +6,9 @@ import pacman3d.logic.Direction
 class PacmanState(val maze: MazeState, val initialPosition: ActorPosition) : ActorState(initialPosition) {
 
     companion object {
-
         // Cornering is the technique of moving the joystick in the direction one wishes to go well before reaching the
         // center of a turn, ensuring Pac-Man will take the turn as quickly as possible.
-        private const val CORNERING_THRESHOLD = 0.2 // Must be between 0 - SUBSTEP_MAX
+        private const val CORNERING_THRESHOLD = 0.1 // Must be between 0 - 0.5
     }
 
     internal fun requestDirection(newDirection: Direction) {

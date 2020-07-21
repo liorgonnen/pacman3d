@@ -8,21 +8,26 @@ abstract class GhostBehaviorMode {
 
     open val initialDirection: Direction = LEFT
 
-    open fun onPositionUpdated(game: GameState, ghost: GhostState, time: Double, mazePositionChanged: Boolean) = Unit
+    open fun onPositionUpdated(game: GameState, ghost: GhostState, mazePositionChanged: Boolean) = Unit
+    open fun onStart(game: GameState, ghost: GhostState) = Unit
 }
 
 class InGhostHouse: GhostBehaviorMode() {
 
     override val initialDirection = Direction.UP
 
-    override fun onPositionUpdated(game: GameState, ghost: GhostState, time: Double, mazePositionChanged: Boolean) = with (ghost) {
-        requestedDirection = if (game.maze.isTileValidInDirection(position, direction)) direction else direction.oppositeDirection
+    override fun onPositionUpdated(game: GameState, ghost: GhostState, mazePositionChanged: Boolean) = with (ghost) {
+        if (!mazePositionChanged) return
+
+        if (!game.maze.isTileValidInDirection(position, requestedDirection)) {
+            requestedDirection = requestedDirection.oppositeDirection
+        }
     }
 }
 
 class LeaveGhostHouse: GhostBehaviorMode() {
 
-    override fun onPositionUpdated(game: GameState, ghost: GhostState, time: Double, mazePositionChanged: Boolean) = with (ghost) {
+    override fun onPositionUpdated(game: GameState, ghost: GhostState, mazePositionChanged: Boolean) = with (ghost) {
         requestedDirection = if (position.x < 13) Direction.RIGHT else LEFT
     }
 }
@@ -38,14 +43,21 @@ class ScatterMode : GhostBehaviorMode() {
      * decided on a tile beforehand. The process is then repeated, looking ahead into the next tile along its new
      * direction of travel and making its next decision on which way to go.
      */
-    var lookAheadDirection: Direction = initialDirection
-    val lookAheadPosition = ActorPosition()
+    private var lookAheadDirection: Direction = initialDirection
+    private val lookAheadPosition = ActorPosition()
 
-    override fun onPositionUpdated(game: GameState, ghost: GhostState, time: Double, mazePositionChanged: Boolean) {
+    override fun onStart(game: GameState, ghost: GhostState) {
+        lookAheadPosition.copy(ghost.position).move(lookAheadDirection)
+        lookAheadDirection = getNextDirection(ghost, game)
+        ghost.requestedDirection = initialDirection
+    }
+
+    override fun onPositionUpdated(game: GameState, ghost: GhostState, mazePositionChanged: Boolean) {
         if (mazePositionChanged) {
+            require(ghost.position.mazeIndex == lookAheadPosition.mazeIndex)
             ghost.requestedDirection = lookAheadDirection
 
-            lookAheadPosition.copy(ghost.position).centerInTile().move(lookAheadDirection)
+            lookAheadPosition.move(lookAheadDirection)
 
             lookAheadDirection = getNextDirection(ghost, game)
         }
@@ -56,7 +68,7 @@ class ScatterMode : GhostBehaviorMode() {
 
         fun Direction.targetDistance(): Int {
             // Normally, a ghost should not flip its direction
-            if (this == direction.oppositeDirection || !maze.isTileValidInDirection(lookAheadPosition, this)) {
+            if (this == requestedDirection.oppositeDirection || !maze.isTileValidInDirection(lookAheadPosition, this)) {
                 return Int.MAX_VALUE
             }
 

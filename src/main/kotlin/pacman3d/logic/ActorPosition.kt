@@ -1,7 +1,7 @@
 package pacman3d.logic
 
-import pacman3d.ext.absValue
 import pacman3d.ext.sqr
+import pacman3d.ext.truncate
 import pacman3d.maze.Maze
 
 class ActorPosition(var x: Double = 0.0, var y: Double = 0.0) {
@@ -16,10 +16,6 @@ class ActorPosition(var x: Double = 0.0, var y: Double = 0.0) {
 
     val worldY get() = -Maze.HALF_LENGTH + y * Maze.UNIT_SIZE
 
-    val fractionX get() = x - mazeX
-
-    val fractionY get() = y - mazeY
-
     val mazeIndex get() = Maze.indexOf(mazeX, mazeY)
 
     fun copy(other: ActorPosition) = apply {
@@ -32,14 +28,16 @@ class ActorPosition(var x: Double = 0.0, var y: Double = 0.0) {
         y += distance * direction.y
     }
 
-    fun centerInTile() = apply {
-        x = mazeX.toDouble() + 0.5
-        y = mazeY.toDouble() + 0.5
+    fun centerX() = apply { x = mazeX.toDouble() + 0.5 }
+
+    fun centerY() = apply { y = mazeY.toDouble() + 0.5 }
+
+    fun correctPosition(direction: Direction) {
+        if (direction.isHorizontal) x = (mazeX.toDouble() + 0.5) else y = (mazeY.toDouble() + 0.5)
     }
 
     fun sqrDistanceFromDirectionTo(direction: Direction, other: ActorPosition): Int
         = (mazeX + direction.x - other.mazeX).sqr + (mazeY + direction.y - other.mazeY).sqr
 
-    fun allowedToTurn(threshold: Double): Boolean
-        = (fractionX - 0.5).absValue < threshold && (fractionY - 0.5).absValue < threshold
+    override fun toString() = "[${x.truncate(2)}, ${y.truncate(2)}] ($mazeIndex)]"
 }

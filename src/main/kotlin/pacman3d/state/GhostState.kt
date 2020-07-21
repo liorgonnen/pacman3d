@@ -13,10 +13,11 @@ class GhostState(
     override fun reset(gameState: GameState) {
         super.reset(gameState)
 
-        direction = mode.initialDirection
+        requestedDirection = mode.initialDirection
+        mode.onStart(gameState, this)
     }
 
     override fun onPositionUpdated(game: GameState, time: Double, mazePositionChanged: Boolean) {
-        mode.onPositionUpdated(game, this, time, mazePositionChanged)
+        mode.onPositionUpdated(game, this, mazePositionChanged)
     }
 }

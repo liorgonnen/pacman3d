@@ -8,28 +8,37 @@ import pacman3d.state.MazeState.Companion.isValid
 abstract class ActorState(initialPosition: ActorPosition) {
 
     companion object {
-        protected const val DEFAULT_TURN_THRESHOLD = 0.1
+        protected const val DEFAULT_TURN_THRESHOLD = 0.01
     }
 
     protected var oneShotTurnThreshold = DEFAULT_TURN_THRESHOLD
 
-    val position = ActorPosition(initialPosition.x, initialPosition.y)
+    val position = initialPosition
 
     var direction: Direction = DOWN
+        private set
 
-    var requestedDirection: Direction = DOWN
+    var requestedDirection: Direction = direction
 
     var speed = 5.0
         protected set
 
-    open fun reset(gameState: GameState) = Unit
+    fun init(game: GameState) {
+        reset(game)
 
-    open fun update(gameState: GameState, time: Double) {
-        updateDirection(gameState.maze)
+        direction = requestedDirection
+
+        if (game.maze.isTileValidInDirection(position, direction)) position.correctPosition(direction)
+    }
+
+    protected open fun reset(gameState: GameState) = Unit
+
+    fun update(gameState: GameState, time: Double) {
 
         val preMoveMazeIndex = position.mazeIndex
 
         updatePosition(gameState.maze, time)
+        updateDirection(gameState.maze)
 
         onPositionUpdated(gameState, time, position.mazeIndex != preMoveMazeIndex)
     }
@@ -40,20 +49,35 @@ abstract class ActorState(initialPosition: ActorPosition) {
         val turnThreshold = oneShotTurnThreshold
         oneShotTurnThreshold = DEFAULT_TURN_THRESHOLD
 
-        if (requestedDirection == direction ||
-            !position.allowedToTurn(turnThreshold) ||
-            !maze.isTileValidInDirection(position, requestedDirection)) return
-
-        direction = requestedDirection
+        if (requestedDirection != direction &&
+            maze.isAllowedToTurn(position, requestedDirection, turnThreshold)) direction = requestedDirection
     }
 
     private fun updatePosition(maze: MazeState, time: Double): Unit = with (position) {
-        val distance = speed * time
+
+        // Check if a movement in the current direction will overshoot and prevent us from turning
+        // to the lateral axis
+        fun isOvershooting(valueBefore: Double, delta: Double): Boolean
+            = minOf(valueBefore, valueBefore + delta) < 0.5 && maxOf(valueBefore, valueBefore + delta) > 0.5
+
+        val isChangingMovementAxis = requestedDirection differentDirectionalityThan direction &&
+            maze.isTileValidInDirection(position, requestedDirection)
+
+        val distance = (speed * time).coerceAtMost(0.5)
 
         // We add 0.5 because we want to check the position at the edge of the tile
         // Specifically the edge in the direction we're moving towards
         val newX = x + direction.x * (distance + 0.5)
         val newY = y + direction.y * (distance + 0.5)
-        if (maze[newX.toInt(), newY.toInt()].isValid) move(direction, distance) else centerInTile()
+        val isNextTileValid = maze[newX.toInt(), newY.toInt()].isValid
+        val isOvershootingX = isChangingMovementAxis && isOvershooting(x - mazeX, direction.x * distance)
+        val isOvershootingY = isChangingMovementAxis && isOvershooting(y - mazeY, direction.y * distance)
+
+        when {
+            isOvershootingX -> centerX()
+            isOvershootingY -> centerY()
+            isNextTileValid -> move(direction, distance)
+            else -> correctPosition(direction)
+        }
     }
 }

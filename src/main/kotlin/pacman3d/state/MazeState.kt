@@ -23,8 +23,28 @@ class MazeState {
                 func(this, x, y)
     }
 
-fun isTileValidInDirection(position: ActorPosition, direction: Direction)
-            = this[position.mazeX + direction.x, position.mazeY + direction.y].isValid
+    fun isTileValidInDirection(position: ActorPosition, direction: Direction)
+        = this[position.mazeX + direction.x, position.mazeY + direction.y].isValid
+
+    fun isAllowedToTurn(position: ActorPosition, direction: Direction, threshold: Double): Boolean {
+        var result = true
+        with(position) {
+            if (direction.isVertical) {
+                val f = x - mazeX
+                result = result && get(mazeX, mazeY + direction.y).isValid
+                if (f < 0.5 - threshold) result = result && get(mazeX - 1, mazeY + direction.y).isValid
+                if (f > 0.5 + threshold) result = result && get(mazeX + 1, mazeY + direction.y).isValid
+            }
+            else {
+                val f = y - mazeY
+                result = result && get(mazeX + direction.x, mazeY).isValid
+                if (f < 0.5 - threshold) result = result && get(mazeX + direction.x, mazeY - 1).isValid
+                if (f > 0.5 + threshold) result = result && get(mazeX + direction.x, mazeY + 1).isValid
+            }
+        }
+
+        return result
+    }
 
     companion object {
         const val INVALID   : Byte = 0
