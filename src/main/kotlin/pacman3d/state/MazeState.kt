@@ -26,6 +26,7 @@ class MazeState {
     fun isTileValidInDirection(position: ActorPosition, direction: Direction)
         = this[position.mazeX + direction.x, position.mazeY + direction.y].isValid
 
+    // TODO: Simplify this or clean this up.
     fun isAllowedToTurn(position: ActorPosition, direction: Direction, threshold: Double): Boolean {
         var result = true
         with(position) {
@@ -51,10 +52,12 @@ class MazeState {
         const val EMPTY     : Byte = 1
         const val DOT       : Byte = 2
         const val PILL      : Byte = 3
+        const val GATE      : Byte = 4
 
         private const val E = EMPTY
         private const val D = DOT
         private const val P = PILL
+        private const val G = GATE
 
         private val DEFAULT_LAYOUT = byteArrayOf(
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -72,7 +75,7 @@ class MazeState {
                 0, 0, 0, 0, 0, 0, D, 0, 0, 0, 0, 0, E, 0, 0, E, 0, 0, 0, 0, 0, D, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, D, 0, 0, 0, 0, 0, E, 0, 0, E, 0, 0, 0, 0, 0, D, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, D, 0, 0, E, E, E, E, E, E, E, E, E, E, 0, 0, D, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, D, 0, 0, E, 0, 0, 0, 0, 0, 0, 0, 0, E, 0, 0, D, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, D, 0, 0, E, 0, 0, 0, G, G, 0, 0, 0, E, 0, 0, D, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, D, 0, 0, E, 0, E, E, E, E, E, E, 0, E, 0, 0, D, 0, 0, 0, 0, 0, 0,
                 E, E, E, E, E, E, D, E, E, E, 0, E, E, E, E, E, E, 0, E, E, E, D, E, E, E, E, E, E,
                 0, 0, 0, 0, 0, 0, D, 0, 0, E, 0, E, E, E, E, E, E, 0, E, 0, 0, D, 0, 0, 0, 0, 0, 0,

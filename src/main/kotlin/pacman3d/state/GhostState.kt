@@ -8,7 +8,11 @@ class GhostState(
         val scatterTargetTile: ActorPosition
 ) : ActorState(initialPosition) {
 
-    private val mode: GhostBehaviorMode = if (id == GhostId.Blinky) ScatterMode() else InGhostHouse()
+    private val mode: GhostBehaviorMode = when (id) {
+        GhostId.Blinky -> ScatterMode()
+        GhostId.Inky -> LeaveGhostHouse()
+        else -> InGhostHouse()
+    }
 
     override fun reset(gameState: GameState) {
         super.reset(gameState)

@@ -28,7 +28,11 @@ class InGhostHouse: GhostBehaviorMode() {
 class LeaveGhostHouse: GhostBehaviorMode() {
 
     override fun onPositionUpdated(game: GameState, ghost: GhostState, mazePositionChanged: Boolean) = with (ghost) {
-        requestedDirection = if (position.x < 13) Direction.RIGHT else LEFT
+        when {
+            position.mazeX < 13 -> requestedDirection = Direction.RIGHT
+            position.mazeX > 13 -> requestedDirection = LEFT
+            position.mazeX == 13 -> requestedDirection = Direction.UP
+        }
     }
 }
 

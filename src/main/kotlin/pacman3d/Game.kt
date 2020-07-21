@@ -24,6 +24,8 @@ class Game {
 
     private val cameraAnimator = CameraAnimator(camera)
 
+    private val readyText = ReadyText()
+
     private val renderer = WebGLRenderer().init(clearColor = 0x333333)
 
     private val gameObjects = arrayOf(
@@ -56,6 +58,7 @@ class Game {
     private val scene = Scene().apply {
         add(plane)
         add(maze)
+        add(readyText)
 
         gameObjects.forEach { add(it) }
 

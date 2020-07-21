@@ -53,6 +53,7 @@ abstract class ActorState(initialPosition: ActorPosition) {
             maze.isAllowedToTurn(position, requestedDirection, turnThreshold)) direction = requestedDirection
     }
 
+    // TODO: Can probably simplofy this method some more
     private fun updatePosition(maze: MazeState, time: Double): Unit = with (position) {
 
         // Check if a movement in the current direction will overshoot and prevent us from turning

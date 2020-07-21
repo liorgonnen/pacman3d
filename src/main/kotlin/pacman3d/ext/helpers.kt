@@ -47,6 +47,16 @@ class ExtrudeOptions(
     override var UVGenerator: UVGenerator? = uvGenerator
 }
 
+class TextParameters(
+        override var font: Font,
+        size: Double = 100.0,
+        thickness: Double = 50.0
+) : TextGeometryParameters {
+
+    override var size: Number? = size
+    override var height: Number? = thickness
+}
+
 // TODO: Can I import constants correctly?
 const val FrontSide = 0
 const val BackSide = 1
