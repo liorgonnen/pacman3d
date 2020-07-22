@@ -16,7 +16,7 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-abstract class Ghost(val id: GhostId, color: Int) : GameObject() {
+sealed class Ghost(val id: GhostId, color: Int) : GameObject() {
 
     // TODO: Remove this in favor of [Direction]
     private sealed class GazeDirection(val multiplier: Double) {
@@ -139,7 +139,6 @@ abstract class Ghost(val id: GhostId, color: Int) : GameObject() {
     }
 }
 
-// TODO: I might be able to simply create these instances in the game class, depending on where the logic will be
 class Blinky : Ghost(id = Blinky, color = 0xFE0000)
 
 class Pinky : Ghost(id = Pinky, color = 0xFFBBFF)

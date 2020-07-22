@@ -1,9 +1,10 @@
 package pacman3d.state
 
 import pacman3d.logic.ActorPosition
+import pacman3d.logic.ActorType.Pacman
 import pacman3d.logic.Direction
 
-class PacmanState(val maze: MazeState, val initialPosition: ActorPosition) : ActorState(initialPosition) {
+class PacmanState(val maze: MazeState, val initialPosition: ActorPosition) : ActorState(Pacman, initialPosition) {
 
     companion object {
         // Cornering is the technique of moving the joystick in the direction one wishes to go well before reaching the

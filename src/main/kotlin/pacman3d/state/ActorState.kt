@@ -1,11 +1,12 @@
 package pacman3d.state
 
 import pacman3d.logic.ActorPosition
+import pacman3d.logic.ActorType
 import pacman3d.logic.Direction
 import pacman3d.logic.Direction.DOWN
 import pacman3d.state.MazeState.Companion.isValid
 
-abstract class ActorState(initialPosition: ActorPosition) {
+abstract class ActorState(val type: ActorType, initialPosition: ActorPosition) {
 
     companion object {
         protected const val DEFAULT_TURN_THRESHOLD = 0.01
@@ -28,7 +29,7 @@ abstract class ActorState(initialPosition: ActorPosition) {
 
         direction = requestedDirection
 
-        if (game.maze.isTileValidInDirection(position, direction)) position.correctPosition(direction)
+        if (game.maze.isTileValidInDirection(type, position, direction)) position.correctPosition(direction)
     }
 
     protected open fun reset(gameState: GameState) = Unit
@@ -50,7 +51,7 @@ abstract class ActorState(initialPosition: ActorPosition) {
         oneShotTurnThreshold = DEFAULT_TURN_THRESHOLD
 
         if (requestedDirection != direction &&
-            maze.isAllowedToTurn(position, requestedDirection, turnThreshold)) direction = requestedDirection
+            maze.isAllowedToTurn(type, position, requestedDirection, turnThreshold)) direction = requestedDirection
     }
 
     // TODO: Can probably simplofy this method some more
@@ -62,7 +63,7 @@ abstract class ActorState(initialPosition: ActorPosition) {
             = minOf(valueBefore, valueBefore + delta) < 0.5 && maxOf(valueBefore, valueBefore + delta) > 0.5
 
         val isChangingMovementAxis = requestedDirection differentDirectionalityThan direction &&
-            maze.isTileValidInDirection(position, requestedDirection)
+            maze.isTileValidInDirection(type, position, requestedDirection)
 
         val distance = (speed * time).coerceAtMost(0.5)
 
@@ -70,7 +71,7 @@ abstract class ActorState(initialPosition: ActorPosition) {
         // Specifically the edge in the direction we're moving towards
         val newX = x + direction.x * (distance + 0.5)
         val newY = y + direction.y * (distance + 0.5)
-        val isNextTileValid = maze[newX.toInt(), newY.toInt()].isValid
+        val isNextTileValid = maze[newX.toInt(), newY.toInt()].isValid(type)
         val isOvershootingX = isChangingMovementAxis && isOvershooting(x - mazeX, direction.x * distance)
         val isOvershootingY = isChangingMovementAxis && isOvershooting(y - mazeY, direction.y * distance)
 

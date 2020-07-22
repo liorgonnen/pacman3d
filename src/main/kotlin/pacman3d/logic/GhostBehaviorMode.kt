@@ -1,6 +1,6 @@
 package pacman3d.logic
 
-import pacman3d.logic.Direction.LEFT
+import pacman3d.logic.Direction.*
 import pacman3d.state.GameState
 import pacman3d.state.GhostState
 
@@ -12,31 +12,31 @@ abstract class GhostBehaviorMode {
     open fun onStart(game: GameState, ghost: GhostState) = Unit
 }
 
-class InGhostHouse: GhostBehaviorMode() {
+object InGhostHouse: GhostBehaviorMode() {
 
-    override val initialDirection = Direction.UP
-
-    override fun onPositionUpdated(game: GameState, ghost: GhostState, mazePositionChanged: Boolean) = with (ghost) {
-        if (!mazePositionChanged) return
-
-        if (!game.maze.isTileValidInDirection(position, requestedDirection)) {
-            requestedDirection = requestedDirection.oppositeDirection
-        }
-    }
-}
-
-class LeaveGhostHouse: GhostBehaviorMode() {
+    override val initialDirection = UP
 
     override fun onPositionUpdated(game: GameState, ghost: GhostState, mazePositionChanged: Boolean) = with (ghost) {
         when {
-            position.mazeX < 13 -> requestedDirection = Direction.RIGHT
-            position.mazeX > 13 -> requestedDirection = LEFT
-            position.mazeX == 13 -> requestedDirection = Direction.UP
+            position.y <= 16.5 -> requestedDirection = DOWN
+            position.y >= 18.0 -> requestedDirection = UP
         }
     }
 }
 
-class ScatterMode : GhostBehaviorMode() {
+object LeaveGhostHouse: GhostBehaviorMode() {
+
+    override fun onPositionUpdated(game: GameState, ghost: GhostState, mazePositionChanged: Boolean) = with (ghost) {
+        when {
+            position.mazeY == 14 -> ghost.setMode(ScatterMode, game)
+            position.mazeX < 13 -> requestedDirection = RIGHT
+            position.mazeX > 13 -> requestedDirection = LEFT
+            position.mazeX == 13 -> requestedDirection = UP
+        }
+    }
+}
+
+object ScatterMode : GhostBehaviorMode() {
 
     override val initialDirection: Direction = LEFT
 
@@ -72,7 +72,7 @@ class ScatterMode : GhostBehaviorMode() {
 
         fun Direction.targetDistance(): Int {
             // Normally, a ghost should not flip its direction
-            if (this == requestedDirection.oppositeDirection || !maze.isTileValidInDirection(lookAheadPosition, this)) {
+            if (this == requestedDirection.oppositeDirection || !maze.isTileValidInDirection(ghost.type, lookAheadPosition, this)) {
                 return Int.MAX_VALUE
             }
 
@@ -83,16 +83,16 @@ class ScatterMode : GhostBehaviorMode() {
 
         // Order matters. If distances in valid directions are equal
         // The ghost prefers direction in order: up, left, down, right
-        val d1 = Direction.UP.targetDistance()
+        val d1 = UP.targetDistance()
         val d2 = LEFT.targetDistance()
         val d3 = Direction.DOWN.targetDistance()
-        val d4 = Direction.RIGHT.targetDistance()
+        val d4 = RIGHT.targetDistance()
 
         return when {
-            d1.smallerOrEqualTo(d2, d3, d4) -> Direction.UP
+            d1.smallerOrEqualTo(d2, d3, d4) -> UP
             d2.smallerOrEqualTo(d1, d3, d4) -> LEFT
             d3.smallerOrEqualTo(d1, d2, d4) -> Direction.DOWN
-            else -> Direction.RIGHT
+            else -> RIGHT
         }
     }
 }

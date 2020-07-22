@@ -6,12 +6,17 @@ class GhostState(
         val id: GhostId,
         initialPosition: ActorPosition,
         val scatterTargetTile: ActorPosition
-) : ActorState(initialPosition) {
+) : ActorState(ActorType.Ghost, initialPosition) {
 
-    private val mode: GhostBehaviorMode = when (id) {
-        GhostId.Blinky -> ScatterMode()
-        GhostId.Inky -> LeaveGhostHouse()
-        else -> InGhostHouse()
+    private var mode: GhostBehaviorMode = when (id) {
+        GhostId.Blinky -> ScatterMode
+        GhostId.Inky -> InGhostHouse
+        else -> InGhostHouse
+    }
+
+    fun setMode(newMode: GhostBehaviorMode, game: GameState) {
+        mode = newMode
+        mode.onStart(game, this)
     }
 
     override fun reset(gameState: GameState) {

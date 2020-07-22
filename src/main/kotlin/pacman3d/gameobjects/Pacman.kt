@@ -27,6 +27,7 @@ class Pacman : GameObject() {
         thetaLength = PI,
     ).apply {
         rotateX(-HALF_PI)
+        computeVertexNormals()
     }
 
     private val geometry = SphereBufferGeometry(
@@ -40,6 +41,7 @@ class Pacman : GameObject() {
     ).apply {
         morphAttributes.asDynamic().position = arrayOf(mouthOpenGeometry.getAttribute("position"))
         rotateX(-HALF_PI)
+        computeVertexNormals()
     }
 
     private var mouthOpenSpeed = 0.15

@@ -77,7 +77,8 @@ class GameState {
         if (tile.isDotOrPill) {
             if (tile.isDot) points += 10
             if (tile.isPill) points += 50
-            maze[pacman.initialPosition] = EMPTY
+            maze.eatDot(pacman.position)
+
             lastEatenDotIndex = pacman.position.mazeIndex
         }
     }

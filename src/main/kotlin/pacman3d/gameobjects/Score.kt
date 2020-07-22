@@ -27,7 +27,7 @@ class Score(private val textParams: TextParameters) : GameObject() {
         digitGeometries = (0..9).map { textGeometry(it.toString(), textParams) }.toTypedArray()
     }
 
-    override fun update(game: GameState, time: Double) = setScore(game.points)
+    override fun update(state: GameState, time: Double) = setScore(state.points)
 
     private fun setScore(points: Int) {
         var value = points

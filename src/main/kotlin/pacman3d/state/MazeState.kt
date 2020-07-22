@@ -1,6 +1,9 @@
 package pacman3d.state
 
 import pacman3d.logic.ActorPosition
+import pacman3d.logic.ActorType
+import pacman3d.logic.ActorType.Ghost
+import pacman3d.logic.ActorType.Pacman
 import pacman3d.logic.Direction
 import pacman3d.maze.Maze
 import pacman3d.maze.MazeCoordinates
@@ -23,28 +26,33 @@ class MazeState {
                 func(this, x, y)
     }
 
-    fun isTileValidInDirection(position: ActorPosition, direction: Direction)
-        = this[position.mazeX + direction.x, position.mazeY + direction.y].isValid
+    fun isTileValidInDirection(type: ActorType, position: ActorPosition, direction: Direction)
+        = this[position.mazeX + direction.x, position.mazeY + direction.y].isValid(type)
 
     // TODO: Simplify this or clean this up.
-    fun isAllowedToTurn(position: ActorPosition, direction: Direction, threshold: Double): Boolean {
+    fun isAllowedToTurn(type: ActorType, position: ActorPosition, direction: Direction, threshold: Double): Boolean {
         var result = true
         with(position) {
             if (direction.isVertical) {
                 val f = x - mazeX
-                result = result && get(mazeX, mazeY + direction.y).isValid
-                if (f < 0.5 - threshold) result = result && get(mazeX - 1, mazeY + direction.y).isValid
-                if (f > 0.5 + threshold) result = result && get(mazeX + 1, mazeY + direction.y).isValid
+                result = result && get(mazeX, mazeY + direction.y).isValid(type)
+                if (f < 0.5 - threshold) result = result && get(mazeX - 1, mazeY + direction.y).isValid(type)
+                if (f > 0.5 + threshold) result = result && get(mazeX + 1, mazeY + direction.y).isValid(type)
             }
             else {
                 val f = y - mazeY
-                result = result && get(mazeX + direction.x, mazeY).isValid
-                if (f < 0.5 - threshold) result = result && get(mazeX + direction.x, mazeY - 1).isValid
-                if (f > 0.5 + threshold) result = result && get(mazeX + direction.x, mazeY + 1).isValid
+                result = result && get(mazeX + direction.x, mazeY).isValid(type)
+                if (f < 0.5 - threshold) result = result && get(mazeX + direction.x, mazeY - 1).isValid(type)
+                if (f > 0.5 + threshold) result = result && get(mazeX + direction.x, mazeY + 1).isValid(type)
             }
         }
 
         return result
+    }
+
+    fun eatDot(position: ActorPosition) {
+        this[position] = EMPTY
+        dotsLeft--
     }
 
     companion object {
@@ -99,6 +107,10 @@ class MazeState {
         inline val Byte.isDot get() = this == DOT
         inline val Byte.isPill get() = this == PILL
         inline val Byte.isDotOrPill get() = isDot || isPill
-        inline val Byte.isValid get() = this != INVALID
+
+        fun Byte.isValid(actorType: ActorType) = when (actorType) {
+            Ghost -> this != INVALID
+            Pacman -> this != INVALID && this != GATE
+        }
     }
 }
