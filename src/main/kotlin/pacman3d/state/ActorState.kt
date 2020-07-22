@@ -24,8 +24,6 @@ abstract class ActorState(
     var speed = 5.0
         protected set
 
-    abstract fun canMove(mazeValue: Byte): Boolean
-
     open fun setup(game: GameState) = Unit
 
     fun update(gameState: GameState, time: Double) {
@@ -56,16 +54,15 @@ abstract class ActorState(
         fun isOvershooting(valueBefore: Double, delta: Double): Boolean
             = minOf(valueBefore, valueBefore + delta) < 0.5 && maxOf(valueBefore, valueBefore + delta) > 0.5
 
-        val isChangingMovementAxis = nextDirection differentAxisThan currentDirection
-                && isTileValidInDirection(fromPosition = position, toDirection = nextDirection, maze)
+        val isChangingMovementAxis = nextDirection differentAxisThan currentDirection && canMove(maze, position, nextDirection)
 
         val distance = (speed * time).coerceAtMost(0.5)
 
         // We add 0.5 because we want to check the position at the edge of the tile
         // Specifically the edge in the direction we're moving towards
-        val newX = x + currentDirection.x * (distance + 0.5)
-        val newY = y + currentDirection.y * (distance + 0.5)
-        val isNextTileValid = canMove(maze[newX.toInt(), newY.toInt()])
+        val xDir = currentDirection.x * (distance + 0.5)
+        val yDir = currentDirection.y * (distance + 0.5)
+        val isNextTileValid = canMove(maze, position, xDir, yDir)
         val isOvershootingX = isChangingMovementAxis && isOvershooting(x - mazeX, currentDirection.x * distance)
         val isOvershootingY = isChangingMovementAxis && isOvershooting(y - mazeY, currentDirection.y * distance)
 
@@ -83,21 +80,26 @@ abstract class ActorState(
         with(position) {
             if (direction.isVertical) {
                 val f = x - mazeX
-                result = result && canMove(maze[mazeX, mazeY + direction.y])
-                if (f < 0.5 - threshold) result = result && canMove(maze[mazeX - 1, mazeY + direction.y])
-                if (f > 0.5 + threshold) result = result && canMove(maze[mazeX + 1, mazeY + direction.y])
+                result = result && canMove(maze, position, direction)
+                if (f < 0.5 - threshold) result = result && canMove(maze, position, -1, direction.y)
+                if (f > 0.5 + threshold) result = result && canMove(maze, position,  1, direction.y)
             }
             else {
                 val f = y - mazeY
-                result = result && canMove(maze[mazeX + direction.x, mazeY])
-                if (f < 0.5 - threshold) result = result && canMove(maze[mazeX + direction.x, mazeY - 1])
-                if (f > 0.5 + threshold) result = result && canMove(maze[mazeX + direction.x, mazeY + 1])
+                result = result && canMove(maze, position, direction)
+                if (f < 0.5 - threshold) result = result && canMove(maze, position, direction.x, -1)
+                if (f > 0.5 + threshold) result = result && canMove(maze, position, direction.x,  1)
             }
         }
 
         return result
     }
 
-    fun isTileValidInDirection(fromPosition: ActorPosition, toDirection: Direction, maze: MazeState)
-        = canMove(maze[fromPosition.mazeX + toDirection.x, fromPosition.mazeY + toDirection.y])
+    fun canMove(maze: MazeState, fromPosition: ActorPosition, direction: Direction): Boolean
+        = canMove(maze, fromPosition, direction.x, direction.y)
+
+    fun canMove(maze: MazeState, fromPosition: ActorPosition, xDir: Int, yDir: Int): Boolean
+        = canMove(maze, fromPosition, xDir.toDouble(), yDir.toDouble())
+
+    abstract fun canMove(maze: MazeState, fromPosition: ActorPosition, xDir: Double, yDir: Double): Boolean
 }

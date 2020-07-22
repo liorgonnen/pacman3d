@@ -3,6 +3,7 @@ package pacman3d.logic.behaviors
 import pacman3d.logic.ActorPosition
 import pacman3d.logic.Direction
 import pacman3d.logic.Direction.*
+import pacman3d.logic.GhostId
 import pacman3d.state.GameState
 import pacman3d.state.GhostState
 
@@ -19,8 +20,11 @@ class ScatterMode : GhostBehaviorMode() {
     private val lookAheadPosition = ActorPosition()
 
     override fun onStart(game: GameState, ghost: GhostState) {
-        lookAheadPosition.copy(ghost.position).move(ghost.nextDirection)
-        lookAheadDirection = getNextDirection(ghost, game)
+        // We need to build up our look-ahead parameters, so we start with the current ghost position
+        lookAheadPosition.copy(ghost.position)
+        lookAheadDirection = getNextDirection(ghost, game) // Find the best direction
+        lookAheadPosition.move(lookAheadDirection)
+        ghost.nextDirection = lookAheadDirection
     }
 
     override fun onPositionUpdated(game: GameState, ghost: GhostState, mazePositionChanged: Boolean) {
@@ -41,7 +45,7 @@ class ScatterMode : GhostBehaviorMode() {
         val maze = game.maze
 
         fun Direction.targetDistance(): Int
-            = if (this != nextDirection.oppositeDirection && isTileValidInDirection(lookAheadPosition, this, maze))
+            = if (this != nextDirection.oppositeDirection && canMove(maze, lookAheadPosition, this))
                 lookAheadPosition.sqrDistanceFromDirectionTo(this, scatterTargetTile) else Int.MAX_VALUE
 
         fun Int.smallerOrEqualTo(d1: Int, d2: Int, d3: Int) = this <= d1 && this <= d2 && this <= d3

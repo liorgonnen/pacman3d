@@ -7,6 +7,7 @@ import pacman3d.state.GhostState
 object LeaveGhostHouse: GhostBehaviorMode() {
 
     override fun onPositionUpdated(game: GameState, ghost: GhostState, mazePositionChanged: Boolean) = with (ghost) {
+        console.log("LeaveGhostHouse: ${position.mazeY}")
         when {
             position.mazeY == 14 -> ghost.setMode(ScatterMode(), game)
             position.mazeX < 13 -> nextDirection = Direction.RIGHT

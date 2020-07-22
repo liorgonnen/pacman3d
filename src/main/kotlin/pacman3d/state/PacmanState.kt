@@ -22,5 +22,8 @@ class PacmanState(
         oneShotTurnThreshold = CORNERING_THRESHOLD
     }
 
-    override fun canMove(mazeValue: Byte) = mazeValue != MazeState.INVALID && mazeValue != MazeState.GHOST_HOUSE
+    override fun canMove(maze: MazeState, fromPosition: ActorPosition, xDir: Double, yDir: Double): Boolean {
+        val mazeValue = maze[(fromPosition.x + xDir).toInt(), (fromPosition.y + yDir).toInt()]
+        return mazeValue != MazeState.INVALID && mazeValue != MazeState.GHOST_HOUSE
+    }
 }
