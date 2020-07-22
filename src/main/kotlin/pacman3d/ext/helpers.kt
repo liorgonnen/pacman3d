@@ -57,6 +57,12 @@ class TextParameters(
     override var height: Number? = thickness
 }
 
+fun textGeometry(text: String, textParameters: TextParameters) = TextGeometry(text, textParameters).apply {
+    computeFaceNormals()
+    computeFlatVertexNormals()
+    computeBoundingBox()
+}
+
 // TODO: Can I import constants correctly?
 const val FrontSide = 0
 const val BackSide = 1
