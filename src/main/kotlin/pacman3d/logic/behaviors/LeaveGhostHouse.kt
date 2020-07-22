@@ -1,0 +1,17 @@
+package pacman3d.logic.behaviors
+
+import pacman3d.logic.Direction
+import pacman3d.state.GameState
+import pacman3d.state.GhostState
+
+object LeaveGhostHouse: GhostBehaviorMode() {
+
+    override fun onPositionUpdated(game: GameState, ghost: GhostState, mazePositionChanged: Boolean) = with (ghost) {
+        when {
+            position.mazeY == 14 -> ghost.setMode(ScatterMode(), game)
+            position.mazeX < 13 -> requestedDirection = Direction.RIGHT
+            position.mazeX > 14 -> requestedDirection = Direction.LEFT
+            position.x in 13.5..14.5 -> requestedDirection = Direction.UP
+        }
+    }
+}

@@ -1,44 +1,11 @@
-package pacman3d.logic
+package pacman3d.logic.behaviors
 
-import pacman3d.logic.Direction.*
+import pacman3d.logic.ActorPosition
+import pacman3d.logic.Direction
 import pacman3d.state.GameState
 import pacman3d.state.GhostState
 
-abstract class GhostBehaviorMode {
-
-    open val initialDirection: Direction = LEFT
-
-    open fun onPositionUpdated(game: GameState, ghost: GhostState, mazePositionChanged: Boolean) = Unit
-    open fun onStart(game: GameState, ghost: GhostState) = Unit
-}
-
-object InGhostHouse: GhostBehaviorMode() {
-
-    override val initialDirection = UP
-
-    override fun onPositionUpdated(game: GameState, ghost: GhostState, mazePositionChanged: Boolean) = with (ghost) {
-        when {
-            position.y <= 16.5 -> requestedDirection = DOWN
-            position.y >= 18.0 -> requestedDirection = UP
-        }
-    }
-}
-
-object LeaveGhostHouse: GhostBehaviorMode() {
-
-    override fun onPositionUpdated(game: GameState, ghost: GhostState, mazePositionChanged: Boolean) = with (ghost) {
-        when {
-            position.mazeY == 14 -> ghost.setMode(ScatterMode, game)
-            position.mazeX < 13 -> requestedDirection = RIGHT
-            position.mazeX > 13 -> requestedDirection = LEFT
-            position.mazeX == 13 -> requestedDirection = UP
-        }
-    }
-}
-
-object ScatterMode : GhostBehaviorMode() {
-
-    override val initialDirection: Direction = LEFT
+class ScatterMode : GhostBehaviorMode() {
 
     /**
      * Ghosts are always thinking one step into the future as they move through the maze. Whenever a ghost enters a new
@@ -47,18 +14,20 @@ object ScatterMode : GhostBehaviorMode() {
      * decided on a tile beforehand. The process is then repeated, looking ahead into the next tile along its new
      * direction of travel and making its next decision on which way to go.
      */
-    private var lookAheadDirection: Direction = initialDirection
+    private var lookAheadDirection: Direction = Direction.LEFT
     private val lookAheadPosition = ActorPosition()
 
     override fun onStart(game: GameState, ghost: GhostState) {
-        lookAheadPosition.copy(ghost.position).move(lookAheadDirection)
+        ghost.requestedDirection = lookAheadDirection
+        lookAheadPosition.copy(ghost.position).move(ghost.requestedDirection)
         lookAheadDirection = getNextDirection(ghost, game)
-        ghost.requestedDirection = initialDirection
     }
 
     override fun onPositionUpdated(game: GameState, ghost: GhostState, mazePositionChanged: Boolean) {
         if (mazePositionChanged) {
-            require(ghost.position.mazeIndex == lookAheadPosition.mazeIndex)
+            require(ghost.position.mazeIndex == lookAheadPosition.mazeIndex) {
+                "id=${ghost.id}, pos=${ghost.position}, ahead=$lookAheadPosition"
+            }
             ghost.requestedDirection = lookAheadDirection
 
             lookAheadPosition.move(lookAheadDirection)
@@ -83,24 +52,16 @@ object ScatterMode : GhostBehaviorMode() {
 
         // Order matters. If distances in valid directions are equal
         // The ghost prefers direction in order: up, left, down, right
-        val d1 = UP.targetDistance()
-        val d2 = LEFT.targetDistance()
+        val d1 = Direction.UP.targetDistance()
+        val d2 = Direction.LEFT.targetDistance()
         val d3 = Direction.DOWN.targetDistance()
-        val d4 = RIGHT.targetDistance()
+        val d4 = Direction.RIGHT.targetDistance()
 
         return when {
-            d1.smallerOrEqualTo(d2, d3, d4) -> UP
-            d2.smallerOrEqualTo(d1, d3, d4) -> LEFT
+            d1.smallerOrEqualTo(d2, d3, d4) -> Direction.UP
+            d2.smallerOrEqualTo(d1, d3, d4) -> Direction.LEFT
             d3.smallerOrEqualTo(d1, d2, d4) -> Direction.DOWN
-            else -> RIGHT
+            else -> Direction.RIGHT
         }
     }
 }
-
-//class ChaseMode : GhostBehaviorMode() {
-//
-//}
-
-//class FrightenedMode: GhostBehaviorMode() {
-//
-//}
