@@ -18,7 +18,7 @@ sealed class Direction(
 
     val oppositeDirection get() = oppositeDirectionFunc()
 
-    infix fun differentDirectionalityThan(other: Direction) = isHorizontal != other.isHorizontal
+    infix fun differentAxisThan(other: Direction) = isHorizontal != other.isHorizontal
 
     override fun toString() = str
 }

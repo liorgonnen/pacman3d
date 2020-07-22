@@ -134,8 +134,8 @@ sealed class Ghost(val id: GhostId, color: Int) : GameObject() {
         sceneObject.position.x = ghost.position.worldX
         sceneObject.position.z = ghost.position.worldY
 
-        if (ghost.direction == Direction.LEFT) look(LEFT)
-        if (ghost.direction == Direction.RIGHT) look(RIGHT)
+        if (ghost.currentDirection == Direction.LEFT) look(LEFT)
+        if (ghost.currentDirection == Direction.RIGHT) look(RIGHT)
     }
 }
 

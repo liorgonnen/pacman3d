@@ -26,46 +26,22 @@ class MazeState {
                 func(this, x, y)
     }
 
-    fun isTileValidInDirection(type: ActorType, position: ActorPosition, direction: Direction)
-        = this[position.mazeX + direction.x, position.mazeY + direction.y].isValid(type)
-
-    // TODO: Simplify this or clean this up.
-    fun isAllowedToTurn(type: ActorType, position: ActorPosition, direction: Direction, threshold: Double): Boolean {
-        var result = true
-        with(position) {
-            if (direction.isVertical) {
-                val f = x - mazeX
-                result = result && get(mazeX, mazeY + direction.y).isValid(type)
-                if (f < 0.5 - threshold) result = result && get(mazeX - 1, mazeY + direction.y).isValid(type)
-                if (f > 0.5 + threshold) result = result && get(mazeX + 1, mazeY + direction.y).isValid(type)
-            }
-            else {
-                val f = y - mazeY
-                result = result && get(mazeX + direction.x, mazeY).isValid(type)
-                if (f < 0.5 - threshold) result = result && get(mazeX + direction.x, mazeY - 1).isValid(type)
-                if (f > 0.5 + threshold) result = result && get(mazeX + direction.x, mazeY + 1).isValid(type)
-            }
-        }
-
-        return result
-    }
-
     fun eatDot(position: ActorPosition) {
         this[position] = EMPTY
         dotsLeft--
     }
 
     companion object {
-        const val INVALID   : Byte = 0
-        const val EMPTY     : Byte = 1
-        const val DOT       : Byte = 2
-        const val PILL      : Byte = 3
-        const val GATE      : Byte = 4
+        const val INVALID       : Byte = 0
+        const val EMPTY         : Byte = 1
+        const val DOT           : Byte = 2
+        const val PILL          : Byte = 3
+        const val GHOST_HOUSE   : Byte = 4
 
         private const val E = EMPTY
         private const val D = DOT
         private const val P = PILL
-        private const val G = GATE
+        private const val G = GHOST_HOUSE
 
         private val DEFAULT_LAYOUT = byteArrayOf(
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -84,9 +60,9 @@ class MazeState {
                 0, 0, 0, 0, 0, 0, D, 0, 0, 0, 0, 0, E, 0, 0, E, 0, 0, 0, 0, 0, D, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, D, 0, 0, E, E, E, E, E, E, E, E, E, E, 0, 0, D, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, D, 0, 0, E, 0, 0, 0, G, G, 0, 0, 0, E, 0, 0, D, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, D, 0, 0, E, 0, E, E, E, E, E, E, 0, E, 0, 0, D, 0, 0, 0, 0, 0, 0,
-                E, E, E, E, E, E, D, E, E, E, 0, E, E, E, E, E, E, 0, E, E, E, D, E, E, E, E, E, E,
-                0, 0, 0, 0, 0, 0, D, 0, 0, E, 0, E, E, E, E, E, E, 0, E, 0, 0, D, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, D, 0, 0, E, 0, G, G, G, G, G, G, 0, E, 0, 0, D, 0, 0, 0, 0, 0, 0,
+                E, E, E, E, E, E, D, E, E, E, 0, G, G, G, G, G, G, 0, E, E, E, D, E, E, E, E, E, E,
+                0, 0, 0, 0, 0, 0, D, 0, 0, E, 0, G, G, G, G, G, G, 0, E, 0, 0, D, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, D, 0, 0, E, 0, 0, 0, 0, 0, 0, 0, 0, E, 0, 0, D, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, D, 0, 0, E, E, E, E, E, E, E, E, E, E, 0, 0, D, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, D, 0, 0, E, 0, 0, 0, 0, 0, 0, 0, 0, E, 0, 0, D, 0, 0, 0, 0, 0, 0,
@@ -107,10 +83,5 @@ class MazeState {
         inline val Byte.isDot get() = this == DOT
         inline val Byte.isPill get() = this == PILL
         inline val Byte.isDotOrPill get() = isDot || isPill
-
-        fun Byte.isValid(actorType: ActorType) = when (actorType) {
-            Ghost -> this != INVALID
-            Pacman -> this != INVALID && this != GATE
-        }
     }
 }

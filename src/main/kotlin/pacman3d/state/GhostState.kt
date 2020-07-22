@@ -9,12 +9,18 @@ import pacman3d.logic.behaviors.ScatterMode
 class GhostState(
         val id: GhostId,
         initialPosition: ActorPosition,
+        initialDirection: Direction,
         val scatterTargetTile: ActorPosition
-) : ActorState(ActorType.Ghost, initialPosition) {
+) : ActorState(initialPosition, initialDirection) {
 
-    private var mode: GhostBehaviorMode = when (id) {
-        GhostId.Blinky -> ScatterMode()
-        else -> LeaveGhostHouse
+    private lateinit var mode: GhostBehaviorMode
+
+    override fun setup(game: GameState) {
+        setMode(when (id) {
+            GhostId.Blinky -> ScatterMode()
+            GhostId.Clyde -> InGhostHouse
+            else -> InGhostHouse
+        }, game)
     }
 
     fun setMode(newMode: GhostBehaviorMode, game: GameState) {
@@ -22,14 +28,9 @@ class GhostState(
         mode.onStart(game, this)
     }
 
-    override fun reset(gameState: GameState) {
-        super.reset(gameState)
-
-        // TODO: Set to the actual desired mode
-        setMode(mode, gameState)
-    }
-
     override fun onPositionUpdated(game: GameState, time: Double, mazePositionChanged: Boolean) {
         mode.onPositionUpdated(game, this, mazePositionChanged)
     }
+
+    override fun canMove(mazeValue: Byte) = mazeValue != MazeState.INVALID
 }

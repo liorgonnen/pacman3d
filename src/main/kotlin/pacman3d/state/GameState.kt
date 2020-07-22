@@ -8,7 +8,6 @@ import pacman3d.KEY_ARROW_UP
 import pacman3d.logic.ActorPosition
 import pacman3d.logic.Direction.*
 import pacman3d.logic.GhostId.*
-import pacman3d.state.MazeState.Companion.EMPTY
 import pacman3d.state.MazeState.Companion.isDot
 import pacman3d.state.MazeState.Companion.isDotOrPill
 import pacman3d.state.MazeState.Companion.isPill
@@ -26,39 +25,46 @@ class GameState {
 
     val maze = MazeState()
 
-    val pacman = PacmanState(maze, initialPosition = ActorPosition(13.5, 26.5))
+    val pacman = PacmanState(
+        initialDirection = RIGHT,
+        initialPosition = ActorPosition(13.5, 26.5)
+    )
 
     val ghosts = arrayOf(
         // Order matters
         GhostState(
-                id = Blinky,
-                initialPosition = ActorPosition(14.0, 14.0),
-                scatterTargetTile = ActorPosition(26, 0)
+            id = Blinky,
+            initialDirection = LEFT,
+            initialPosition = ActorPosition(14.0, 14.0),
+            scatterTargetTile = ActorPosition(26, 0)
         ),
         GhostState(
-                id = Inky,
-                initialPosition = ActorPosition(12.0, 17.0),
-                scatterTargetTile = ActorPosition(27, 35)
+            id = Inky,
+            initialDirection = UP,
+            initialPosition = ActorPosition(12.0, 17.0),
+            scatterTargetTile = ActorPosition(27, 35),
         ),
         GhostState(
-                id = Pinky,
-                initialPosition = ActorPosition(14.0, 18.0),
-                scatterTargetTile = ActorPosition(1, 0)
+            id = Pinky,
+            initialDirection = DOWN,
+            initialPosition = ActorPosition(14.0, 18.0),
+            scatterTargetTile = ActorPosition(1, 0)
         ),
         GhostState(
-                id = Clyde,
-                initialPosition = ActorPosition(16.0, 17.0),
-                scatterTargetTile = ActorPosition(0, 35)
+            id = Clyde,
+            initialDirection = UP,
+            initialPosition = ActorPosition(16.0, 17.0),
+            scatterTargetTile = ActorPosition(0, 35)
         ),
     )
 
     init {
-        reset()
+        setup()
     }
 
-    private fun reset() {
-        pacman.init(this)
-        ghosts.forEach { it.init(this) }
+    private fun setup() {
+        pacman.setup(this)
+        ghosts.forEach { it.setup(this) }
     }
 
     /**

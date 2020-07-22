@@ -8,12 +8,12 @@ object InGhostHouse: GhostBehaviorMode() {
 
     override fun onPositionUpdated(game: GameState, ghost: GhostState, mazePositionChanged: Boolean) = with (ghost) {
         when {
-            position.y <= 16.5 -> requestedDirection = Direction.DOWN
-            position.y >= 18.0 -> requestedDirection = Direction.UP
+            position.y <= 16.5 -> nextDirection = Direction.DOWN
+            position.y >= 18.0 -> nextDirection = Direction.UP
         }
     }
 
     override fun onStart(game: GameState, ghost: GhostState) {
-        ghost.requestedDirection = Direction.UP
+        ghost.nextDirection = Direction.UP
     }
 }

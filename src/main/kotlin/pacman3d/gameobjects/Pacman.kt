@@ -85,7 +85,7 @@ class Pacman : GameObject() {
         sceneObject.position.x = position.worldX
         sceneObject.position.z = position.worldY
 
-        sceneObject.setRotationFromAxisAngle(Y_AXIS, when (state.pacman.direction) {
+        sceneObject.setRotationFromAxisAngle(Y_AXIS, when (state.pacman.currentDirection) {
             DOWN -> 1.5 * PI
             RIGHT -> 0
             UP -> PI / 2
