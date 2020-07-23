@@ -1,12 +1,14 @@
 package pacman3d.state
 
+import pacman3d.gameobjects.PacManRenderable
 import pacman3d.logic.Position
 import pacman3d.logic.Direction
+import pacman3d.state.Maze.Companion.isDotOrPill
 
-class PacmanState(
+class PacMan(
         initialPosition: Position,
         initialDirection: Direction
-) : AbsGameEntity(initialPosition, initialDirection) {
+) : MovableGameEntity(initialPosition, initialDirection) {
 
     companion object {
         // Cornering is the technique of moving the joystick in the direction one wishes to go well before reaching the
@@ -22,8 +24,14 @@ class PacmanState(
         oneShotTurnThreshold = CORNERING_THRESHOLD
     }
 
-    override fun canMove(maze: MazeState, fromPosition: Position, xDir: Double, yDir: Double): Boolean {
-        val mazeValue = maze[(fromPosition.x + xDir).toInt(), (fromPosition.y + yDir).toInt()]
-        return mazeValue != MazeState.INVALID && mazeValue != MazeState.GHOST_HOUSE
+    override fun onPositionUpdated(world: World, time: Double, mazePositionChanged: Boolean) = with (world) {
+        if (mazePositionChanged && maze[position].isDotOrPill) dots.eat(world, position)
     }
+
+    override fun canMove(maze: Maze, fromPosition: Position, xDir: Double, yDir: Double): Boolean {
+        val mazeValue = maze[(fromPosition.x + xDir).toInt(), (fromPosition.y + yDir).toInt()]
+        return mazeValue != Maze.INVALID && mazeValue != Maze.GHOST_HOUSE
+    }
+
+    override fun createRenderable() = PacManRenderable(this)
 }

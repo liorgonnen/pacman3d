@@ -4,8 +4,7 @@ import kotlinx.browser.document
 import kotlinx.browser.window
 import pacman3d.camera.CameraAnimator
 import pacman3d.ext.*
-import pacman3d.gameobjects.*
-import pacman3d.maze.Maze
+import pacman3d.maze.MazeConst
 import pacman3d.maze.MazeGeometryBuilder
 import pacman3d.state.World
 import stats.js.Stats
@@ -18,7 +17,7 @@ class Game {
     private val clock = Clock()
 
     private val camera = PerspectiveCamera(75, window.aspectRatio, 0.1, 1000).apply {
-        position.set(0, Maze.LENGTH * 0.6, Maze.LENGTH * 0.6)
+        position.set(0, MazeConst.LENGTH * 0.6, MazeConst.LENGTH * 0.6)
         lookAt(0, 0, 0)
     }
 
@@ -26,17 +25,7 @@ class Game {
 
     private val renderer = WebGLRenderer().init(clearColor = 0x333333)
 
-    private val gameObjects = arrayOf(
-        Dots(),
-        PacMan(),
-        Blinky(),
-        Pinky(),
-        Inky(),
-        Clyde(),
-        TextObjects(),
-    )
-
-    private val gameState = World()
+    private val world = World()
 
     private val stats = Stats().apply {
         showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -48,19 +37,8 @@ class Game {
         }
     }
 
-    private val plane = Mesh(PlaneGeometry(Maze.WIDTH, Maze.EFFECTIVE_LENGTH, 5), 0.toMeshLambertMaterial()).apply {
-        rotateX(-HALF_PI)
-    }
-
-    private val maze = Mesh(MazeGeometryBuilder().build(), 0x151FCD.toMeshLambertMaterial())
-
     private val scene = Scene().apply {
-        add(plane)
-        add(maze)
-
-        gameObjects.forEach { add(it) }
-
-        add(DirectionalLight(0xffffff, 1).apply { position.set(-Maze.WIDTH, 40, Maze.LENGTH) })
+        add(DirectionalLight(0xffffff, 1).apply { position.set(-MazeConst.WIDTH, 40, MazeConst.LENGTH) })
         add(HemisphereLight(0xffffff, 0xffffff, 0.5))
         //add(AmbientLight(0x555555))
     }
@@ -76,9 +54,10 @@ class Game {
 
         window.onfocus = { resume() }
 
-        gameObjects.forEach { it.setup(gameState) }
+        world.addRenderablesToScene(scene)
 
-        document.onkeydown = gameState::keyboardHandler
+        // TODO: Fix when creating the game states
+        //document.onkeydown = gameState::keyboardHandler
     }
 
     private fun pause() {
@@ -97,9 +76,7 @@ class Game {
 
         val time = clock.getDelta().toDouble()
 
-        gameState.update(time)
-
-        gameObjects.forEach { it.update(gameState, time) }
+        world.update(time)
 
         //cameraAnimator.update(time)
 

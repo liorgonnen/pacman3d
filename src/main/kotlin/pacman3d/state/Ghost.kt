@@ -1,20 +1,24 @@
 package pacman3d.state
 
+import pacman3d.gameobjects.GhostRenderable
 import pacman3d.logic.*
 import pacman3d.logic.behaviors.GhostBehaviorMode
 import pacman3d.logic.behaviors.LeaveGhostHouse
 import pacman3d.logic.behaviors.ScatterMode
 
-class GhostState(
+class Ghost(
         val id: GhostId,
+        private val color: Int,
         initialPosition: Position,
         initialDirection: Direction,
         val scatterTargetTile: Position
-) : AbsGameEntity(initialPosition, initialDirection) {
+) : MovableGameEntity(initialPosition, initialDirection) {
 
     private lateinit var mode: GhostBehaviorMode
 
     override fun setup(world: World) {
+        super.setup(world)
+
         setMode(when (id) {
             GhostId.Blinky -> ScatterMode()
             //GhostId.Clyde -> LeaveGhostHouse
@@ -30,13 +34,15 @@ class GhostState(
         mode.onPositionUpdated(world, this, mazePositionChanged)
     }
 
-    override fun canMove(maze: MazeState, fromPosition: Position, xDir: Double, yDir: Double): Boolean {
+    override fun canMove(maze: Maze, fromPosition: Position, xDir: Double, yDir: Double): Boolean {
         val currentMazeValue = maze[fromPosition]
         val nextMazeValue = maze[(fromPosition.x + xDir).toInt(), (fromPosition.y + yDir).toInt()]
 
         // Cannot re-enter the ghost house for now
-        if (currentMazeValue == MazeState.EMPTY && nextMazeValue == MazeState.GHOST_HOUSE) return false
+        if (currentMazeValue == Maze.EMPTY && nextMazeValue == Maze.GHOST_HOUSE) return false
 
-        return nextMazeValue != MazeState.INVALID
+        return nextMazeValue != Maze.INVALID
     }
+
+    override fun createRenderable() = GhostRenderable(this, color)
 }

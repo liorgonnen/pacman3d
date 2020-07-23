@@ -4,7 +4,7 @@ import pacman3d.logic.Position
 import pacman3d.logic.Direction
 import pacman3d.logic.Direction.*
 import pacman3d.state.World
-import pacman3d.state.GhostState
+import pacman3d.state.Ghost
 
 class ScatterMode : GhostBehaviorMode() {
 
@@ -18,7 +18,7 @@ class ScatterMode : GhostBehaviorMode() {
     private var lookAheadDirection: Direction = LEFT
     private val lookAheadPosition = Position()
 
-    override fun onStart(world: World, ghost: GhostState) {
+    override fun onStart(world: World, ghost: Ghost) {
         // We need to build up our look-ahead parameters, so we start with the current ghost position
         lookAheadPosition.copy(ghost.position)
         lookAheadDirection = getNextDirection(ghost, world) // Find the best direction
@@ -26,7 +26,7 @@ class ScatterMode : GhostBehaviorMode() {
         ghost.nextDirection = lookAheadDirection
     }
 
-    override fun onPositionUpdated(world: World, ghost: GhostState, mazePositionChanged: Boolean) {
+    override fun onPositionUpdated(world: World, ghost: Ghost, mazePositionChanged: Boolean) {
         if (!mazePositionChanged) return
 
         require(ghost.position.mazeIndex == lookAheadPosition.mazeIndex) {
@@ -40,7 +40,7 @@ class ScatterMode : GhostBehaviorMode() {
         lookAheadDirection = getNextDirection(ghost, world)
     }
 
-    private fun getNextDirection(ghost: GhostState, world: World): Direction = with (ghost) {
+    private fun getNextDirection(ghost: Ghost, world: World): Direction = with (ghost) {
         val maze = world.maze
 
         fun Direction.targetDistance(): Int

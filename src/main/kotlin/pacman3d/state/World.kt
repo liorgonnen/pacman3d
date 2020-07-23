@@ -1,16 +1,12 @@
 package pacman3d.state
 
 import org.w3c.dom.events.KeyboardEvent
-import pacman3d.KEY_ARROW_DOWN
-import pacman3d.KEY_ARROW_LEFT
-import pacman3d.KEY_ARROW_RIGHT
-import pacman3d.KEY_ARROW_UP
+import pacman3d.ext.plusAssign
+import pacman3d.gameobjects.GameEntity
 import pacman3d.logic.Position
 import pacman3d.logic.Direction.*
 import pacman3d.logic.GhostId.*
-import pacman3d.state.MazeState.Companion.isDot
-import pacman3d.state.MazeState.Companion.isDotOrPill
-import pacman3d.state.MazeState.Companion.isPill
+import three.js.Scene
 
 /**
  * Notes:
@@ -20,41 +16,49 @@ import pacman3d.state.MazeState.Companion.isPill
  */
 class World {
 
-    var points = 0
-        private set
+    val maze = Maze()
 
-    val maze = MazeState()
+    val dots = Dots()
 
-    val pacman = PacmanState(
+    val score = Score()
+
+    val pacman = PacMan(
         initialDirection = RIGHT,
         initialPosition = Position(13.5, 26.5)
     )
 
-    val ghosts = arrayOf(
-        // Order matters
-        GhostState(
-            id = Blinky,
-            initialDirection = LEFT,
-            initialPosition = Position(14.0, 14.0),
-            scatterTargetTile = Position(26, 0)
+    private val entities = arrayOf<GameEntity>(
+        maze,
+        dots,
+        score,
+        pacman,
+        Ghost(
+                id = Blinky,
+                color = 0xFE0000,
+                initialDirection = LEFT,
+                initialPosition = Position(14.0, 14.0),
+                scatterTargetTile = Position(26, 0)
         ),
-        GhostState(
-            id = Inky,
-            initialDirection = UP,
-            initialPosition = Position(12.0, 17.0),
-            scatterTargetTile = Position(27, 35),
+        Ghost(
+                id = Inky,
+                color = 0x00D4D4,
+                initialDirection = UP,
+                initialPosition = Position(12.0, 17.0),
+                scatterTargetTile = Position(27, 35),
         ),
-        GhostState(
-            id = Pinky,
-            initialDirection = DOWN,
-            initialPosition = Position(14.0, 18.0),
-            scatterTargetTile = Position(1, 0)
+        Ghost(
+                id = Pinky,
+                color = 0xFFBBFF,
+                initialDirection = DOWN,
+                initialPosition = Position(14.0, 18.0),
+                scatterTargetTile = Position(1, 0)
         ),
-        GhostState(
-            id = Clyde,
-            initialDirection = UP,
-            initialPosition = Position(16.0, 17.0),
-            scatterTargetTile = Position(0, 35)
+        Ghost(
+                id = Clyde,
+                color = 0xFFB950,
+                initialDirection = UP,
+                initialPosition = Position(16.0, 17.0),
+                scatterTargetTile = Position(0, 35)
         ),
     )
 
@@ -63,39 +67,29 @@ class World {
     }
 
     private fun setup() {
-        pacman.setup(this)
-        ghosts.forEach { it.setup(this) }
+        entities.forEach { it.setup(this) }
     }
 
-    /**
-     * Holds the maze index of the dot or pill that's been eaten in the last update or null otherwise
-     */
-    var lastEatenDotIndex: Int? = null
-        private set
+    fun addRenderablesToScene(scene: Scene) {
+        entities.forEach { scene += it.renderable }
+    }
 
     fun update(time: Double) {
-        lastEatenDotIndex = null
+        entities.forEach { it.update(this, time) }
 
-        pacman.update(this, time)
-        ghosts.forEach { it.update(this, time) }
+        entities.forEach { it.renderable.update(this, time) }
 
-        val tile = maze[pacman.position]
-        if (tile.isDotOrPill) {
-            if (tile.isDot) points += 10
-            if (tile.isPill) points += 50
-            maze.eatDot(pacman.position)
+        // TODO: Create points game entity that has the score as its renderable
 
-            lastEatenDotIndex = pacman.position.mazeIndex
-        }
     }
 
     // TODO: This is just temporarily here to test things out.
     fun keyboardHandler(event: KeyboardEvent) {
-        when (event.keyCode) {
-            KEY_ARROW_UP ->  pacman.requestDirection(UP)
-            KEY_ARROW_DOWN -> pacman.requestDirection(DOWN)
-            KEY_ARROW_LEFT -> pacman.requestDirection(LEFT)
-            KEY_ARROW_RIGHT -> pacman.requestDirection(RIGHT)
-        }
+//        when (event.keyCode) {
+//            KEY_ARROW_UP ->  pacman.requestDirection(UP)
+//            KEY_ARROW_DOWN -> pacman.requestDirection(DOWN)
+//            KEY_ARROW_LEFT -> pacman.requestDirection(LEFT)
+//            KEY_ARROW_RIGHT -> pacman.requestDirection(RIGHT)
+//        }
     }
 }

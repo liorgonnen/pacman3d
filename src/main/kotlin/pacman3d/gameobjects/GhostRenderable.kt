@@ -1,22 +1,18 @@
 package pacman3d.gameobjects
 
 import pacman3d.ext.*
-import pacman3d.gameobjects.Ghost.GazeDirection.LEFT
-import pacman3d.gameobjects.Ghost.GazeDirection.RIGHT
+import pacman3d.gameobjects.GhostRenderable.GazeDirection.LEFT
+import pacman3d.gameobjects.GhostRenderable.GazeDirection.RIGHT
 import pacman3d.logic.Direction
-import pacman3d.logic.GhostId
-import pacman3d.logic.GhostId.Blinky
-import pacman3d.logic.GhostId.Clyde
-import pacman3d.logic.GhostId.Inky
-import pacman3d.logic.GhostId.Pinky
-import pacman3d.maze.Maze
+import pacman3d.maze.MazeConst
+import pacman3d.state.Ghost
 import pacman3d.state.World
 import three.js.*
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-sealed class Ghost(val id: GhostId, color: Int) : Renderable {
+class GhostRenderable(val entity: Ghost, color: Int) : Renderable {
 
     // TODO: Remove this in favor of [Direction]
     private sealed class GazeDirection(val multiplier: Double) {
@@ -30,7 +26,7 @@ sealed class Ghost(val id: GhostId, color: Int) : Renderable {
         private const val HEAD_FRACTION = 0.5
         private const val EYE_FRACTION = 0.7
 
-        private const val WIDTH = Maze.UNIT_SIZE * 1.6
+        private const val WIDTH = MazeConst.UNIT_SIZE * 1.6
         private const val HEIGHT = WIDTH * 1.2
         private const val RADIUS = WIDTH / 2.0
         private const val EYE_DEPTH = 0.01
@@ -125,24 +121,14 @@ sealed class Ghost(val id: GhostId, color: Int) : Renderable {
 
     override fun setup(world: World) {
         look(RIGHT)
-        val ghostState = world.ghosts[id.ordinal]
-        sceneObject.position.set(ghostState.position.worldX, WAVE_FRACTION * HEIGHT, ghostState.position.worldY)
+        sceneObject.position.set(entity.position.worldX, WAVE_FRACTION * HEIGHT, entity.position.worldY)
     }
 
     override fun update(world: World, time: Double) {
-        val ghost = world.ghosts[id.ordinal]
-        sceneObject.position.x = ghost.position.worldX
-        sceneObject.position.z = ghost.position.worldY
+        sceneObject.position.x = entity.position.worldX
+        sceneObject.position.z = entity.position.worldY
 
-        if (ghost.currentDirection == Direction.LEFT) look(LEFT)
-        if (ghost.currentDirection == Direction.RIGHT) look(RIGHT)
+        if (entity.currentDirection == Direction.LEFT) look(LEFT)
+        if (entity.currentDirection == Direction.RIGHT) look(RIGHT)
     }
 }
-
-class Blinky : Ghost(id = Blinky, color = 0xFE0000)
-
-class Pinky : Ghost(id = Pinky, color = 0xFFBBFF)
-
-class Inky : Ghost(id = Inky, color = 0x00D4D4)
-
-class Clyde : Ghost(id = Clyde, color = 0xFFB950)

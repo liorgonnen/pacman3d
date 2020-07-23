@@ -4,9 +4,9 @@ import pacman3d.ext.ExtrudeOptions
 import pacman3d.ext.absValue
 import pacman3d.ext.minus
 import pacman3d.ext.plus
-import pacman3d.maze.Maze.HALF_WALL_THICKNESS
-import pacman3d.maze.Maze.WALL_HEIGHT
-import pacman3d.maze.Maze.WALL_THICKNESS
+import pacman3d.maze.MazeConst.HALF_WALL_THICKNESS
+import pacman3d.maze.MazeConst.WALL_HEIGHT
+import pacman3d.maze.MazeConst.WALL_THICKNESS
 import three.js.*
 import kotlin.math.PI
 import kotlin.math.sign

@@ -1,24 +1,24 @@
 package pacman3d.state
 
+import pacman3d.gameobjects.MazeRenderable
 import pacman3d.logic.Position
-import pacman3d.maze.Maze
+import pacman3d.maze.MazeConst
 import pacman3d.maze.MazeCoordinates
 
-class MazeState {
+class Maze : AbsGameEntity() {
 
     private val state = DEFAULT_LAYOUT.copyOf()
 
     var dotsLeft = state.count { it.isDotOrPill }
-        private set
 
-    operator fun get(x: Int, y: Int): Byte = state[Maze.indexOf(x, y)]
+    operator fun get(x: Int, y: Int): Byte = state[MazeConst.indexOf(x, y)]
     operator fun get(pos: Position): Byte = state[pos.mazeIndex]
     operator fun get(pos: MazeCoordinates): Byte = this[pos.x, pos.y]
     operator fun set(pos: Position, value: Byte) { state[pos.mazeIndex] = value }
 
-    fun forEachTile(func: (state: MazeState, x: Int, y: Int) -> Unit) {
-        for (y in Maze.FIRST_EFFECTIVE_LINE until Maze.LAST_EFFECTIVE_LINE)
-            for (x in 0 until Maze.WIDTH_UNITS)
+    fun forEachTile(func: (state: Maze, x: Int, y: Int) -> Unit) {
+        for (y in MazeConst.FIRST_EFFECTIVE_LINE until MazeConst.LAST_EFFECTIVE_LINE)
+            for (x in 0 until MazeConst.WIDTH_UNITS)
                 func(this, x, y)
     }
 
@@ -80,4 +80,8 @@ class MazeState {
         inline val Byte.isPill get() = this == PILL
         inline val Byte.isDotOrPill get() = isDot || isPill
     }
+
+    override fun createRenderable() = MazeRenderable()
+
+    override fun update(world: World, time: Double) = Unit
 }

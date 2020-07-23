@@ -5,20 +5,20 @@ import three.js.Vector2
 data class MazeCoordinates(var x: Int = 0, var y: Int = 0) {
 
     // Top
-    private val TM = Vector2(Maze.HALF_UNIT_SIZE, 0)
-    private val TR = Vector2(Maze.UNIT_SIZE, 0)
+    private val TM = Vector2(MazeConst.HALF_UNIT_SIZE, 0)
+    private val TR = Vector2(MazeConst.UNIT_SIZE, 0)
 
     // Middle
-    private val ML = Vector2(0, Maze.HALF_UNIT_SIZE)
-    private val MM = Vector2(Maze.HALF_UNIT_SIZE, Maze.HALF_UNIT_SIZE)
-    private val MR = Vector2(Maze.UNIT_SIZE, Maze.HALF_UNIT_SIZE)
+    private val ML = Vector2(0, MazeConst.HALF_UNIT_SIZE)
+    private val MM = Vector2(MazeConst.HALF_UNIT_SIZE, MazeConst.HALF_UNIT_SIZE)
+    private val MR = Vector2(MazeConst.UNIT_SIZE, MazeConst.HALF_UNIT_SIZE)
 
     // Bottom
-    private val BL = Vector2(0, Maze.UNIT_SIZE)
-    private val BM = Vector2(Maze.HALF_UNIT_SIZE, Maze.UNIT_SIZE)
-    private val BR = Vector2(Maze.UNIT_SIZE, Maze.UNIT_SIZE)
+    private val BL = Vector2(0, MazeConst.UNIT_SIZE)
+    private val BM = Vector2(MazeConst.HALF_UNIT_SIZE, MazeConst.UNIT_SIZE)
+    private val BR = Vector2(MazeConst.UNIT_SIZE, MazeConst.UNIT_SIZE)
 
-    private fun toWorldPosition() = Vector2(-Maze.HALF_WIDTH + x * Maze.UNIT_SIZE, -Maze.HALF_LENGTH + y * Maze.UNIT_SIZE)
+    private fun toWorldPosition() = Vector2(-MazeConst.HALF_WIDTH + x * MazeConst.UNIT_SIZE, -MazeConst.HALF_LENGTH + y * MazeConst.UNIT_SIZE)
 
     fun set(x: Int, y: Int) {
         this.x = x

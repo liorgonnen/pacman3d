@@ -1,21 +1,28 @@
 package pacman3d.gameobjects
 
+import pacman3d.assets.AssetLoader
 import pacman3d.ext.*
 import pacman3d.logic.Position
+import pacman3d.maze.MazeConst
 import pacman3d.state.World
 import three.js.Group
 import three.js.Mesh
 
-class ReadyText(private val textParams: TextParameters) : Renderable {
+class ReadyText : Renderable {
 
     companion object {
-        const val COLOR = 0xFFFF00
+        private const val COLOR = 0xFFFF00
+        private const val SIZE = MazeConst.UNIT_SIZE
+        private const val THICKNESS = 1.0
+        private const val TEXT = "READY!"
     }
 
     override val sceneObject = Group()
 
-    override fun setup(world: World) {
-        sceneObject += Mesh(textGeometry("Ready!", textParams), COLOR.toMeshLambertMaterial()).apply {
+    override fun setup(world: World) = AssetLoader.onFontLoaded { font ->
+        val textParams = TextParameters(font, SIZE, THICKNESS)
+
+        sceneObject += Mesh(textGeometry(TEXT, textParams), COLOR.toMeshLambertMaterial()).apply {
             val pos = Position(14.0, 20.0)
             position.set(-boundingBox.max.x.toDouble() / 2 + pos.worldX, -boundingBox.min.y.toDouble(), pos.worldY)
             rotateX((-40).toRadians())

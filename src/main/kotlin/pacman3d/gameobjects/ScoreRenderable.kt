@@ -1,16 +1,21 @@
 package pacman3d.gameobjects
 
+import pacman3d.assets.AssetLoader
 import pacman3d.ext.*
 import pacman3d.logic.Position
+import pacman3d.maze.MazeConst
+import pacman3d.state.Score
 import pacman3d.state.World
 import three.js.Geometry
 import three.js.Group
 import three.js.Mesh
 
-class Score(private val textParams: TextParameters) : Renderable {
+class ScoreRenderable(private val score: Score) : Renderable {
 
     companion object {
         private const val COLOR = 0xDFDFFF
+        private const val SIZE = MazeConst.UNIT_SIZE
+        private const val THICKNESS = 1.0
     }
 
     private lateinit var digitGeometries: Array<Geometry>
@@ -23,11 +28,14 @@ class Score(private val textParams: TextParameters) : Renderable {
         rotateX((-40).toRadians())
     }
 
-    override fun setup(world: World) {
+    override fun setup(world: World) = AssetLoader.onFontLoaded { font ->
+        val textParams = TextParameters(font, SIZE, THICKNESS)
         digitGeometries = (0..9).map { textGeometry(it.toString(), textParams) }.toTypedArray()
     }
 
-    override fun update(world: World, time: Double) = setScore(world.points)
+    override fun update(world: World, time: Double) {
+        if (this::digitGeometries.isInitialized) setScore(score.points)
+    }
 
     private fun setScore(points: Int) {
         var value = points

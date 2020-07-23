@@ -2,7 +2,7 @@ package pacman3d.logic
 
 import pacman3d.ext.sqr
 import pacman3d.ext.truncate
-import pacman3d.maze.Maze
+import pacman3d.maze.MazeConst
 
 class Position(var x: Double = 0.0, var y: Double = 0.0) {
 
@@ -12,11 +12,11 @@ class Position(var x: Double = 0.0, var y: Double = 0.0) {
 
     val mazeY get() = y.toInt()
 
-    val worldX get() = -Maze.HALF_WIDTH + x * Maze.UNIT_SIZE
+    val worldX get() = -MazeConst.HALF_WIDTH + x * MazeConst.UNIT_SIZE
 
-    val worldY get() = -Maze.HALF_LENGTH + y * Maze.UNIT_SIZE
+    val worldY get() = -MazeConst.HALF_LENGTH + y * MazeConst.UNIT_SIZE
 
-    val mazeIndex get() = Maze.indexOf(mazeX, mazeY)
+    val mazeIndex get() = MazeConst.indexOf(mazeX, mazeY)
 
     fun copy(other: Position) = apply {
         x = other.x
