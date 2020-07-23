@@ -20,11 +20,7 @@ class World {
         initialPosition = Position(13.5, 26.5)
     )
 
-    private val entities = arrayOf<GameEntity>(
-        maze,
-        dots,
-        score,
-        pacman,
+    val ghosts = arrayOf(
         Ghost(
                 id = Blinky,
                 color = 0xFE0000,
@@ -55,6 +51,14 @@ class World {
         ),
     )
 
+    private val entities = arrayOf<GameEntity>(
+        maze,
+        dots,
+        score,
+        pacman,
+        *ghosts,
+    )
+
     init {
         setup()
     }
@@ -76,13 +80,8 @@ class World {
         forEach { it.renderable.update(this@World, time) }
     }
 
-    // TODO: This is just temporarily here to test things out.
-    fun keyboardHandler(event: KeyboardEvent) {
-//        when (event.keyCode) {
-//            KEY_ARROW_UP ->  pacman.requestDirection(UP)
-//            KEY_ARROW_DOWN -> pacman.requestDirection(DOWN)
-//            KEY_ARROW_LEFT -> pacman.requestDirection(LEFT)
-//            KEY_ARROW_RIGHT -> pacman.requestDirection(RIGHT)
-//        }
+    fun setPacmanAndGhostsActive(active: Boolean) {
+        pacman.isActive = active
+        ghosts.forEach { it.isActive = active }
     }
 }

@@ -6,6 +6,7 @@ import pacman3d.camera.CameraAnimator
 import pacman3d.ext.*
 import pacman3d.maze.MazeConst
 import pacman3d.entities.World
+import pacman3d.logic.states.GameStateMachine
 import stats.js.Stats
 import three.js.*
 
@@ -25,6 +26,8 @@ class Game {
     private val renderer = WebGLRenderer().init(clearColor = 0x333333)
 
     private val world = World()
+
+    private val gameStateMachine = GameStateMachine(world)
 
     private val stats = Stats().apply {
         showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -55,8 +58,7 @@ class Game {
 
         world.addRenderablesToScene(scene)
 
-        // TODO: Fix when creating the game states
-        //document.onkeydown = gameState::keyboardHandler
+        gameStateMachine.start()
     }
 
     private fun pause() {
