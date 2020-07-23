@@ -2,7 +2,6 @@ package pacman3d.entities
 
 import org.w3c.dom.events.KeyboardEvent
 import pacman3d.ext.plusAssign
-import pacman3d.renderables.GameEntity
 import pacman3d.logic.Position
 import pacman3d.logic.Direction.*
 import pacman3d.logic.GhostId.*
