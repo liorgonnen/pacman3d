@@ -1,10 +1,9 @@
 package pacman3d.logic.behaviors
 
-import pacman3d.logic.ActorPosition
+import pacman3d.logic.Position
 import pacman3d.logic.Direction
 import pacman3d.logic.Direction.*
-import pacman3d.logic.GhostId
-import pacman3d.state.GameState
+import pacman3d.state.World
 import pacman3d.state.GhostState
 
 class ScatterMode : GhostBehaviorMode() {
@@ -17,17 +16,17 @@ class ScatterMode : GhostBehaviorMode() {
      * direction of travel and making its next decision on which way to go.
      */
     private var lookAheadDirection: Direction = LEFT
-    private val lookAheadPosition = ActorPosition()
+    private val lookAheadPosition = Position()
 
-    override fun onStart(game: GameState, ghost: GhostState) {
+    override fun onStart(world: World, ghost: GhostState) {
         // We need to build up our look-ahead parameters, so we start with the current ghost position
         lookAheadPosition.copy(ghost.position)
-        lookAheadDirection = getNextDirection(ghost, game) // Find the best direction
+        lookAheadDirection = getNextDirection(ghost, world) // Find the best direction
         lookAheadPosition.move(lookAheadDirection)
         ghost.nextDirection = lookAheadDirection
     }
 
-    override fun onPositionUpdated(game: GameState, ghost: GhostState, mazePositionChanged: Boolean) {
+    override fun onPositionUpdated(world: World, ghost: GhostState, mazePositionChanged: Boolean) {
         if (!mazePositionChanged) return
 
         require(ghost.position.mazeIndex == lookAheadPosition.mazeIndex) {
@@ -38,11 +37,11 @@ class ScatterMode : GhostBehaviorMode() {
 
         lookAheadPosition.move(lookAheadDirection)
 
-        lookAheadDirection = getNextDirection(ghost, game)
+        lookAheadDirection = getNextDirection(ghost, world)
     }
 
-    private fun getNextDirection(ghost: GhostState, game: GameState): Direction = with (ghost) {
-        val maze = game.maze
+    private fun getNextDirection(ghost: GhostState, world: World): Direction = with (ghost) {
+        val maze = world.maze
 
         fun Direction.targetDistance(): Int
             = if (this != nextDirection.oppositeDirection && canMove(maze, lookAheadPosition, this))

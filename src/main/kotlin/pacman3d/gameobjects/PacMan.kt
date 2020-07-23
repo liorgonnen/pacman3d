@@ -3,13 +3,13 @@ package pacman3d.gameobjects
 import pacman3d.ext.*
 import pacman3d.logic.Direction.*
 import pacman3d.maze.Maze
-import pacman3d.state.GameState
+import pacman3d.state.World
 import three.js.Group
 import three.js.Mesh
 import three.js.SphereBufferGeometry
 import kotlin.math.PI
 
-class Pacman : GameObject() {
+class PacMan : Renderable {
 
     companion object {
         private const val SIZE = 1.6 * Maze.UNIT_SIZE
@@ -64,11 +64,11 @@ class Pacman : GameObject() {
         rotateX(-HALF_PI)
     }
 
-    override fun setup(state: GameState) {
-        sceneObject.position.set(state.pacman.position.worldX, SIZE / 2, state.pacman.position.worldY)
+    override fun setup(world: World) {
+        sceneObject.position.set(world.pacman.position.worldX, SIZE / 2, world.pacman.position.worldY)
     }
 
-    override fun update(state: GameState, time: Double) = with (state.pacman) {
+    override fun update(world: World, time: Double) = with (world.pacman) {
         mouthOpenInfluence += mouthOpenSpeed
         if (mouthOpenInfluence >= 1.0) {
             mouthOpenInfluence = 1.0
@@ -85,7 +85,7 @@ class Pacman : GameObject() {
         sceneObject.position.x = position.worldX
         sceneObject.position.z = position.worldY
 
-        sceneObject.setRotationFromAxisAngle(Y_AXIS, when (state.pacman.currentDirection) {
+        sceneObject.setRotationFromAxisAngle(Y_AXIS, when (world.pacman.currentDirection) {
             DOWN -> 1.5 * PI
             RIGHT -> 0
             UP -> PI / 2

@@ -5,7 +5,7 @@ import pacman3d.KEY_ARROW_DOWN
 import pacman3d.KEY_ARROW_LEFT
 import pacman3d.KEY_ARROW_RIGHT
 import pacman3d.KEY_ARROW_UP
-import pacman3d.logic.ActorPosition
+import pacman3d.logic.Position
 import pacman3d.logic.Direction.*
 import pacman3d.logic.GhostId.*
 import pacman3d.state.MazeState.Companion.isDot
@@ -18,7 +18,7 @@ import pacman3d.state.MazeState.Companion.isPill
  * 240 small dots x 10 points each
  * 4 energizer dots x 50 points each
  */
-class GameState {
+class World {
 
     var points = 0
         private set
@@ -27,7 +27,7 @@ class GameState {
 
     val pacman = PacmanState(
         initialDirection = RIGHT,
-        initialPosition = ActorPosition(13.5, 26.5)
+        initialPosition = Position(13.5, 26.5)
     )
 
     val ghosts = arrayOf(
@@ -35,26 +35,26 @@ class GameState {
         GhostState(
             id = Blinky,
             initialDirection = LEFT,
-            initialPosition = ActorPosition(14.0, 14.0),
-            scatterTargetTile = ActorPosition(26, 0)
+            initialPosition = Position(14.0, 14.0),
+            scatterTargetTile = Position(26, 0)
         ),
         GhostState(
             id = Inky,
             initialDirection = UP,
-            initialPosition = ActorPosition(12.0, 17.0),
-            scatterTargetTile = ActorPosition(27, 35),
+            initialPosition = Position(12.0, 17.0),
+            scatterTargetTile = Position(27, 35),
         ),
         GhostState(
             id = Pinky,
             initialDirection = DOWN,
-            initialPosition = ActorPosition(14.0, 18.0),
-            scatterTargetTile = ActorPosition(1, 0)
+            initialPosition = Position(14.0, 18.0),
+            scatterTargetTile = Position(1, 0)
         ),
         GhostState(
             id = Clyde,
             initialDirection = UP,
-            initialPosition = ActorPosition(16.0, 17.0),
-            scatterTargetTile = ActorPosition(0, 35)
+            initialPosition = Position(16.0, 17.0),
+            scatterTargetTile = Position(0, 35)
         ),
     )
 

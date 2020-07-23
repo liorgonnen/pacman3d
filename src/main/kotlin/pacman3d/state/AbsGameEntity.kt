@@ -1,13 +1,12 @@
 package pacman3d.state
 
-import pacman3d.logic.ActorPosition
+import pacman3d.logic.Position
 import pacman3d.logic.Direction
 
-abstract class ActorState(
-    initialPosition: ActorPosition,
-    initialDirection: Direction
+abstract class AbsGameEntity(
+        initialPosition: Position,
+        initialDirection: Direction
 ) {
-
     companion object {
         protected const val DEFAULT_TURN_THRESHOLD = 0.01
     }
@@ -24,19 +23,19 @@ abstract class ActorState(
     var speed = 5.0
         protected set
 
-    open fun setup(game: GameState) = Unit
+    open fun setup(world: World) = Unit
 
-    fun update(gameState: GameState, time: Double) {
+    fun update(world: World, time: Double) {
 
         val preMoveMazeIndex = position.mazeIndex
 
-        updatePosition(gameState.maze, time)
-        updateDirection(gameState.maze)
+        updatePosition(world.maze, time)
+        updateDirection(world.maze)
 
-        onPositionUpdated(gameState, time, position.mazeIndex != preMoveMazeIndex)
+        onPositionUpdated(world, time, position.mazeIndex != preMoveMazeIndex)
     }
 
-    protected open fun onPositionUpdated(game: GameState, time: Double, mazePositionChanged: Boolean) = Unit
+    protected open fun onPositionUpdated(world: World, time: Double, mazePositionChanged: Boolean) = Unit
 
     private fun updateDirection(maze: MazeState) {
         if (currentDirection != nextDirection && canTurn(maze, nextDirection, oneShotTurnThreshold)) {
@@ -95,11 +94,11 @@ abstract class ActorState(
         return result
     }
 
-    fun canMove(maze: MazeState, fromPosition: ActorPosition, direction: Direction): Boolean
+    fun canMove(maze: MazeState, fromPosition: Position, direction: Direction): Boolean
         = canMove(maze, fromPosition, direction.x, direction.y)
 
-    fun canMove(maze: MazeState, fromPosition: ActorPosition, xDir: Int, yDir: Int): Boolean
+    fun canMove(maze: MazeState, fromPosition: Position, xDir: Int, yDir: Int): Boolean
         = canMove(maze, fromPosition, xDir.toDouble(), yDir.toDouble())
 
-    abstract fun canMove(maze: MazeState, fromPosition: ActorPosition, xDir: Double, yDir: Double): Boolean
+    abstract fun canMove(maze: MazeState, fromPosition: Position, xDir: Double, yDir: Double): Boolean
 }

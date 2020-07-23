@@ -2,18 +2,18 @@ package pacman3d.gameobjects
 
 import pacman3d.ext.plusAssign
 import pacman3d.ext.toMeshLambertMaterial
-import pacman3d.logic.ActorPosition
+import pacman3d.logic.Position
 import pacman3d.maze.Maze
-import pacman3d.state.GameState
 import pacman3d.state.MazeState.Companion.isDot
 import pacman3d.state.MazeState.Companion.isDotOrPill
+import pacman3d.state.World
 import three.js.BoxGeometry
 import three.js.Group
 import three.js.Mesh
 import three.js.SphereGeometry
 import kotlin.collections.set
 
-class Dots : GameObject() {
+class Dots : Renderable {
 
     companion object {
         const val DOT_COLOR = 0xF5BCB2
@@ -38,11 +38,11 @@ class Dots : GameObject() {
 
     private val mazeCoordinatesToDotMap = mutableMapOf<Int, Mesh>()
 
-    override fun setup(state: GameState) {
-        state.maze.forEachTile { maze, x, y ->
+    override fun setup(world: World) {
+        world.maze.forEachTile { maze, x, y ->
             if (maze[x, y].isDotOrPill) {
                 group += Mesh(if (maze[x, y].isDot) dotGeometry else pillGeometry, dotMaterial).apply {
-                    val pos = ActorPosition(x, y)
+                    val pos = Position(x, y)
                     position.set(x = pos.worldX, z = pos.worldY, y = DOT_Y_POSITION)
                     mazeCoordinatesToDotMap[Maze.indexOf(x, y)] = this
                 }
@@ -50,8 +50,8 @@ class Dots : GameObject() {
         }
     }
 
-    override fun update(state: GameState, time: Double) {
-        state.lastEatenDotIndex?.let { index ->
+    override fun update(world: World, time: Double) {
+        world.lastEatenDotIndex?.let { index ->
             mazeCoordinatesToDotMap.remove(index)?.let { group.remove(it) }
         }
     }

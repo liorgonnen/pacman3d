@@ -2,38 +2,35 @@ package pacman3d.state
 
 import pacman3d.logic.*
 import pacman3d.logic.behaviors.GhostBehaviorMode
-import pacman3d.logic.behaviors.InGhostHouse
 import pacman3d.logic.behaviors.LeaveGhostHouse
 import pacman3d.logic.behaviors.ScatterMode
 
 class GhostState(
         val id: GhostId,
-        initialPosition: ActorPosition,
+        initialPosition: Position,
         initialDirection: Direction,
-        val scatterTargetTile: ActorPosition
-) : ActorState(initialPosition, initialDirection) {
+        val scatterTargetTile: Position
+) : AbsGameEntity(initialPosition, initialDirection) {
 
     private lateinit var mode: GhostBehaviorMode
 
-    override fun setup(game: GameState) {
+    override fun setup(world: World) {
         setMode(when (id) {
             GhostId.Blinky -> ScatterMode()
             //GhostId.Clyde -> LeaveGhostHouse
             else -> LeaveGhostHouse//InGhostHouse
-        }, game)
+        }, world)
     }
 
-    fun setMode(newMode: GhostBehaviorMode, game: GameState) {
-        console.log("New mode set for $id: $newMode")
-        mode = newMode
-        mode.onStart(game, this)
+    fun setMode(newMode: GhostBehaviorMode, world: World) {
+        mode = newMode.also { it.onStart(world, this) }
     }
 
-    override fun onPositionUpdated(game: GameState, time: Double, mazePositionChanged: Boolean) {
-        mode.onPositionUpdated(game, this, mazePositionChanged)
+    override fun onPositionUpdated(world: World, time: Double, mazePositionChanged: Boolean) {
+        mode.onPositionUpdated(world, this, mazePositionChanged)
     }
 
-    override fun canMove(maze: MazeState, fromPosition: ActorPosition, xDir: Double, yDir: Double): Boolean {
+    override fun canMove(maze: MazeState, fromPosition: Position, xDir: Double, yDir: Double): Boolean {
         val currentMazeValue = maze[fromPosition]
         val nextMazeValue = maze[(fromPosition.x + xDir).toInt(), (fromPosition.y + yDir).toInt()]
 

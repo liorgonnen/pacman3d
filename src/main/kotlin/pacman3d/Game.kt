@@ -7,7 +7,7 @@ import pacman3d.ext.*
 import pacman3d.gameobjects.*
 import pacman3d.maze.Maze
 import pacman3d.maze.MazeGeometryBuilder
-import pacman3d.state.GameState
+import pacman3d.state.World
 import stats.js.Stats
 import three.js.*
 
@@ -28,7 +28,7 @@ class Game {
 
     private val gameObjects = arrayOf(
         Dots(),
-        Pacman(),
+        PacMan(),
         Blinky(),
         Pinky(),
         Inky(),
@@ -36,7 +36,7 @@ class Game {
         TextObjects(),
     )
 
-    private val gameState = GameState()
+    private val gameState = World()
 
     private val stats = Stats().apply {
         showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom

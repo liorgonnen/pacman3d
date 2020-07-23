@@ -1,13 +1,13 @@
 package pacman3d.gameobjects
 
 import pacman3d.ext.*
-import pacman3d.logic.ActorPosition
-import pacman3d.state.GameState
+import pacman3d.logic.Position
+import pacman3d.state.World
 import three.js.Geometry
 import three.js.Group
 import three.js.Mesh
 
-class Score(private val textParams: TextParameters) : GameObject() {
+class Score(private val textParams: TextParameters) : Renderable {
 
     companion object {
         private const val COLOR = 0xDFDFFF
@@ -18,16 +18,16 @@ class Score(private val textParams: TextParameters) : GameObject() {
     private val material = COLOR.toMeshLambertMaterial()
 
     override val sceneObject = Group().apply {
-        val pos = ActorPosition(0.0, 0.0)
+        val pos = Position(0.0, 0.0)
         position.set(pos.worldX, 0, pos.worldY)
         rotateX((-40).toRadians())
     }
 
-    override fun setup(state: GameState) {
+    override fun setup(world: World) {
         digitGeometries = (0..9).map { textGeometry(it.toString(), textParams) }.toTypedArray()
     }
 
-    override fun update(state: GameState, time: Double) = setScore(state.points)
+    override fun update(world: World, time: Double) = setScore(world.points)
 
     private fun setScore(points: Int) {
         var value = points

@@ -1,12 +1,12 @@
 package pacman3d.state
 
-import pacman3d.logic.ActorPosition
+import pacman3d.logic.Position
 import pacman3d.logic.Direction
 
 class PacmanState(
-    initialPosition: ActorPosition,
-    initialDirection: Direction
-) : ActorState(initialPosition, initialDirection) {
+        initialPosition: Position,
+        initialDirection: Direction
+) : AbsGameEntity(initialPosition, initialDirection) {
 
     companion object {
         // Cornering is the technique of moving the joystick in the direction one wishes to go well before reaching the
@@ -22,7 +22,7 @@ class PacmanState(
         oneShotTurnThreshold = CORNERING_THRESHOLD
     }
 
-    override fun canMove(maze: MazeState, fromPosition: ActorPosition, xDir: Double, yDir: Double): Boolean {
+    override fun canMove(maze: MazeState, fromPosition: Position, xDir: Double, yDir: Double): Boolean {
         val mazeValue = maze[(fromPosition.x + xDir).toInt(), (fromPosition.y + yDir).toInt()]
         return mazeValue != MazeState.INVALID && mazeValue != MazeState.GHOST_HOUSE
     }

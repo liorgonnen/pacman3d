@@ -1,10 +1,6 @@
 package pacman3d.state
 
-import pacman3d.logic.ActorPosition
-import pacman3d.logic.ActorType
-import pacman3d.logic.ActorType.Ghost
-import pacman3d.logic.ActorType.Pacman
-import pacman3d.logic.Direction
+import pacman3d.logic.Position
 import pacman3d.maze.Maze
 import pacman3d.maze.MazeCoordinates
 
@@ -16,9 +12,9 @@ class MazeState {
         private set
 
     operator fun get(x: Int, y: Int): Byte = state[Maze.indexOf(x, y)]
-    operator fun get(pos: ActorPosition): Byte = state[pos.mazeIndex]
+    operator fun get(pos: Position): Byte = state[pos.mazeIndex]
     operator fun get(pos: MazeCoordinates): Byte = this[pos.x, pos.y]
-    operator fun set(pos: ActorPosition, value: Byte) { state[pos.mazeIndex] = value }
+    operator fun set(pos: Position, value: Byte) { state[pos.mazeIndex] = value }
 
     fun forEachTile(func: (state: MazeState, x: Int, y: Int) -> Unit) {
         for (y in Maze.FIRST_EFFECTIVE_LINE until Maze.LAST_EFFECTIVE_LINE)
@@ -26,7 +22,7 @@ class MazeState {
                 func(this, x, y)
     }
 
-    fun eatDot(position: ActorPosition) {
+    fun eatDot(position: Position) {
         this[position] = EMPTY
         dotsLeft--
     }

@@ -10,13 +10,13 @@ import pacman3d.logic.GhostId.Clyde
 import pacman3d.logic.GhostId.Inky
 import pacman3d.logic.GhostId.Pinky
 import pacman3d.maze.Maze
-import pacman3d.state.GameState
+import pacman3d.state.World
 import three.js.*
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-sealed class Ghost(val id: GhostId, color: Int) : GameObject() {
+sealed class Ghost(val id: GhostId, color: Int) : Renderable {
 
     // TODO: Remove this in favor of [Direction]
     private sealed class GazeDirection(val multiplier: Double) {
@@ -123,14 +123,14 @@ sealed class Ghost(val id: GhostId, color: Int) : GameObject() {
         rightIris.position.set(-center + gazeDistance, EYE_HEIGHT, RADIUS + EYE_DEPTH)
     }
 
-    override fun setup(state: GameState) {
+    override fun setup(world: World) {
         look(RIGHT)
-        val ghostState = state.ghosts[id.ordinal]
+        val ghostState = world.ghosts[id.ordinal]
         sceneObject.position.set(ghostState.position.worldX, WAVE_FRACTION * HEIGHT, ghostState.position.worldY)
     }
 
-    override fun update(state: GameState, time: Double) {
-        val ghost = state.ghosts[id.ordinal]
+    override fun update(world: World, time: Double) {
+        val ghost = world.ghosts[id.ordinal]
         sceneObject.position.x = ghost.position.worldX
         sceneObject.position.z = ghost.position.worldY
 
