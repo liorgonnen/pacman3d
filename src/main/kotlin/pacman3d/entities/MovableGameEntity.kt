@@ -1,4 +1,4 @@
-package pacman3d.state
+package pacman3d.entities
 
 import pacman3d.logic.Direction
 import pacman3d.logic.Position

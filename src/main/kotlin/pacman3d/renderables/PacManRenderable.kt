@@ -1,10 +1,10 @@
-package pacman3d.gameobjects
+package pacman3d.renderables
 
 import pacman3d.ext.*
 import pacman3d.logic.Direction
 import pacman3d.maze.MazeConst
-import pacman3d.state.PacMan
-import pacman3d.state.World
+import pacman3d.entities.PacMan
+import pacman3d.entities.World
 import three.js.Group
 import three.js.Mesh
 import three.js.SphereBufferGeometry

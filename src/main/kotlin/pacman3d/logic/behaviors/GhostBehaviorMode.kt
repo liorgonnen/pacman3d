@@ -1,7 +1,7 @@
 package pacman3d.logic.behaviors
 
-import pacman3d.state.World
-import pacman3d.state.Ghost
+import pacman3d.entities.World
+import pacman3d.entities.Ghost
 
 abstract class GhostBehaviorMode {
     open fun onPositionUpdated(world: World, ghost: Ghost, mazePositionChanged: Boolean) = Unit

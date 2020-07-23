@@ -1,6 +1,6 @@
 package pacman3d.ext
 
-import pacman3d.gameobjects.Renderable
+import pacman3d.renderables.Renderable
 import three.js.Object3D
 
 inline operator fun Object3D.plusAssign(child: Object3D) { add(child) }

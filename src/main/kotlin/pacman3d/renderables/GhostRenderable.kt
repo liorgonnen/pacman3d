@@ -1,12 +1,12 @@
-package pacman3d.gameobjects
+package pacman3d.renderables
 
 import pacman3d.ext.*
-import pacman3d.gameobjects.GhostRenderable.GazeDirection.LEFT
-import pacman3d.gameobjects.GhostRenderable.GazeDirection.RIGHT
+import pacman3d.renderables.GhostRenderable.GazeDirection.LEFT
+import pacman3d.renderables.GhostRenderable.GazeDirection.RIGHT
 import pacman3d.logic.Direction
 import pacman3d.maze.MazeConst
-import pacman3d.state.Ghost
-import pacman3d.state.World
+import pacman3d.entities.Ghost
+import pacman3d.entities.World
 import three.js.*
 import kotlin.math.PI
 import kotlin.math.cos

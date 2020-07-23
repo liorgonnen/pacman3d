@@ -5,8 +5,7 @@ import kotlinx.browser.window
 import pacman3d.camera.CameraAnimator
 import pacman3d.ext.*
 import pacman3d.maze.MazeConst
-import pacman3d.maze.MazeGeometryBuilder
-import pacman3d.state.World
+import pacman3d.entities.World
 import stats.js.Stats
 import three.js.*
 

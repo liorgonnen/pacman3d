@@ -1,19 +1,13 @@
-package pacman3d.state
+package pacman3d.entities
 
 import org.w3c.dom.events.KeyboardEvent
 import pacman3d.ext.plusAssign
-import pacman3d.gameobjects.GameEntity
+import pacman3d.renderables.GameEntity
 import pacman3d.logic.Position
 import pacman3d.logic.Direction.*
 import pacman3d.logic.GhostId.*
 import three.js.Scene
 
-/**
- * Notes:
- * There are 244 dots overall.
- * 240 small dots x 10 points each
- * 4 energizer dots x 50 points each
- */
 class World {
 
     val maze = Maze()
@@ -74,13 +68,13 @@ class World {
         entities.forEach { scene += it.renderable }
     }
 
-    fun update(time: Double) {
-        entities.forEach { it.update(this, time) }
+    fun update(time: Double) = with (entities) {
 
-        entities.forEach { it.renderable.update(this, time) }
+        forEach { it.onBeforeUpdate() }
 
-        // TODO: Create points game entity that has the score as its renderable
+        forEach { it.update(this@World, time) }
 
+        forEach { it.renderable.update(this@World, time) }
     }
 
     // TODO: This is just temporarily here to test things out.

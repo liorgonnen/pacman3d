@@ -1,7 +1,7 @@
-package pacman3d.state
+package pacman3d.entities
 
-import pacman3d.gameobjects.GameEntity
-import pacman3d.gameobjects.Renderable
+import pacman3d.renderables.GameEntity
+import pacman3d.renderables.Renderable
 
 abstract class AbsGameEntity : GameEntity {
 

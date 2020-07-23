@@ -3,8 +3,8 @@ package pacman3d.logic.behaviors
 import pacman3d.logic.Position
 import pacman3d.logic.Direction
 import pacman3d.logic.Direction.*
-import pacman3d.state.World
-import pacman3d.state.Ghost
+import pacman3d.entities.World
+import pacman3d.entities.Ghost
 
 class ScatterMode : GhostBehaviorMode() {
 

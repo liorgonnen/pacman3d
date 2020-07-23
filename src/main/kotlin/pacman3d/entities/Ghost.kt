@@ -1,6 +1,6 @@
-package pacman3d.state
+package pacman3d.entities
 
-import pacman3d.gameobjects.GhostRenderable
+import pacman3d.renderables.GhostRenderable
 import pacman3d.logic.*
 import pacman3d.logic.behaviors.GhostBehaviorMode
 import pacman3d.logic.behaviors.LeaveGhostHouse

@@ -1,13 +1,13 @@
-package pacman3d.gameobjects
+package pacman3d.renderables
 
 import pacman3d.ext.plusAssign
 import pacman3d.ext.toMeshLambertMaterial
 import pacman3d.logic.Position
 import pacman3d.maze.MazeConst
-import pacman3d.state.Dots
-import pacman3d.state.Maze.Companion.isDot
-import pacman3d.state.Maze.Companion.isDotOrPill
-import pacman3d.state.World
+import pacman3d.entities.Dots
+import pacman3d.entities.Maze.Companion.isDot
+import pacman3d.entities.Maze.Companion.isDotOrPill
+import pacman3d.entities.World
 import three.js.BoxGeometry
 import three.js.Group
 import three.js.Mesh

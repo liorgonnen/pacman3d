@@ -1,6 +1,6 @@
-package pacman3d.state
+package pacman3d.entities
 
-import pacman3d.gameobjects.MazeRenderable
+import pacman3d.renderables.MazeRenderable
 import pacman3d.logic.Position
 import pacman3d.maze.MazeConst
 import pacman3d.maze.MazeCoordinates

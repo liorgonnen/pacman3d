@@ -1,11 +1,11 @@
-package pacman3d.gameobjects
+package pacman3d.renderables
 
 import pacman3d.assets.AssetLoader
 import pacman3d.ext.*
 import pacman3d.logic.Position
 import pacman3d.maze.MazeConst
-import pacman3d.state.Score
-import pacman3d.state.World
+import pacman3d.entities.Score
+import pacman3d.entities.World
 import three.js.Geometry
 import three.js.Group
 import three.js.Mesh

@@ -1,6 +1,6 @@
-package pacman3d.gameobjects
+package pacman3d.renderables
 
-import pacman3d.state.World
+import pacman3d.entities.World
 import three.js.Object3D
 
 interface Updatable {
