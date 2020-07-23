@@ -15,6 +15,8 @@ class World {
 
     val score = Score()
 
+    val readyText = ReadyText()
+
     val pacman = PacMan(
         initialDirection = RIGHT,
         initialPosition = Position(13.5, 26.5)
@@ -51,11 +53,12 @@ class World {
         ),
     )
 
-    private val entities = arrayOf<GameEntity>(
+    private val entities = arrayOf<AbsGameEntity>(
         maze,
         dots,
         score,
         pacman,
+        readyText,
         *ghosts,
     )
 
@@ -72,12 +75,11 @@ class World {
     }
 
     fun update(time: Double) = with (entities) {
+        forEach { if (it.isActive) it.onBeforeUpdate() }
 
-        forEach { it.onBeforeUpdate() }
+        forEach { if (it.isActive) it.update(this@World, time) }
 
-        forEach { it.update(this@World, time) }
-
-        forEach { it.renderable.update(this@World, time) }
+        forEach { with (it.renderable) { if (sceneObject.visible) update(this@World, time) } }
     }
 
     fun setPacmanAndGhostsActive(active: Boolean) {

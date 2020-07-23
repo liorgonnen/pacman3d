@@ -31,16 +31,28 @@ abstract class AbsGameState : GameState {
 
 object WaitingForPlayer : AbsGameState() {
 
+    override fun onEnterState(world: World) {
+        world.setPacmanAndGhostsActive(false)
+    }
+
+    override fun onLeaveState(world: World) = with (world) {
+        readyText.isVisible = false
+        setPacmanAndGhostsActive(true)
+    }
+
+    override fun handleKeyboardEvent(stateMachine: GameStateMachine, world: World, event: KeyboardEvent) {
+        stateMachine.currentState = Playing // Start the game on any key press
+    }
+}
+
+object Paused : AbsGameState() {
+
     override fun handleKeyboardEvent(stateMachine: GameStateMachine, world: World, event: KeyboardEvent) {
         stateMachine.currentState = Playing // Start the game on any key press
     }
 }
 
 object Playing : AbsGameState() {
-
-    override fun onEnterState(world: World) {
-        world.setPacmanAndGhostsActive(true)
-    }
 
     override fun handleKeyboardEvent(stateMachine: GameStateMachine, world: World, event: KeyboardEvent) {
         with (world.pacman) {
@@ -52,5 +64,5 @@ object Playing : AbsGameState() {
             }
         }
     }
-
 }
+

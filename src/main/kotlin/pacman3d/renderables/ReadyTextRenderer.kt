@@ -8,7 +8,7 @@ import pacman3d.entities.World
 import three.js.Group
 import three.js.Mesh
 
-class ReadyText : Renderable {
+class ReadyTextRenderer : Renderable {
 
     companion object {
         private const val COLOR = 0xFFFF00

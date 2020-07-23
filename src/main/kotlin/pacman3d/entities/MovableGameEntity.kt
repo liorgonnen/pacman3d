@@ -18,14 +18,10 @@ abstract class MovableGameEntity(initialPosition: Position, initialDirection: Di
 
     var nextDirection = initialDirection
 
-    var isActive = false
-
     var speed = 5.0
         protected set
 
     override fun update(world: World, time: Double) {
-        if (!isActive) return
-
         val preMoveMazeIndex = position.mazeIndex
 
         updatePosition(world.maze, time)
