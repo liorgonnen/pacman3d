@@ -2,12 +2,9 @@ package pacman3d.entities
 
 import pacman3d.renderables.GhostRenderable
 import pacman3d.logic.*
-import pacman3d.logic.behaviors.GhostBehaviorMode
-import pacman3d.logic.behaviors.LeaveGhostHouse
-import pacman3d.logic.behaviors.ScatterMode
+import pacman3d.logic.behaviors.*
 
-class Ghost(
-        val id: GhostId,
+abstract class Ghost(
         private val color: Int,
         initialPosition: Position,
         initialDirection: Direction,
@@ -16,13 +13,14 @@ class Ghost(
 
     private lateinit var mode: GhostBehaviorMode
 
+    abstract fun getChaseTargetTile(world: World, targetTile: Position)
+
     override fun setup(world: World) {
         super.setup(world)
 
-        setMode(when (id) {
-            GhostId.Blinky -> ScatterMode()
-            //GhostId.Clyde -> LeaveGhostHouse
-            else -> LeaveGhostHouse//InGhostHouse
+        setMode(when (this) {
+            is Blinky -> ScatterMode()//ChaseMode()
+            else -> LeaveGhostHouse
         }, world)
     }
 
@@ -34,6 +32,7 @@ class Ghost(
         mode.onPositionUpdated(world, this, mazePositionChanged)
     }
 
+    // TODO: Implement zones where the ghosts cannot turn upward (these are ignored in Frightened mode)
     override fun canMove(maze: Maze, fromPosition: Position, xDir: Double, yDir: Double): Boolean {
         val currentMazeValue = maze[fromPosition]
         val nextMazeValue = maze[(fromPosition.x + xDir).toInt(), (fromPosition.y + yDir).toInt()]
