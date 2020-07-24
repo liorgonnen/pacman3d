@@ -33,7 +33,7 @@ abstract class GhostBehaviorWithLookAhead : GhostBehaviorMode() {
         // We need to build up our look-ahead parameters, so we start with the current ghost position
         lookAheadPosition.copy(ghost.position)
         lookAheadDirection = getNextDirection(ghost, world) // Find the best direction
-        lookAheadPosition.move(lookAheadDirection)
+        lookAheadPosition.move(lookAheadDirection, limitToMazeBounds = true)
         ghost.nextDirection = lookAheadDirection
     }
 
@@ -44,7 +44,7 @@ abstract class GhostBehaviorWithLookAhead : GhostBehaviorMode() {
 
         ghost.nextDirection = lookAheadDirection
 
-        lookAheadPosition.move(lookAheadDirection)
+        lookAheadPosition.move(lookAheadDirection, limitToMazeBounds = true)
 
         lookAheadDirection = getNextDirection(ghost, world)
     }

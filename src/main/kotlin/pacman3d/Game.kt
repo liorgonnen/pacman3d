@@ -39,7 +39,7 @@ class Game {
     }
 
     private val scene = Scene().apply {
-        add(DirectionalLight(0xffffff, 1).apply { position.set(-MazeConst.WIDTH, 40, MazeConst.LENGTH) })
+        add(DirectionalLight(0xffffff, 1).apply { position.set(-MazeConst.VISIBLE_WIDTH, 40, MazeConst.LENGTH) })
         add(HemisphereLight(0xffffff, 0xffffff, 0.5))
         //add(AmbientLight(0x555555))
     }

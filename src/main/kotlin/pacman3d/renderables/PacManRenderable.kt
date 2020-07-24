@@ -51,11 +51,13 @@ class PacManRenderable(private val entity: PacMan) : Renderable {
     private val outsideMaterial = 0xFFFE54.toMeshLambertMaterial().apply {
         morphTargets = true
         materialSide = BackSide
+        transparent = true
     }
 
     private val insideMaterial = 0x887E29.toMeshLambertMaterial().apply {
         morphTargets = true
         materialSide = FrontSide
+        transparent = true
     }
 
     private val insideMesh = Mesh(geometry, insideMaterial)
@@ -82,6 +84,18 @@ class PacManRenderable(private val entity: PacMan) : Renderable {
 
         insideMesh.morphTargetInfluences[0] = mouthOpenInfluence
         outsideMesh.morphTargetInfluences[0] = mouthOpenInfluence
+
+
+        val opacity = when {
+            position.x < 2.0 -> position.x - 1
+            position.x >= MazeConst.WIDTH_UNITS - 2 -> MazeConst.WIDTH_UNITS - 1 - position.x
+            else -> 1.0
+        }
+
+        if (opacity != 1.0) console.log(opacity)
+
+        outsideMaterial.opacity = opacity
+        insideMaterial.opacity = opacity
 
         sceneObject.position.x = position.worldX
         sceneObject.position.z = position.worldY

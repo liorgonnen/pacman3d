@@ -13,7 +13,7 @@ class MazeRenderable : Renderable {
 
     private val maze = Mesh(MazeGeometryBuilder().build(), 0x151FCD.toMeshLambertMaterial())
 
-    private val plane = Mesh(PlaneGeometry(MazeConst.WIDTH, MazeConst.EFFECTIVE_LENGTH, 5), 0.toMeshLambertMaterial()).apply {
+    private val plane = Mesh(PlaneGeometry(MazeConst.VISIBLE_WIDTH, MazeConst.EFFECTIVE_LENGTH, 5), 0.toMeshLambertMaterial()).apply {
         rotateX(-HALF_PI)
     }
 

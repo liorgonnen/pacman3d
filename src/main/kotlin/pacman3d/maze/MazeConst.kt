@@ -1,11 +1,13 @@
 package pacman3d.maze
 
+import kotlin.math.absoluteValue
+
 object MazeConst {
 
-    fun indexOf(x: Int, y: Int) = y * WIDTH_UNITS + x
-    fun indexOf(pos: MazeCoordinates) = pos.y * WIDTH_UNITS + pos.x
+    fun indexOf(x: Int, y: Int) = y * WIDTH_UNITS + (x.absoluteValue % WIDTH_UNITS)
 
-    const val WIDTH_UNITS = 28
+    const val WIDTH_UNITS = 30
+    const val VISIBLE_WIDTH_UNITS = 28 // The tunnel at each side of the maze is not visible
     const val LENGTH_UNITS = 36
 
     const val FIRST_EFFECTIVE_LINE = 3
@@ -19,6 +21,8 @@ object MazeConst {
 
     const val HALF_UNIT_SIZE = UNIT_SIZE / 2.0
 
+    const val VISIBLE_WIDTH = VISIBLE_WIDTH_UNITS * UNIT_SIZE
+    const val HALF_VISIBLE_WIDTH = VISIBLE_WIDTH / 2
     const val WIDTH = WIDTH_UNITS * UNIT_SIZE
     const val LENGTH = LENGTH_UNITS * UNIT_SIZE
     const val EFFECTIVE_LENGTH = (LAST_EFFECTIVE_LINE - FIRST_EFFECTIVE_LINE + 1) * UNIT_SIZE

@@ -70,7 +70,7 @@ abstract class MovableGameEntity(val initialPosition: Position, val initialDirec
         when {
             isOvershootingX -> centerX()
             isOvershootingY -> centerY()
-            isNextTileValid -> move(currentDirection, distance)
+            isNextTileValid -> move(currentDirection, distance, limitToMazeBounds = true)
             else -> correctPosition(currentDirection)
         }
     }

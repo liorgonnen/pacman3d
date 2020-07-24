@@ -24,9 +24,13 @@ class Position(var x: Double = 0.0, var y: Double = 0.0) {
         y = other.y
     }
 
-    fun move(direction: Direction, distance: Double = 1.0) = apply {
+    fun move(direction: Direction, distance: Double = 1.0, limitToMazeBounds: Boolean = false) = apply {
         x += distance * direction.x
         y += distance * direction.y
+        if (limitToMazeBounds) {
+            if (x < 0) x = MazeConst.WIDTH_UNITS - 0.01
+            if (x >= MazeConst.WIDTH_UNITS) x = 0.0
+        }
     }
 
     fun centerX() = apply { x = mazeX.toDouble() + 0.5 }
