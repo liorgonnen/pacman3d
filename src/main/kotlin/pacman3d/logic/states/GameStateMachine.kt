@@ -26,4 +26,9 @@ class GameStateMachine(val world: World) {
     fun start() {
         document.onkeydown = ::handleKeyboardEvent
     }
+
+    fun update(time: Double) {
+
+    }
 }
+

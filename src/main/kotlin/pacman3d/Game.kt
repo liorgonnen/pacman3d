@@ -6,6 +6,7 @@ import pacman3d.camera.CameraAnimator
 import pacman3d.ext.*
 import pacman3d.maze.MazeConst
 import pacman3d.entities.World
+import pacman3d.logic.states.GameController
 import pacman3d.logic.states.GameStateMachine
 import stats.js.Stats
 import three.js.*
@@ -25,9 +26,7 @@ class Game {
 
     private val renderer = WebGLRenderer().init(clearColor = 0x333333)
 
-    private val world = World()
-
-    private val gameStateMachine = GameStateMachine(world)
+    private val gameController = GameController()
 
     private val stats = Stats().apply {
         showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -56,9 +55,9 @@ class Game {
 
         window.onfocus = { resume() }
 
-        world.addRenderablesToScene(scene)
+        gameController.setup(scene)
 
-        gameStateMachine.start()
+        gameController.start()
     }
 
     private fun pause() {
@@ -77,7 +76,7 @@ class Game {
 
         val time = clock.getDelta().toDouble()
 
-        world.update(time)
+        gameController.update(time)
 
         //cameraAnimator.update(time)
 

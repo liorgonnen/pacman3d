@@ -2,9 +2,12 @@ package pacman3d.entities
 
 import pacman3d.logic.Direction
 import pacman3d.logic.Position
+import pacman3d.logic.behaviors.InGhostHouse
+import pacman3d.logic.behaviors.ScatterMode
 
 class Blinky : Ghost(
     color = 0xFE0000,
+    initialMode = ScatterMode,
     initialDirection = Direction.LEFT,
     initialPosition = Position(14.0, 14.0),
     scatterTargetTile = Position(26, 0)
@@ -16,6 +19,7 @@ class Blinky : Ghost(
 
 class Clyde : Ghost(
         color = 0xFFB950,
+        initialMode = InGhostHouse,
         initialDirection = Direction.UP,
         initialPosition = Position(16.0, 17.0),
         scatterTargetTile = Position(0, 35)
@@ -29,6 +33,7 @@ class Clyde : Ghost(
 
 class Inky : Ghost(
         color = 0x00D4D4,
+        initialMode = InGhostHouse,
         initialDirection = Direction.UP,
         initialPosition = Position(12.0, 17.0),
         scatterTargetTile = Position(27, 35),
@@ -50,8 +55,9 @@ class Inky : Ghost(
 
 class Pinky : Ghost(
         color = 0xFFBBFF,
+        initialMode = InGhostHouse,
         initialDirection = Direction.DOWN,
-        initialPosition = Position(14.0, 18.0),
+        initialPosition = Position(14.0, 17.0),
         scatterTargetTile = Position(1, 0)
 ) {
     /**

@@ -6,36 +6,30 @@ import pacman3d.logic.Direction.*
 import pacman3d.entities.World
 import pacman3d.entities.Ghost
 
-class ChaseMode : GhostBehaviorWithLookAhead() {
+object ChaseMode : GhostBehaviorWithLookAhead() {
 
     override fun updateTargetTile(world: World, ghost: Ghost, targetTile: Position) {
         ghost.getChaseTargetTile(world, targetTile)
     }
 }
 
-class ScatterMode : GhostBehaviorWithLookAhead() {
+object ScatterMode : GhostBehaviorWithLookAhead() {
 
     override fun updateTargetTile(world: World, ghost: Ghost, targetTile: Position) {
         targetTile.copy(ghost.scatterTargetTile)
     }
 }
 
+/**
+ * The behaviors are designed to be completely stateless and only manipulate ghost state
+ * It make it possible to create a single reusable instance of each, and also prevents object
+ * allocation during the game
+ */
 abstract class GhostBehaviorWithLookAhead : GhostBehaviorMode() {
-    /**
-     * Ghosts are always thinking one step into the future as they move through the maze. Whenever a ghost enters a new
-     * tile, it looks ahead to the next tile along its current direction of travel and decides which way it will go when
-     * it gets there. When it eventually reaches that tile, it will change its direction of travel to whatever it had
-     * decided on a tile beforehand. The process is then repeated, looking ahead into the next tile along its new
-     * direction of travel and making its next decision on which way to go.
-     */
-    private var lookAheadDirection: Direction = LEFT
-    private val lookAheadPosition = Position()
-
-    private val targetTile = Position()
 
     abstract fun updateTargetTile(world: World, ghost: Ghost, targetTile: Position)
 
-    override fun onStart(world: World, ghost: Ghost) {
+    override fun onStart(world: World, ghost: Ghost) = with (ghost) {
         // We need to build up our look-ahead parameters, so we start with the current ghost position
         lookAheadPosition.copy(ghost.position)
         lookAheadDirection = getNextDirection(ghost, world) // Find the best direction
@@ -43,7 +37,7 @@ abstract class GhostBehaviorWithLookAhead : GhostBehaviorMode() {
         ghost.nextDirection = lookAheadDirection
     }
 
-    override fun onPositionUpdated(world: World, ghost: Ghost, mazePositionChanged: Boolean) {
+    override fun onPositionUpdated(world: World, ghost: Ghost, mazePositionChanged: Boolean) = with (ghost) {
         if (!mazePositionChanged) return
 
         require(ghost.position.mazeIndex == lookAheadPosition.mazeIndex) { "pos=${ghost.position}, ahead=$lookAheadPosition" }

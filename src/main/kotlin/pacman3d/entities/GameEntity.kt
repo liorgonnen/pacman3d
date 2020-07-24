@@ -7,6 +7,4 @@ interface GameEntity : Updatable {
     var renderable: Renderable
 
     fun createRenderable(): Renderable
-
-    fun onBeforeUpdate()
 }

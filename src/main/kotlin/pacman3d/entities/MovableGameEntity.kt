@@ -3,7 +3,7 @@ package pacman3d.entities
 import pacman3d.logic.Direction
 import pacman3d.logic.Position
 
-abstract class MovableGameEntity(initialPosition: Position, initialDirection: Direction) : AbsGameEntity() {
+abstract class MovableGameEntity(val initialPosition: Position, val initialDirection: Direction) : AbsGameEntity() {
 
     companion object {
         protected const val DEFAULT_TURN_THRESHOLD = 0.01
@@ -11,7 +11,7 @@ abstract class MovableGameEntity(initialPosition: Position, initialDirection: Di
 
     protected var oneShotTurnThreshold = DEFAULT_TURN_THRESHOLD
 
-    val position = initialPosition
+    val position = Position()
 
     var currentDirection = initialDirection
         private set
@@ -20,6 +20,13 @@ abstract class MovableGameEntity(initialPosition: Position, initialDirection: Di
 
     var speed = 5.0
         protected set
+
+    override fun resetState(world: World) {
+        super.resetState(world)
+
+        position.copy(initialPosition)
+        currentDirection = initialDirection
+    }
 
     override fun update(world: World, time: Double) {
         val preMoveMazeIndex = position.mazeIndex

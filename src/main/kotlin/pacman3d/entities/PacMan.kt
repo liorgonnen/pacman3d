@@ -24,12 +24,8 @@ class PacMan(
         oneShotTurnThreshold = CORNERING_THRESHOLD
     }
 
-    override fun onPositionUpdated(world: World, time: Double, mazePositionChanged: Boolean) = with (world) {
-        if (mazePositionChanged && maze[position].isDotOrPill) dots.eat(world, position)
-    }
-
     override fun canMove(maze: Maze, fromPosition: Position, xDir: Double, yDir: Double): Boolean {
-        val mazeValue = maze[(fromPosition.x + xDir).toInt(), (fromPosition.y + yDir).toInt()]
+        val mazeValue = maze[fromPosition.x + xDir, fromPosition.y + yDir]
         return mazeValue != Maze.INVALID && mazeValue != Maze.GHOST_HOUSE
     }
 

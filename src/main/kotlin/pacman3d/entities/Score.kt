@@ -12,15 +12,7 @@ class Score : AbsGameEntity() {
 
     override fun createRenderable() = ScoreRenderable(this)
 
-    override fun update(world: World, time: Double) = with(world) {
-
-        val tile = maze[pacman.position]
-        if (tile.isDotOrPill) {
-            if (tile.isDot) points += 10
-            if (tile.isPill) points += 50
-            dots.eat(world, pacman.position)
-        }
-    }
+    override fun update(world: World, time: Double) = Unit
 
     operator fun plusAssign(value: Int) {
         points += value

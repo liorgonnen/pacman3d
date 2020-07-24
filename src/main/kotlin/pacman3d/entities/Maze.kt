@@ -12,6 +12,7 @@ class Maze : AbsGameEntity() {
     var dotsLeft = state.count { it.isDotOrPill }
 
     operator fun get(x: Int, y: Int): Byte = state[MazeConst.indexOf(x, y)]
+    operator fun get(x: Double, y: Double): Byte = state[MazeConst.indexOf(x.toInt(), y.toInt())]
     operator fun get(pos: Position): Byte = state[pos.mazeIndex]
     operator fun get(pos: MazeCoordinates): Byte = this[pos.x, pos.y]
     operator fun set(pos: Position, value: Byte) { state[pos.mazeIndex] = value }

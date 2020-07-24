@@ -18,5 +18,5 @@ abstract class AbsGameEntity : GameEntity {
         renderable = createRenderable().apply { setup(world) }
     }
 
-    override fun onBeforeUpdate() = Unit
+    open fun resetState(world: World) = Unit
 }
