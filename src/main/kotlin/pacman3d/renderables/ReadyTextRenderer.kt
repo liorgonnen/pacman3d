@@ -23,7 +23,7 @@ class ReadyTextRenderer : Renderable {
         val textParams = TextParameters(font, SIZE, THICKNESS)
 
         sceneObject += Mesh(textGeometry(TEXT, textParams), COLOR.toMeshLambertMaterial()).apply {
-            val pos = Position(14.0, 20.0)
+            val pos = Position(15.0, 20.0)
             position.set(-boundingBox.max.x.toDouble() / 2 + pos.worldX, -boundingBox.min.y.toDouble(), pos.worldY)
             rotateX((-40).toRadians())
         }

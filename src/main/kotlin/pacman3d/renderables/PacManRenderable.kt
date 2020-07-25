@@ -92,8 +92,6 @@ class PacManRenderable(private val entity: PacMan) : Renderable {
             else -> 1.0
         }
 
-        if (opacity != 1.0) console.log(opacity)
-
         outsideMaterial.opacity = opacity
         insideMaterial.opacity = opacity
 
