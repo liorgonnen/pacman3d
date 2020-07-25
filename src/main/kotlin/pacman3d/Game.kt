@@ -20,6 +20,7 @@ class Game {
     private val camera = PerspectiveCamera(75, window.aspectRatio, 0.1, 1000).apply {
         position.set(0, MazeConst.LENGTH * 0.6, MazeConst.LENGTH * 0.6)
         lookAt(0, 0, 0)
+        add(SoundPlayer)
     }
 
     private val cameraAnimator = CameraAnimator(camera)

@@ -1,12 +1,14 @@
 package pacman3d.logic.states
 
+import pacman3d.Sound
+import pacman3d.SoundPlayer
 import pacman3d.entities.Ghost
 import pacman3d.entities.Maze
 import pacman3d.entities.Maze.Companion.isDotOrPill
 import pacman3d.entities.World
 import pacman3d.logic.behaviors.InGhostHouse
 import pacman3d.logic.behaviors.LeaveGhostHouse
-import three.js.Scene
+import three.js.*
 
 // TODO: Move this to a better location
 class GameController {
@@ -42,6 +44,8 @@ class GameController {
 
     private var timeElapsedSinceLastDotEaten = 0.0
 
+    private var lastPacmanMazeIndex = 0
+
     private fun initLevel() = with (world) {
         inky.dotCounter.limit = inkyDotLimit.levelValue(level)
         pinky.dotCounter.limit = pinkyDotLimit.levelValue(level)
@@ -65,17 +69,24 @@ class GameController {
         val mazeValue = maze[pacmanPosition]
         val dotEaten = mazeValue.isDotOrPill
 
-        nextGhostToLeaveGhostHouse?.let { ghost ->
-            if (dotEaten) {
-                timeElapsedSinceLastDotEaten = 0.0
+
+        if (dotEaten) {
+            SoundPlayer.play(Sound.Chomp)
+
+            timeElapsedSinceLastDotEaten = 0.0
+            dots.lastEatenIndex = pacmanPosition.mazeIndex
+
+            score += valueOf(mazeValue)
+
+            maze.eatDot(pacmanPosition)
+
+            nextGhostToLeaveGhostHouse?.let { ghost ->
                 ghost.dotCounter.count++
                 if (ghost.dotCounter.reachedLimit) ghost.setMode(LeaveGhostHouse, world)
-                dots.lastEatenIndex = pacmanPosition.mazeIndex
-                score += valueOf(mazeValue)
-                maze.eatDot(pacmanPosition)
-            } else {
-                timeElapsedSinceLastDotEaten += time
             }
+        }
+        else {
+            timeElapsedSinceLastDotEaten += time
         }
     }
 
