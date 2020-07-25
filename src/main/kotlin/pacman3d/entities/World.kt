@@ -17,7 +17,7 @@ class World {
 
     val pacman = PacMan(
         initialDirection = RIGHT,
-        initialPosition = Position(13.5, 26.5)
+        initialPosition = Position(15.0, 26.5)
     )
 
     val blinky = Blinky()

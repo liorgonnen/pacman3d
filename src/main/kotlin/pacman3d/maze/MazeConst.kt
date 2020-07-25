@@ -22,11 +22,11 @@ object MazeConst {
     const val HALF_UNIT_SIZE = UNIT_SIZE / 2.0
 
     const val VISIBLE_WIDTH = VISIBLE_WIDTH_UNITS * UNIT_SIZE
-    const val HALF_VISIBLE_WIDTH = VISIBLE_WIDTH / 2
     const val WIDTH = WIDTH_UNITS * UNIT_SIZE
     const val LENGTH = LENGTH_UNITS * UNIT_SIZE
     const val EFFECTIVE_LENGTH = (LAST_EFFECTIVE_LINE - FIRST_EFFECTIVE_LINE + 1) * UNIT_SIZE
 
     const val HALF_WIDTH = WIDTH / 2
     const val HALF_LENGTH = LENGTH / 2
+    const val HALF_VISIBLE_WIDTH = VISIBLE_WIDTH / 2
 }

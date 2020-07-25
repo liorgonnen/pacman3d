@@ -9,8 +9,8 @@ class Blinky : Ghost(
     color = 0xFE0000,
     initialMode = ScatterMode,
     initialDirection = Direction.LEFT,
-    initialPosition = Position(14.0, 14.0),
-    scatterTargetTile = Position(26, 0)
+    initialPosition = Position(15.0, 14.0),
+    scatterTargetTile = Position(27, 0)
 ) {
     override fun getChaseTargetTile(world: World, targetTile: Position) {
         targetTile.copy(world.pacman.position)
@@ -21,8 +21,8 @@ class Clyde : Ghost(
         color = 0xFFB950,
         initialMode = InGhostHouse,
         initialDirection = Direction.UP,
-        initialPosition = Position(16.0, 17.0),
-        scatterTargetTile = Position(0, 35)
+        initialPosition = Position(17.0, 17.0),
+        scatterTargetTile = Position(1, 35)
 ) {
     override fun getChaseTargetTile(world: World, targetTile: Position) {
         val pacmanPosition = world.pacman.position
@@ -35,7 +35,7 @@ class Inky : Ghost(
         color = 0x00D4D4,
         initialMode = InGhostHouse,
         initialDirection = Direction.UP,
-        initialPosition = Position(12.0, 17.0),
+        initialPosition = Position(13.0, 17.0),
         scatterTargetTile = Position(27, 35),
 ) {
     override fun getChaseTargetTile(world: World, targetTile: Position) = with (world) {
@@ -57,8 +57,8 @@ class Pinky : Ghost(
         color = 0xFFBBFF,
         initialMode = InGhostHouse,
         initialDirection = Direction.DOWN,
-        initialPosition = Position(14.0, 17.0),
-        scatterTargetTile = Position(1, 0)
+        initialPosition = Position(15.0, 17.0),
+        scatterTargetTile = Position(2, 0)
 ) {
     /**
      * In chase mode, Pinky behaves as he does because he does not target Pac-Man's tile directly. Instead, he selects an
