@@ -1,9 +1,6 @@
 package pacman3d.entities
 
 import pacman3d.renderables.DotsRenderable
-import pacman3d.logic.Position
-import pacman3d.entities.Maze.Companion.DOT
-import pacman3d.entities.Maze.Companion.PILL
 
 /**
  * Notes:
@@ -14,7 +11,7 @@ import pacman3d.entities.Maze.Companion.PILL
 class Dots : AbsGameEntity() {
 
     /**
-     * Holds the maze index of the dot or pill that's been eaten in the last update or null otherwise
+     * Holds the maze index of the dot or energizer that's been eaten in the last update or null otherwise
      */
     var lastEatenIndex: Int? = null
 

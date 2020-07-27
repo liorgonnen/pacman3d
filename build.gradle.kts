@@ -1,19 +1,17 @@
-import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackOutput.Target.COMMONJS
-
 plugins {
-    id("org.jetbrains.kotlin.js") version "1.4-M3"
+    id("org.jetbrains.kotlin.js") version "1.4.0-rc"
 }
 
 group = "com.liorgonnen"
 version = "1.0-SNAPSHOT"
 
 repositories {
-    maven("https://dl.bintray.com/kotlin/kotlin-eap")
     mavenCentral()
+    maven ("https://dl.bintray.com/kotlin/kotlin-eap")
+    maven ("https://kotlin.bintray.com/kotlinx")
 }
 
 dependencies {
-    implementation(kotlin("stdlib-js"))
     api(project(":threejs_kt"))
     api(project(":statsjs_kt"))
 }

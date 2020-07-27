@@ -4,7 +4,8 @@ import pacman3d.Sound
 import pacman3d.SoundPlayer
 import pacman3d.entities.Ghost
 import pacman3d.entities.Maze
-import pacman3d.entities.Maze.Companion.isDotOrPill
+import pacman3d.entities.Maze.Companion.isDotOrEnergizer
+import pacman3d.entities.Maze.Companion.isEnergizer
 import pacman3d.entities.World
 import pacman3d.logic.behaviors.InGhostHouse
 import pacman3d.logic.behaviors.LeaveGhostHouse
@@ -67,8 +68,10 @@ class GameController {
 
         val pacmanPosition = pacman.position
         val mazeValue = maze[pacmanPosition]
-        val dotEaten = mazeValue.isDotOrPill
+        val dotEaten = mazeValue.isDotOrEnergizer
+        val isEnergizer = mazeValue.isEnergizer
 
+        dots.lastEatenIndex = null
 
         if (dotEaten) {
             SoundPlayer.play(Sound.Chomp)
@@ -110,7 +113,7 @@ class GameController {
 
     private fun valueOf(mazeValue: Byte) = when (mazeValue) {
         Maze.DOT -> 10
-        Maze.PILL -> 50
+        Maze.ENERGIZER -> 50
         else -> 0
     }
 }

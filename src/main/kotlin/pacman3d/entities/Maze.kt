@@ -8,7 +8,7 @@ class Maze : AbsGameEntity() {
 
     private val state = DEFAULT_LAYOUT.copyOf()
 
-    var dotsLeft = state.count { it.isDotOrPill }
+    var dotsLeft = state.count { it.isDotOrEnergizer }
 
     operator fun get(x: Int, y: Int): Byte = state[MazeConst.indexOf(x, y)]
     operator fun get(x: Double, y: Double): Byte = state[MazeConst.indexOf(x.toInt(), y.toInt())]
@@ -30,12 +30,12 @@ class Maze : AbsGameEntity() {
         const val INVALID       : Byte = 0
         const val EMPTY         : Byte = 1
         const val DOT           : Byte = 2
-        const val PILL          : Byte = 3
+        const val ENERGIZER     : Byte = 3
         const val GHOST_HOUSE   : Byte = 4
 
         private const val E = EMPTY
         private const val D = DOT
-        private const val P = PILL
+        private const val R = ENERGIZER
         private const val G = GHOST_HOUSE
 
         private val DEFAULT_LAYOUT = byteArrayOf(
@@ -45,7 +45,7 @@ class Maze : AbsGameEntity() {
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, D, D, D, D, D, D, D, D, D, D, D, D, 0, 0, D, D, D, D, D, D, D, D, D, D, D, D, 0, 0,
                 0, 0, D, 0, 0, 0, 0, D, 0, 0, 0, 0, 0, D, 0, 0, D, 0, 0, 0, 0, 0, D, 0, 0, 0, 0, D, 0, 0,
-                0, 0, P, 0, 0, 0, 0, D, 0, 0, 0, 0, 0, D, 0, 0, D, 0, 0, 0, 0, 0, D, 0, 0, 0, 0, P, 0, 0,
+                0, 0, R, 0, 0, 0, 0, D, 0, 0, 0, 0, 0, D, 0, 0, D, 0, 0, 0, 0, 0, D, 0, 0, 0, 0, R, 0, 0,
                 0, 0, D, 0, 0, 0, 0, D, 0, 0, 0, 0, 0, D, 0, 0, D, 0, 0, 0, 0, 0, D, 0, 0, 0, 0, D, 0, 0,
                 0, 0, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, 0, 0,
                 0, 0, D, 0, 0, 0, 0, D, 0, 0, D, 0, 0, 0, 0, 0, 0, 0, 0, D, 0, 0, D, 0, 0, 0, 0, D, 0, 0,
@@ -65,7 +65,7 @@ class Maze : AbsGameEntity() {
                 0, 0, D, D, D, D, D, D, D, D, D, D, D, D, 0, 0, D, D, D, D, D, D, D, D, D, D, D, D, 0, 0,
                 0, 0, D, 0, 0, 0, 0, D, 0, 0, 0, 0, 0, D, 0, 0, D, 0, 0, 0, 0, 0, D, 0, 0, 0, 0, D, 0, 0,
                 0, 0, D, 0, 0, 0, 0, D, 0, 0, 0, 0, 0, D, 0, 0, D, 0, 0, 0, 0, 0, D, 0, 0, 0, 0, D, 0, 0,
-                0, 0, P, D, D, 0, 0, D, D, D, D, D, D, D, E, E, D, D, D, D, D, D, D, 0, 0, D, D, P, 0, 0,
+                0, 0, R, D, D, 0, 0, D, D, D, D, D, D, D, E, E, D, D, D, D, D, D, D, 0, 0, D, D, R, 0, 0,
                 0, 0, 0, 0, D, 0, 0, D, 0, 0, D, 0, 0, 0, 0, 0, 0, 0, 0, D, 0, 0, D, 0, 0, D, 0, 0, 0, 0,
                 0, 0, 0, 0, D, 0, 0, D, 0, 0, D, 0, 0, 0, 0, 0, 0, 0, 0, D, 0, 0, D, 0, 0, D, 0, 0, 0, 0,
                 0, 0, D, D, D, D, D, D, 0, 0, D, D, D, D, 0, 0, D, D, D, D, 0, 0, D, D, D, D, D, D, 0, 0,
@@ -76,8 +76,8 @@ class Maze : AbsGameEntity() {
         )
 
         inline val Byte.isDot get() = this == DOT
-        inline val Byte.isPill get() = this == PILL
-        inline val Byte.isDotOrPill get() = isDot || isPill
+        inline val Byte.isEnergizer get() = this == ENERGIZER
+        inline val Byte.isDotOrEnergizer get() = isDot || isEnergizer
     }
 
     override fun createRenderable() = MazeRenderable()

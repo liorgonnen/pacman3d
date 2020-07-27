@@ -3,7 +3,6 @@ package pacman3d.entities
 import pacman3d.renderables.PacManRenderable
 import pacman3d.logic.Position
 import pacman3d.logic.Direction
-import pacman3d.entities.Maze.Companion.isDotOrPill
 
 class PacMan(
         initialPosition: Position,

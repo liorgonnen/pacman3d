@@ -1,9 +1,6 @@
 package pacman3d.entities
 
 import pacman3d.renderables.ScoreRenderable
-import pacman3d.entities.Maze.Companion.isDot
-import pacman3d.entities.Maze.Companion.isDotOrPill
-import pacman3d.entities.Maze.Companion.isPill
 
 class Score : AbsGameEntity() {
 
