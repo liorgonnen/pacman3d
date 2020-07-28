@@ -29,7 +29,7 @@ class Game {
 
     private val cameraAnimator = CameraAnimator(camera)
 
-    private val renderer = WebGLRenderer().init(clearColor = 0x333333)
+    private val renderer = webGLRenderer(clearColor = 0x333333)
 
     private val gameController = GameController()
 

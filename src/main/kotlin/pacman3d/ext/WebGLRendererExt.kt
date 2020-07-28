@@ -10,11 +10,12 @@ inline fun WebGLRenderer.onResize() {
     setSize(window.innerWidth, window.innerHeight)
 }
 
-fun WebGLRenderer.init(
+fun webGLRenderer(
+    antialias: Boolean = true,
     enableShadows: Boolean = false,
     appendDomElement: Boolean = true,
     clearColor: Int = 0
-) = apply {
+) = WebGLRenderer(WebGLParameters(antialias)).apply {
     setSize(window.innerWidth, window.innerHeight)
     setPixelRatio(window.devicePixelRatio)
 

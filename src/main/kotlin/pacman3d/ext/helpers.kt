@@ -63,6 +63,11 @@ fun textGeometry(text: String, textParameters: TextParameters) = TextGeometry(te
     computeBoundingBox()
 }
 
+class WebGLParameters(antialias: Boolean = true) : WebGLRendererParameters {
+
+    override var antialias: Boolean? = antialias
+}
+
 // TODO: Can I import constants correctly?
 const val FrontSide = 0
 const val BackSide = 1
