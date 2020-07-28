@@ -3,11 +3,15 @@ package pacman3d
 import kotlinx.browser.document
 import kotlinx.browser.window
 import pacman3d.camera.CameraAnimator
+import pacman3d.entities.Blinky
+import pacman3d.entities.Inky
 import pacman3d.ext.*
 import pacman3d.maze.MazeConst
 import pacman3d.entities.World
+import pacman3d.logic.Direction
 import pacman3d.logic.states.GameController
 import pacman3d.logic.states.GameStateMachine
+import pacman3d.renderables.GhostRenderable
 import stats.js.Stats
 import three.js.*
 
@@ -18,7 +22,7 @@ class Game {
     private val clock = Clock()
 
     private val camera = PerspectiveCamera(75, window.aspectRatio, 0.1, 1000).apply {
-        position.set(0, MazeConst.LENGTH * 0.6, MazeConst.LENGTH * 0.6)
+        position.set(0, MazeConst.LENGTH * 0.7, MazeConst.LENGTH * 0.6)
         lookAt(0, 0, 0)
         add(SoundPlayer)
     }

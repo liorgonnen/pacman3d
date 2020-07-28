@@ -18,7 +18,7 @@ object SoundPlayer {
     private val audioLoader = AudioLoader()
 
     private val sounds = arrayOf(
-        newSound(Sound.Chomp).apply { offset = 0.139; autoplay = true }
+        newSound(Sound.Chomp).apply { offset = 0.139 }
     )
 
     init {
@@ -33,8 +33,8 @@ object SoundPlayer {
     }
 
     fun play(sound: Sound): Unit = sounds[sound.ordinal].run {
-        buffer?.also {
-            if (!isPlaying) play()
-        }
+//        buffer?.also {
+//            if (!isPlaying) play()
+//        }
     }
 }

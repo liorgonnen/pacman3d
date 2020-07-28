@@ -1,12 +1,11 @@
 package pacman3d.renderables
 
-import pacman3d.ext.*
-import pacman3d.renderables.GhostRenderable.GazeDirection.LEFT
-import pacman3d.renderables.GhostRenderable.GazeDirection.RIGHT
-import pacman3d.logic.Direction
-import pacman3d.maze.MazeConst
 import pacman3d.entities.Ghost
 import pacman3d.entities.World
+import pacman3d.ext.*
+import pacman3d.logic.Direction
+import pacman3d.logic.Direction.RIGHT
+import pacman3d.maze.MazeConst
 import three.js.*
 import kotlin.math.PI
 import kotlin.math.cos
@@ -14,31 +13,54 @@ import kotlin.math.sin
 
 class GhostRenderable(val entity: Ghost, color: Int) : Renderable {
 
-    // TODO: Remove this in favor of [Direction]
-    private sealed class GazeDirection(val multiplier: Double) {
-        object LEFT : GazeDirection(-1.0)
-        object RIGHT : GazeDirection(1.0)
-    }
-
     companion object {
         // The percentage the wavy part of the ghost spans out of its entire height
         private const val WAVE_FRACTION = 0.1
+        private const val MOUTH_FRACTION = 0.35
         private const val HEAD_FRACTION = 0.5
-        private const val EYE_FRACTION = 0.7
+        private const val EYE_FRACTION = 0.55
 
         private const val WIDTH = MazeConst.UNIT_SIZE * 1.6
         private const val HEIGHT = WIDTH * 1.2
         private const val RADIUS = WIDTH / 2.0
-        private const val EYE_DEPTH = 0.01
+        private const val EYE_DEPTH = 0.02
         private const val EYE_HEIGHT = EYE_FRACTION * HEIGHT
         private const val EYE_WIDTH_RADIUS = RADIUS * 0.25
         private const val EYE_HEIGHT_RADIUS = EYE_WIDTH_RADIUS * 1.15
-        private const val EYE_SPACING = RADIUS * 0.2
         private const val IRIS_RADIUS = EYE_WIDTH_RADIUS / 2
+        private val EYE_SPACING_ANGLE = (20.0).toRadians()
+        private val EYE_SPACING = sin(EYE_SPACING_ANGLE) * RADIUS
 
         private const val SLICES = 60
         private const val STACKS = 20
     }
+
+    private val mouthCurve = CatmullRomCurve3(arrayOf(
+        Vector2(RADIUS * -0.7, 0),
+        Vector2(RADIUS * -0.5, 0.2),
+        Vector2(RADIUS * -0.36, 0),
+        Vector2(RADIUS * -0.2, 0),
+        Vector2(RADIUS * 0, 0.2),
+        Vector2(RADIUS * 0.2, 0),
+        Vector2(RADIUS * 0.36, 0),
+        Vector2(RADIUS * 0.5, 0.2),
+        Vector2(RADIUS * 0.7, 0),
+    ).mapIndexed { i, v2 -> Vector3(v2.x, MOUTH_FRACTION + v2.y, cos((i - 4) * (40 / 4).toRadians()) * RADIUS) }.toTypedArray())
+
+    private val shape = Shape(arrayOf(
+        Vector2(-0.05, 0.0),
+        Vector2(0.0, 0.05),
+        Vector2(0.05, 0.0),
+    ))
+
+    private val options = ExtrudeOptions(
+        steps = 300,
+        curveSegments = 300,
+        bevelEnabled = false,
+        extrudePath =  mouthCurve
+    )
+
+    private val mouthGeometry = ExtrudeGeometry(shape, options)
 
     private val bodyGeometry = parametricGeometry(SLICES, STACKS) { u, v, p ->
         val a = u * TWO_PI
@@ -76,7 +98,7 @@ class GhostRenderable(val entity: Ghost, color: Int) : Renderable {
         add(EllipseCurve(0, 0, EYE_WIDTH_RADIUS, EYE_HEIGHT_RADIUS, 0, TWO_PI, false, 0))
     }
 
-    private val eyeballMaterial = 0xffffff.toMeshLambertMaterial()
+    private val whiteMaterial = 0xffffff.toMeshLambertMaterial()
 
     private val eyeballGeometry = ExtrudeGeometry(eyeballShape, ExtrudeOptions(steps = 10, depth = EYE_DEPTH, bevelEnabled = false))
 
@@ -92,31 +114,43 @@ class GhostRenderable(val entity: Ghost, color: Int) : Renderable {
 
     private val leftIris = Mesh(irisGeometry, irisMaterial)
 
+    private val mouth = Mesh(mouthGeometry, whiteMaterial)
+
     override val sceneObject = Group().add(
             Mesh(bodyGeometry, bodyMaterial),
-            Mesh(eyeballGeometry, eyeballMaterial).apply {
+            Mesh(eyeballGeometry, whiteMaterial).apply {
                 position.set(
-                    x = -(EYE_SPACING / 2 + EYE_WIDTH_RADIUS),
+                    x = -EYE_SPACING,
                     y = EYE_HEIGHT,
-                    z = RADIUS
+                    z = RADIUS - EYE_DEPTH * 2
                 )
+                rotateY(-EYE_SPACING_ANGLE)
             },
-            Mesh(eyeballGeometry, eyeballMaterial).apply {
+            Mesh(eyeballGeometry, whiteMaterial).apply {
                 position.set(
-                    x = EYE_SPACING / 2 + EYE_WIDTH_RADIUS,
+                    x = EYE_SPACING,
                     y = EYE_HEIGHT,
-                    z = RADIUS
+                    z = RADIUS - EYE_DEPTH * 2
                 )
+                rotateY(EYE_SPACING_ANGLE)
             },
-            leftIris,
-            rightIris,
+            leftIris.apply { rotateY(EYE_SPACING_ANGLE) },
+            rightIris.apply { rotateY(-EYE_SPACING_ANGLE) },
+            //mouth,
     )
 
-    private fun look(direction: GazeDirection) {
-        val center = EYE_SPACING / 2 + EYE_WIDTH_RADIUS
-        val gazeDistance = (EYE_WIDTH_RADIUS - IRIS_RADIUS) * direction.multiplier
-        leftIris.position.set(center + gazeDistance, EYE_HEIGHT, RADIUS + EYE_DEPTH)
-        rightIris.position.set(-center + gazeDistance, EYE_HEIGHT, RADIUS + EYE_DEPTH)
+    fun look(direction: Direction) {
+        val deltaX = direction.x * (EYE_WIDTH_RADIUS - IRIS_RADIUS)
+        val deltaY = direction.y * (EYE_HEIGHT_RADIUS - IRIS_RADIUS)
+
+        fun Mesh.adjustLook(x: Double) {
+            position.set(x, EYE_HEIGHT, RADIUS + EYE_DEPTH)
+            translateX(deltaX)
+            translateY(-deltaY)
+        }
+
+        leftIris.adjustLook(EYE_SPACING)
+        rightIris.adjustLook(-EYE_SPACING)
     }
 
     override fun setup(world: World) {
@@ -128,7 +162,6 @@ class GhostRenderable(val entity: Ghost, color: Int) : Renderable {
         sceneObject.position.x = entity.position.worldX
         sceneObject.position.z = entity.position.worldY
 
-        if (entity.currentDirection == Direction.LEFT) look(LEFT)
-        if (entity.currentDirection == Direction.RIGHT) look(RIGHT)
+        look(entity.currentDirection)
     }
 }
