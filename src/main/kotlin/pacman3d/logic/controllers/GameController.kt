@@ -8,8 +8,8 @@ import pacman3d.entities.Maze.Companion.isDotOrEnergizer
 import pacman3d.entities.Maze.Companion.isEnergizer
 import pacman3d.entities.World
 import pacman3d.ext.levelValue
-import pacman3d.logic.behaviors.InGhostHouse
-import pacman3d.logic.behaviors.LeaveGhostHouse
+import pacman3d.logic.behaviors.InGhostHouseMovementStrategy
+import pacman3d.logic.behaviors.LeaveGhostHouseMovementStrategy
 import pacman3d.logic.states.GameStateMachine
 import three.js.*
 
@@ -28,15 +28,6 @@ import three.js.*
  * Pinky released when counter = 7
  * Inky released when counter = 17
  * if (Clyde in house && counter == 32) disableCounter() -> Switch back to ghost-individual counters
- *
- *
- * Ghosts are forced to reverse direction by the system anytime the mode changes from:
- * - chase-to-scatter
- * - chase-to-frightened
- * - scatter-to-chase
- * - scatter-to-frightened.
- *
- * Ghosts do not reverse direction when changing back from frightened to chase or scatter modes.
  */
 // TODO: Move this to a better location
 class GameController {
@@ -88,8 +79,6 @@ class GameController {
         if (dotEaten) {
             SoundPlayer.play(Sound.Chomp)
 
-            if (isEnergizer) ghostBehaviorController.setFrightened(world)
-
             timeElapsedSinceLastDotEaten = 0.0
             dots.lastEatenIndex = pacmanPosition.mazeIndex
 
@@ -97,10 +86,7 @@ class GameController {
 
             maze.eatDot(pacmanPosition)
 
-            nextGhostToLeaveGhostHouse?.let { ghost ->
-                ghost.dotCounter.count++
-                if (ghost.dotCounter.reachedLimit) ghost.setMode(LeaveGhostHouse, world)
-            }
+            ghostBehaviorController.onDotEaten(isEnergizer)
         }
         else {
             timeElapsedSinceLastDotEaten += time
@@ -118,12 +104,6 @@ class GameController {
     fun setup(scene: Scene) {
         world.addRenderablesToScene(scene)
     }
-
-    /**
-     * Order of preferred ghost to leave house: Pinky, then Inky, and then Clyde
-     */
-    private val nextGhostToLeaveGhostHouse: Ghost? get()
-        = world.preferredOrderToLeaveHouse.firstOrNull { it.mode == InGhostHouse }
 
     private fun valueOf(mazeValue: Byte) = when (mazeValue) {
         Maze.DOT -> 10

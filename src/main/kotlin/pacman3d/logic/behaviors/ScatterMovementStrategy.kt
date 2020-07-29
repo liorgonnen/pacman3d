@@ -6,14 +6,14 @@ import pacman3d.logic.Direction.*
 import pacman3d.entities.World
 import pacman3d.entities.Ghost
 
-object ChaseMode : GhostBehaviorWithLookAhead() {
+object ChaseMovementStrategy : GhostMovementStrategyWithLookAhead() {
 
     override fun updateTargetTile(world: World, ghost: Ghost, targetTile: Position) {
         ghost.getChaseTargetTile(world, targetTile)
     }
 }
 
-object ScatterMode : GhostBehaviorWithLookAhead() {
+object ScatterMovementStrategy : GhostMovementStrategyWithLookAhead() {
 
     override fun updateTargetTile(world: World, ghost: Ghost, targetTile: Position) {
         targetTile.copy(ghost.scatterTargetTile)
@@ -25,7 +25,7 @@ object ScatterMode : GhostBehaviorWithLookAhead() {
  * It make it possible to create a single reusable instance of each, and also prevents object
  * allocation during the game
  */
-abstract class GhostBehaviorWithLookAhead : GhostBehaviorMode() {
+abstract class GhostMovementStrategyWithLookAhead : GhostMovementStrategy() {
 
     abstract fun updateTargetTile(world: World, ghost: Ghost, targetTile: Position)
 

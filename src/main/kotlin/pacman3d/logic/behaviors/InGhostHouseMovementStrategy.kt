@@ -4,7 +4,7 @@ import pacman3d.logic.Direction
 import pacman3d.entities.World
 import pacman3d.entities.Ghost
 
-object InGhostHouse: GhostBehaviorMode() {
+object InGhostHouseMovementStrategy: GhostMovementStrategy() {
 
     // TODO: Make this more robust
     override fun onPositionUpdated(world: World, ghost: Ghost, mazePositionChanged: Boolean) = with (ghost) {

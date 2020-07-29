@@ -12,11 +12,11 @@ class DotCounter(var count: Int = 0, var limit: Int = 0) {
 }
 
 abstract class Ghost(
-        private val color: Int,
-        val initialMode: GhostBehaviorMode,
-        initialPosition: Position,
-        initialDirection: Direction,
-        val scatterTargetTile: Position
+    private val color: Int,
+    val initialState: GhostState,
+    initialPosition: Position,
+    initialDirection: Direction,
+    val scatterTargetTile: Position
 ) : MovableGameEntity(initialPosition, initialDirection) {
 
     /**
@@ -34,24 +34,32 @@ abstract class Ghost(
 
     val targetTile = Position()
 
-    var mode: GhostBehaviorMode = InGhostHouse
+    var state: GhostState = initialState
         private set
+
+    var movementStrategy: GhostMovementStrategy = state.movementStrategy
+        private set
+
+    val hasReachedTarget get() = movementStrategy.hasReachedTarget(this)
 
     override fun resetState(world: World) {
         super.resetState(world)
 
         dotCounter.reset()
-        setMode(initialMode, world)
+
+        // We need to call this to initiate the side-effects
+        setState(initialState, world)
     }
 
     abstract fun getChaseTargetTile(world: World, targetTile: Position)
 
-    fun setMode(newMode: GhostBehaviorMode, world: World) {
-        mode = newMode.also { it.onStart(world, this) }
+    fun setState(newState: GhostState, world: World) {
+        state = newState
+        movementStrategy = state.movementStrategy.also { it.onStart(world, this) }
     }
 
     override fun onPositionUpdated(world: World, time: Double, mazePositionChanged: Boolean) {
-        mode.onPositionUpdated(world, this, mazePositionChanged)
+        movementStrategy.onPositionUpdated(world, this, mazePositionChanged)
     }
 
     // TODO: Implement zones where the ghosts cannot turn upward (these are ignored in Frightened mode)
