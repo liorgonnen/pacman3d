@@ -10,7 +10,7 @@ import pacman3d.logic.Direction.*
 
 interface GameState {
 
-    fun onEnterState(world: World)
+    fun onEnterState(world: World, previousState: GameState)
 
     fun handleKeyboardEvent(stateMachine: GameStateMachine, world: World, event: KeyboardEvent)
 
@@ -21,17 +21,20 @@ interface GameState {
 
 abstract class AbsGameState : GameState {
 
-    override fun onEnterState(world: World) = Unit
+    override fun onEnterState(world: World, previousState: GameState) = Unit
 
     override fun update(stateMachine: GameStateMachine, world: World, time: Double) = Unit
 
     override fun onLeaveState(world: World) = Unit
 
+    override fun handleKeyboardEvent(stateMachine: GameStateMachine, world: World, event: KeyboardEvent) = Unit
 }
+
+object NullState : AbsGameState()
 
 object WaitingForPlayer : AbsGameState() {
 
-    override fun onEnterState(world: World) {
+    override fun onEnterState(world: World, previousState: GameState) {
         world.setPacmanAndGhostsActive(false)
     }
 

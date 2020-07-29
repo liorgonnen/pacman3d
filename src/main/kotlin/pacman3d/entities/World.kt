@@ -29,7 +29,7 @@ class World {
 
     val pinky = Pinky()
 
-    private val ghosts = arrayOf(
+    val ghosts = arrayOf(
         blinky,
         clyde,
         inky,

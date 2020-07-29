@@ -11,7 +11,7 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-class GhostRenderable(val entity: Ghost, color: Int) : Renderable {
+class GhostRenderable(private val entity: Ghost, private val color: Int) : Renderable {
 
     companion object {
         // The percentage the wavy part of the ghost spans out of its entire height
@@ -33,6 +33,12 @@ class GhostRenderable(val entity: Ghost, color: Int) : Renderable {
 
         private const val SLICES = 60
         private const val STACKS = 20
+
+        private const val BODY_FRIGHTENED_COLOR = 0x1B1AD4
+        private const val FACE_FRIGHTENED_COLOR = 0xCAD5FF
+
+        private const val BODY_FRIGHTENED_FADE_COLOR = 0xB3B5D1
+        private const val FACE_FRIGHTENED_FADE_COLOR = 0xAA0916
     }
 
     private val mouthCurve = CatmullRomCurve3(arrayOf(
@@ -136,10 +142,10 @@ class GhostRenderable(val entity: Ghost, color: Int) : Renderable {
             },
             leftIris.apply { rotateY(EYE_SPACING_ANGLE) },
             rightIris.apply { rotateY(-EYE_SPACING_ANGLE) },
-            //mouth,
+            mouth.apply { visible = false },
     )
 
-    fun look(direction: Direction) {
+    private fun look(direction: Direction) {
         val deltaX = direction.x * (EYE_WIDTH_RADIUS - IRIS_RADIUS)
         val deltaY = direction.y * (EYE_HEIGHT_RADIUS - IRIS_RADIUS)
 
@@ -151,6 +157,21 @@ class GhostRenderable(val entity: Ghost, color: Int) : Renderable {
 
         leftIris.adjustLook(EYE_SPACING)
         rightIris.adjustLook(-EYE_SPACING)
+    }
+
+    fun setFrightened(frightened: Boolean) {
+        mouth.visible = frightened
+        leftIris.visible = !frightened
+        rightIris.visible = !frightened
+
+        if (frightened) {
+            bodyMaterial.color.setHex(BODY_FRIGHTENED_COLOR)
+            whiteMaterial.color.setHex(FACE_FRIGHTENED_COLOR)
+        }
+        else {
+            bodyMaterial.color.setHex(color)
+            whiteMaterial.color.setHex(0xffffff)
+        }
     }
 
     override fun setup(world: World) {

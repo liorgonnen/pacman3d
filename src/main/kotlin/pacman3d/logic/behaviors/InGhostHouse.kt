@@ -6,6 +6,7 @@ import pacman3d.entities.Ghost
 
 object InGhostHouse: GhostBehaviorMode() {
 
+    // TODO: Make this more robust
     override fun onPositionUpdated(world: World, ghost: Ghost, mazePositionChanged: Boolean) = with (ghost) {
         when {
             position.y <= 16.5 -> nextDirection = Direction.DOWN

@@ -3,15 +3,9 @@ package pacman3d
 import kotlinx.browser.document
 import kotlinx.browser.window
 import pacman3d.camera.CameraAnimator
-import pacman3d.entities.Blinky
-import pacman3d.entities.Inky
 import pacman3d.ext.*
 import pacman3d.maze.MazeConst
-import pacman3d.entities.World
-import pacman3d.logic.Direction
-import pacman3d.logic.states.GameController
-import pacman3d.logic.states.GameStateMachine
-import pacman3d.renderables.GhostRenderable
+import pacman3d.logic.controllers.GameController
 import stats.js.Stats
 import three.js.*
 

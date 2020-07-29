@@ -6,7 +6,7 @@ import pacman3d.entities.World
 
 class GameStateMachine(val world: World) {
 
-    private var previousState: GameState? = null
+    private var previousState: GameState = NullState
 
     var currentState: GameState = WaitingForPlayer
         set(value) {
@@ -14,11 +14,11 @@ class GameStateMachine(val world: World) {
             previousState = field
             field.onLeaveState(world)
             field = value
-            field.onEnterState(world)
+            field.onEnterState(world, previousState)
         }
 
     init {
-        currentState.onEnterState(world)
+        currentState.onEnterState(world, previousState)
     }
 
     private fun handleKeyboardEvent(event: KeyboardEvent) = currentState.handleKeyboardEvent(this, world, event)

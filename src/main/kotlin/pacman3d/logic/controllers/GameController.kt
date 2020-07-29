@@ -1,4 +1,4 @@
-package pacman3d.logic.states
+package pacman3d.logic.controllers
 
 import pacman3d.Sound
 import pacman3d.SoundPlayer
@@ -7,35 +7,43 @@ import pacman3d.entities.Maze
 import pacman3d.entities.Maze.Companion.isDotOrEnergizer
 import pacman3d.entities.Maze.Companion.isEnergizer
 import pacman3d.entities.World
+import pacman3d.ext.levelValue
 import pacman3d.logic.behaviors.InGhostHouse
 import pacman3d.logic.behaviors.LeaveGhostHouse
+import pacman3d.logic.states.GameStateMachine
 import three.js.*
 
+/**
+ * For each ghost:
+ * - Dot counter with a dot limit
+ * If preferred ghost counter reaches limit, ghost leaves house immediately. Dot counter stops (not reset)
+ *
+ * Dot limit:
+ * - Pinky: 0 (always) - Leaves immediately as level begins
+ * - Inky: Level 1 - 30, Level 2 - 0, Level 3 - 0
+ * - Clyde: Level 1 - 60, Level 2 - 50, Level 3 - 0
+ *
+ * if (life is lost) - use a system-level dot counter instead of ghost-individual dot counter
+ * This counter is enabled and set to zero when a life is lost
+ * Pinky released when counter = 7
+ * Inky released when counter = 17
+ * if (Clyde in house && counter == 32) disableCounter() -> Switch back to ghost-individual counters
+ *
+ *
+ * Ghosts are forced to reverse direction by the system anytime the mode changes from:
+ * - chase-to-scatter
+ * - chase-to-frightened
+ * - scatter-to-chase
+ * - scatter-to-frightened.
+ *
+ * Ghosts do not reverse direction when changing back from frightened to chase or scatter modes.
+ */
 // TODO: Move this to a better location
 class GameController {
-    /**
-     * //
-     * For each ghost:
-     * - Dot counter with a dot limit
-     * If preferred ghost counter reaches limit, ghost leaves house immediately. Dot counter stops (not reset)
-     *
-     * Dot limit:
-     * - Pinky: 0 (always) - Leaves immediately as level begins
-     * - Inky: Level 1 - 30, Level 2 - 0, Level 3 - 0
-     * - Clyde: Level 1 - 60, Level 2 - 50, Level 3 - 0
-     *
-     * if (life is lost) - use a system-level dot counter instead of ghost-individual dot counter
-     * This counter is enabled and set to zero when a life is lost
-     * Pinky released when counter = 7
-     * Inky released when counter = 17
-     * if (Clyde in house && counter == 32) disableCounter() -> Switch back to ghost-individual counters
-     */
 
     private val inkyDotLimit = arrayOf(30, 0)
     private val pinkyDotLimit = arrayOf(0)
     private val clydeDotLimit = arrayOf(60, 50, 0)
-
-    private fun <T> Array<T>.levelValue(level: Int) = this[minOf(level, size - 1)]
 
     private val world = World()
 
@@ -46,6 +54,8 @@ class GameController {
     private var timeElapsedSinceLastDotEaten = 0.0
 
     private var lastPacmanMazeIndex = 0
+
+    private val ghostBehaviorController = GhostBehaviorController(world)
 
     private fun initLevel() = with (world) {
         inky.dotCounter.limit = inkyDotLimit.levelValue(level)
@@ -58,6 +68,8 @@ class GameController {
     fun update(time: Double) {
 
         updateGameLogic(time)
+
+        ghostBehaviorController.update(time)
 
         stateMachine.update(time)
 
@@ -75,6 +87,8 @@ class GameController {
 
         if (dotEaten) {
             SoundPlayer.play(Sound.Chomp)
+
+            if (isEnergizer) ghostBehaviorController.setFrightened(world)
 
             timeElapsedSinceLastDotEaten = 0.0
             dots.lastEatenIndex = pacmanPosition.mazeIndex
