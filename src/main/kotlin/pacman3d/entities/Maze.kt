@@ -4,7 +4,7 @@ import pacman3d.renderables.MazeRenderable
 import pacman3d.logic.Position
 import pacman3d.maze.MazeConst
 
-class Maze : AbsGameEntity() {
+class Maze : AbsGameEntity<MazeRenderable>() {
 
     private val state = DEFAULT_LAYOUT.copyOf()
 

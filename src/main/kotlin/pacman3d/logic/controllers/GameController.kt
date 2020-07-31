@@ -74,16 +74,13 @@ class GameController {
         val dotEaten = mazeValue.isDotOrEnergizer
         val isEnergizer = mazeValue.isEnergizer
 
-        dots.lastEatenIndex = null
-
         if (dotEaten) {
             SoundPlayer.play(Sound.Chomp)
 
             timeElapsedSinceLastDotEaten = 0.0
-            dots.lastEatenIndex = pacmanPosition.mazeIndex
 
             score += valueOf(mazeValue)
-
+            dots.eat(pacmanPosition)
             maze.eatDot(pacmanPosition)
 
             ghostBehaviorController.onDotEaten(isEnergizer)

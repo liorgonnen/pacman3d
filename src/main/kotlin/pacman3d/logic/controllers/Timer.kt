@@ -6,9 +6,11 @@ class Timer(timeoutInSeconds: Double, private val onTimeout: () -> Unit) {
 
     private val isIndefinite = timeoutInSeconds <= 0
 
-    private var timeLeft = timeoutInSeconds * 1000.0
+    var timeLeft = timeoutInSeconds.also { require(!timeoutInSeconds.isNaN()) }
+        private set
 
-    private var isPaused = false
+    var isPaused = false
+        private set
 
     fun update(time: Double) {
         if (isIndefinite || isPaused) return

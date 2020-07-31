@@ -20,9 +20,9 @@ enum class GhostState(val movementStrategy: GhostMovementStrategy) {
     private val isEaten get() = this == Eaten
 
     fun canSwitchToState(newState: GhostState) = this === newState || when (newState) {
-        Chase -> !isEaten
-        Scatter -> !isEaten
-        Frightened -> !isEaten
+        Chase -> this.isNotAnyOf(Eaten, InGhostHouse, LeaveGhostHouse)
+        Scatter -> this.isNotAnyOf(Eaten, InGhostHouse, LeaveGhostHouse)
+        Frightened -> this.isNotAnyOf(Eaten, InGhostHouse, LeaveGhostHouse) // TODO: Solve this. Ghost in house or leaving house should become frightened.
         Eaten -> this.isAnyOf(Frightened)
         LeaveGhostHouse -> this.isAnyOf(InGhostHouse)
         InGhostHouse -> true

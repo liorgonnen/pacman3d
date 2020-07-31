@@ -2,8 +2,12 @@ package pacman3d.entities
 
 import pacman3d.logic.Direction
 import pacman3d.logic.Position
+import pacman3d.renderables.Renderable
 
-abstract class MovableGameEntity(val initialPosition: Position, val initialDirection: Direction) : AbsGameEntity() {
+abstract class MovableGameEntity<R : Renderable>(
+    private val initialPosition: Position,
+    private val initialDirection: Direction
+) : AbsGameEntity<R>() {
 
     companion object {
         protected const val DEFAULT_TURN_THRESHOLD = 0.01
@@ -26,20 +30,21 @@ abstract class MovableGameEntity(val initialPosition: Position, val initialDirec
 
         position.copy(initialPosition)
         currentDirection = initialDirection
+        nextDirection = initialDirection
     }
 
     override fun update(world: World, time: Double) {
         val preMoveMazeIndex = position.mazeIndex
 
-        updatePosition(world.maze, time)
         updateDirection(world.maze)
+        updatePosition(world.maze, time)
 
         onPositionUpdated(world, time, position.mazeIndex != preMoveMazeIndex)
     }
 
     protected open fun onPositionUpdated(world: World, time: Double, mazePositionChanged: Boolean) = Unit
 
-    private fun updateDirection(maze: Maze) {
+    open fun updateDirection(maze: Maze) {
         if (currentDirection != nextDirection && canTurn(maze, nextDirection, oneShotTurnThreshold)) {
             currentDirection = nextDirection
         }
@@ -52,20 +57,21 @@ abstract class MovableGameEntity(val initialPosition: Position, val initialDirec
 
         // Check if a movement in the current direction will overshoot and prevent us from turning
         // to the lateral axis
-        fun isOvershooting(valueBefore: Double, delta: Double): Boolean
-                = minOf(valueBefore, valueBefore + delta) < 0.5 && maxOf(valueBefore, valueBefore + delta) > 0.5
+        fun isOvershooting(valueBefore: Double, delta: Double): Boolean {
+            val valueAfter = valueBefore + delta
+            return minOf(valueBefore, valueAfter) < 0.5 && maxOf(valueBefore, valueAfter) > 0.5
+        }
 
-        val isChangingMovementAxis = nextDirection differentAxisThan currentDirection && canMove(maze, position, nextDirection)
+        val isChangingMovementAxis = nextDirection differentAxisThan currentDirection && isLegalMove(maze, position, nextDirection)
 
         val distance = (speed * time).coerceAtMost(0.5)
 
         // We add 0.5 because we want to check the position at the edge of the tile
         // Specifically the edge in the direction we're moving towards
-        val xDir = currentDirection.x * (distance + 0.5)
-        val yDir = currentDirection.y * (distance + 0.5)
-        val isNextTileValid = canMove(maze, position, xDir, yDir)
-        val isOvershootingX = isChangingMovementAxis && isOvershooting(x - mazeX, currentDirection.x * distance)
-        val isOvershootingY = isChangingMovementAxis && isOvershooting(y - mazeY, currentDirection.y * distance)
+        val distanceCeil = distance + 0.5
+        val isNextTileValid = isLegalMove(maze, position, currentDirection.x * distanceCeil, currentDirection.y * distanceCeil)
+        val isOvershootingX = isChangingMovementAxis && isOvershooting(fractionX, currentDirection.x * distance)
+        val isOvershootingY = isChangingMovementAxis && isOvershooting(fractionY, currentDirection.y * distance)
 
         when {
             isOvershootingX -> centerX()
@@ -75,32 +81,26 @@ abstract class MovableGameEntity(val initialPosition: Position, val initialDirec
         }
     }
 
-    // TODO: Simplify this or clean this up.
     private fun canTurn(maze: Maze, direction: Direction, threshold: Double): Boolean {
-        var result = true
-        with(position) {
-            if (direction.isVertical) {
-                val f = x - mazeX
-                result = result && canMove(maze, position, direction)
-                if (f < 0.5 - threshold) result = result && canMove(maze, position, -1, direction.y)
-                if (f > 0.5 + threshold) result = result && canMove(maze, position,  1, direction.y)
-            }
-            else {
-                val f = y - mazeY
-                result = result && canMove(maze, position, direction)
-                if (f < 0.5 - threshold) result = result && canMove(maze, position, direction.x, -1)
-                if (f > 0.5 + threshold) result = result && canMove(maze, position, direction.x,  1)
-            }
+        if (!isLegalMove(maze, position, direction)) return false
+
+        if (direction.isVertical) {
+            if (position.fractionX < 0.5 - threshold && !isLegalMove(maze, position, -1, direction.y)) return false
+            if (position.fractionX > 0.5 + threshold && !isLegalMove(maze, position,  1, direction.y)) return false
+        }
+        else {
+            if (position.fractionY < 0.5 - threshold && !isLegalMove(maze, position, direction.x, -1)) return false
+            if (position.fractionY > 0.5 + threshold && !isLegalMove(maze, position, direction.x,  1)) return false
         }
 
-        return result
+        return true
     }
 
-    fun canMove(maze: Maze, fromPosition: Position, direction: Direction): Boolean
-            = canMove(maze, fromPosition, direction.x, direction.y)
+    fun isLegalMove(maze: Maze, fromPosition: Position, direction: Direction)
+        = isLegalMove(maze, fromPosition, direction.x, direction.y)
 
-    fun canMove(maze: Maze, fromPosition: Position, xDir: Int, yDir: Int): Boolean
-            = canMove(maze, fromPosition, xDir.toDouble(), yDir.toDouble())
+    fun isLegalMove(maze: Maze, fromPosition: Position, xDir: Int, yDir: Int)
+        = isLegalMove(maze, fromPosition, xDir.toDouble(), yDir.toDouble())
 
-    abstract fun canMove(maze: Maze, fromPosition: Position, xDir: Double, yDir: Double): Boolean
+    abstract fun isLegalMove(maze: Maze, fromPosition: Position, xDir: Double, yDir: Double): Boolean
 }

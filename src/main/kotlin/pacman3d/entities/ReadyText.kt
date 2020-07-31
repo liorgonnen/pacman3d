@@ -2,7 +2,7 @@ package pacman3d.entities
 
 import pacman3d.renderables.ReadyTextRenderer
 
-class ReadyText : AbsGameEntity() {
+class ReadyText : AbsGameEntity<ReadyTextRenderer>() {
 
     override fun setup(world: World) {
         super.setup(world)

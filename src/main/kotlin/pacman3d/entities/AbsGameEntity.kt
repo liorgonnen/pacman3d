@@ -2,9 +2,9 @@ package pacman3d.entities
 
 import pacman3d.renderables.Renderable
 
-abstract class AbsGameEntity : GameEntity {
+abstract class AbsGameEntity<R : Renderable> : GameEntity<R> {
 
-    override lateinit var renderable: Renderable
+    override lateinit var renderable: R
 
     var isActive = true
 

@@ -2,9 +2,9 @@ package pacman3d.entities
 
 import pacman3d.renderables.Renderable
 
-interface GameEntity : Updatable {
+interface GameEntity<R : Renderable> : Updatable {
 
-    var renderable: Renderable
+    var renderable: R
 
-    fun createRenderable(): Renderable
+    fun createRenderable(): R
 }

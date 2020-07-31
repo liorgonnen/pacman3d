@@ -16,8 +16,8 @@ class Game {
     private val clock = Clock()
 
     private val camera = PerspectiveCamera(75, window.aspectRatio, 0.1, 1000).apply {
-        position.set(0, MazeConst.LENGTH * 0.7, MazeConst.LENGTH * 0.6)
-        lookAt(0, 0, 0)
+        position.set(0, MazeConst.LENGTH * 0.55, MazeConst.LENGTH * 0.5)
+        lookAt(0, 0, 5)
         add(SoundPlayer)
     }
 

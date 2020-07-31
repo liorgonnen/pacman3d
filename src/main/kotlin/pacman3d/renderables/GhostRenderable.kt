@@ -5,6 +5,8 @@ import pacman3d.entities.World
 import pacman3d.ext.*
 import pacman3d.logic.Direction
 import pacman3d.logic.Direction.RIGHT
+import pacman3d.logic.GhostState
+import pacman3d.logic.GhostState.Frightened
 import pacman3d.maze.MazeConst
 import three.js.*
 import kotlin.math.PI
@@ -159,7 +161,7 @@ class GhostRenderable(private val entity: Ghost, private val color: Int) : Rende
         rightIris.adjustLook(-EYE_SPACING)
     }
 
-    fun setFrightened(frightened: Boolean) {
+    private fun setFrightened(frightened: Boolean) {
         mouth.visible = frightened
         leftIris.visible = !frightened
         rightIris.visible = !frightened
@@ -184,5 +186,10 @@ class GhostRenderable(private val entity: Ghost, private val color: Int) : Rende
         sceneObject.position.z = entity.position.worldY
 
         look(entity.currentDirection)
+    }
+
+    fun onStateChanged(newState: GhostState, previousState: GhostState) {
+        if (newState == Frightened && previousState != Frightened) setFrightened(true)
+        if (newState != Frightened && previousState == Frightened) setFrightened(false)
     }
 }

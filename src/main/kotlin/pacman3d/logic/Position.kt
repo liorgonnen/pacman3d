@@ -13,11 +13,22 @@ class Position(var x: Double = 0.0, var y: Double = 0.0) {
 
     val mazeY get() = y.toInt()
 
+    val fractionX get() = x - mazeX
+
+    val fractionY get() = y - mazeY
+
     val worldX get() = -MazeConst.HALF_WIDTH + x * MazeConst.UNIT_SIZE
 
     val worldY get() = -MazeConst.HALF_LENGTH + y * MazeConst.UNIT_SIZE
 
     val mazeIndex get() = MazeConst.indexOf(mazeX, mazeY)
+
+    val isReset get() = mazeX == 0 && mazeY == 0
+
+    fun reset() {
+        x = 0.0
+        y = 0.0
+    }
 
     fun copy(other: Position) = apply {
         x = other.x
@@ -37,9 +48,7 @@ class Position(var x: Double = 0.0, var y: Double = 0.0) {
 
     fun centerY() = apply { y = mazeY.toDouble() + 0.5 }
 
-    fun correctPosition(direction: Direction) {
-        if (direction.isHorizontal) x = (mazeX.toDouble() + 0.5) else y = (mazeY.toDouble() + 0.5)
-    }
+    fun correctPosition(direction: Direction) = apply { if (direction.isHorizontal) centerX() else centerY() }
 
     fun distanceTo(other: Position): Double
         = sqrt((mazeX - other.mazeX).toDouble().sqr + (mazeY - other.mazeY).toDouble().sqr)

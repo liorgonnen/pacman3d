@@ -7,7 +7,7 @@ import pacman3d.logic.Direction
 class PacMan(
         initialPosition: Position,
         initialDirection: Direction
-) : MovableGameEntity(initialPosition, initialDirection) {
+) : MovableGameEntity<PacManRenderable>(initialPosition, initialDirection) {
 
     companion object {
         // Cornering is the technique of moving the joystick in the direction one wishes to go well before reaching the
@@ -23,7 +23,7 @@ class PacMan(
         oneShotTurnThreshold = CORNERING_THRESHOLD
     }
 
-    override fun canMove(maze: Maze, fromPosition: Position, xDir: Double, yDir: Double): Boolean {
+    override fun isLegalMove(maze: Maze, fromPosition: Position, xDir: Double, yDir: Double): Boolean {
         val mazeValue = maze[fromPosition.x + xDir, fromPosition.y + yDir]
         return mazeValue != Maze.INVALID && mazeValue != Maze.GHOST_HOUSE
     }

@@ -3,6 +3,8 @@ package pacman3d.logic.controllers
 import pacman3d.entities.Ghost
 import pacman3d.entities.World
 import pacman3d.ext.levelValue
+import pacman3d.logic.Direction
+import pacman3d.logic.Direction.LEFT
 import pacman3d.logic.GhostState
 import pacman3d.logic.GhostState.*
 
@@ -32,11 +34,14 @@ class GhostBehaviorController(private val world: World) {
     private val numberOfFlashes = arrayOf(5, 5, 5, 5, 5, 5, 5, 5, 3, 5, 5, 3, 3, 5, 3, 3, 0, 3, 0)
 
     // TODO: Reset this timer when a life is lost
-    private lateinit var scatterChaseTimer: Timer
+    private var scatterChaseTimer: Timer
 
     private var frightenedTimer: Timer? = null
 
     private var globalChaseScatterState: GhostState = Scatter
+
+    // The direction to which the ghost turns upon leaving the ghost house
+    private var ghostExitDirection: Direction = LEFT
 
     private var timeTableIndex = 0
 
@@ -47,7 +52,7 @@ class GhostBehaviorController(private val world: World) {
         }
 
     init {
-        onScatterChaseTimerElapsed()
+        scatterChaseTimer = createNewScatterChaseTimer()
     }
 
     fun onDotEaten(isEnergizer: Boolean) {
@@ -55,7 +60,7 @@ class GhostBehaviorController(private val world: World) {
 
         nextGhostToLeaveGhostHouse?.let { ghost ->
             ghost.dotCounter.count++
-            if (ghost.dotCounter.reachedLimit) ghost.setState(LeaveGhostHouse, world)
+            if (ghost.dotCounter.reachedLimit) ghost.state = LeaveGhostHouse
         }
     }
 
@@ -73,19 +78,26 @@ class GhostBehaviorController(private val world: World) {
         scatterChaseTimer.pause()
         frightenedTimer = Timer(time.toDouble(), onTimeout = ::onFrightenedTimerElapsed)
 
-        forEachGhost { it.setState(Frightened, world) }
+        switchAllGhostsToState(Frightened)
     }
 
     private fun onFrightenedTimerElapsed() {
         frightenedTimer = null
         scatterChaseTimer.resume()
 
-        switchAllGhostsToState(globalChaseScatterState)
+        switchAllGhostsToState(globalChaseScatterState, reverseDirection = false)
+    }
+
+    private fun createNewScatterChaseTimer(): Timer {
+        val time = scatterChaseTimeTable.levelValue(gameLevel)[timeTableIndex++]
+        return Timer(time, ::onScatterChaseTimerElapsed)
     }
 
     private fun onScatterChaseTimerElapsed() {
-        val time = scatterChaseTimeTable.levelValue(gameLevel)[timeTableIndex++]
-        scatterChaseTimer = Timer(time, ::onScatterChaseTimerElapsed)
+        scatterChaseTimer = createNewScatterChaseTimer()
+
+        flipChaseScatterState()
+        flipGhostExitDirection()
     }
 
     fun update(time: Double) {
@@ -93,19 +105,31 @@ class GhostBehaviorController(private val world: World) {
         frightenedTimer?.update(time)
 
         forEachGhost { ghost ->
-            if (ghost.state == LeaveGhostHouse && ghost.hasReachedTarget) ghost.setState(globalChaseScatterState, world)
+            if (ghost.state == LeaveGhostHouse && ghost.hasReachedTarget) {
+                ghost.state = globalChaseScatterState
+                ghost.mandatoryDirectionOverride = ghostExitDirection
+            }
         }
+
+        // The only time blinky is in the ghost house is if he's captured by pacman, and he
+        // immediately turns around and leaves once revived
+        if (world.blinky.state == InGhostHouse) world.blinky.state = LeaveGhostHouse
     }
 
     private fun flipChaseScatterState() {
         globalChaseScatterState = if (globalChaseScatterState == Chase) Scatter else Chase
 
-        // TODO:
-        // forEachGhost { it.reverseDirection() }
+        switchAllGhostsToState(globalChaseScatterState)
     }
 
-    private fun switchAllGhostsToState(state: GhostState) = forEachGhost { ghost ->
-        if (ghost.state.canSwitchToState(state)) ghost.setState(state, world)
+    private fun flipGhostExitDirection() { ghostExitDirection = ghostExitDirection.oppositeDirection }
+
+    private fun switchAllGhostsToState(newState: GhostState, reverseDirection: Boolean = true) = forEachGhost { ghost ->
+        if (ghost.state.canSwitchToState(newState)) {
+            //console.log("Switching $ghost to state: $newState")
+            if (reverseDirection) ghost.reverseDirection()
+            ghost.state = newState
+        }
     }
 
     private inline fun forEachGhost(action: (Ghost) -> Unit) = world.ghosts.forEach(action)

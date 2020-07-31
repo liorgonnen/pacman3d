@@ -1,5 +1,6 @@
 package pacman3d.entities
 
+import pacman3d.ext.truncate
 import pacman3d.renderables.GhostRenderable
 import pacman3d.logic.*
 import pacman3d.logic.behaviors.*
@@ -12,20 +13,14 @@ class DotCounter(var count: Int = 0, var limit: Int = 0) {
 }
 
 abstract class Ghost(
+    val name: String,
     private val color: Int,
     val initialState: GhostState,
     initialPosition: Position,
     initialDirection: Direction,
     val scatterTargetTile: Position
-) : MovableGameEntity(initialPosition, initialDirection) {
-
-    /**
-     * Ghosts are always thinking one step into the future as they move through the maze. Whenever a ghost enters a new
-     * tile, it looks ahead to the next tile along its current direction of travel and decides which way it will go when
-     * it gets there. When it eventually reaches that tile, it will change its direction of travel to whatever it had
-     * decided on a tile beforehand. The process is then repeated, looking ahead into the next tile along its new
-     * direction of travel and making its next decision on which way to go.
-     */
+) : MovableGameEntity<GhostRenderable>(initialPosition, initialDirection) {
+    
     var lookAheadDirection: Direction = Direction.LEFT
 
     val lookAheadPosition = Position()
@@ -34,11 +29,21 @@ abstract class Ghost(
 
     val targetTile = Position()
 
-    var state: GhostState = initialState
-        private set
+    var mandatoryDirectionOverride: Direction? = null
 
-    var movementStrategy: GhostMovementStrategy = state.movementStrategy
-        private set
+    var state: GhostState = initialState
+        set(value) {
+            val previousState = state
+            field = value
+            movementStrategy = value.movementStrategy
+            renderable.onStateChanged(value, previousState)
+        }
+
+    private var movementStrategy: GhostMovementStrategy = state.movementStrategy
+        set(value) {
+            field = value
+            lookAheadPosition.reset()
+        }
 
     val hasReachedTarget get() = movementStrategy.hasReachedTarget(this)
 
@@ -47,25 +52,27 @@ abstract class Ghost(
 
         dotCounter.reset()
 
-        // We need to call this to initiate the side-effects
-        setState(initialState, world)
+        state = initialState
     }
 
     abstract fun getChaseTargetTile(world: World, targetTile: Position)
 
-    fun setState(newState: GhostState, world: World) {
-        state = newState
-        movementStrategy = state.movementStrategy.also { it.onStart(world, this) }
+    fun reverseDirection() {
+        mandatoryDirectionOverride = currentDirection.oppositeDirection
     }
 
     override fun onPositionUpdated(world: World, time: Double, mazePositionChanged: Boolean) {
-        movementStrategy.onPositionUpdated(world, this, mazePositionChanged)
+        // If the ghost is forced to change direction by the system, we don't need to call the movement strategy
+        mandatoryDirectionOverride?.let { newDirection ->
+            mandatoryDirectionOverride = null
+            nextDirection = newDirection
+        } ?: movementStrategy.onPositionUpdated(world, this, mazePositionChanged)
     }
 
     // TODO: Implement zones where the ghosts cannot turn upward (these are ignored in Frightened mode)
-    override fun canMove(maze: Maze, fromPosition: Position, xDir: Double, yDir: Double): Boolean {
+    override fun isLegalMove(maze: Maze, fromPosition: Position, xDir: Double, yDir: Double): Boolean {
         val currentMazeValue = maze[fromPosition]
-        val nextMazeValue = maze[(fromPosition.x + xDir).toInt(), (fromPosition.y + yDir).toInt()]
+        val nextMazeValue = maze[fromPosition.x + xDir, fromPosition.y + yDir]
 
         // Cannot re-enter the ghost house for now
         if (currentMazeValue == Maze.EMPTY && nextMazeValue == Maze.GHOST_HOUSE) return false
@@ -74,4 +81,6 @@ abstract class Ghost(
     }
 
     override fun createRenderable() = GhostRenderable(this, color)
+
+    override fun toString() = name
 }

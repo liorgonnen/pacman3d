@@ -9,6 +9,7 @@ import pacman3d.logic.behaviors.InGhostHouseMovementStrategy
 import pacman3d.logic.behaviors.ScatterMovementStrategy
 
 class Blinky : Ghost(
+    "Blinky",
     color = 0xFE0000,
     initialState = Scatter,
     initialDirection = Direction.LEFT,
@@ -21,6 +22,7 @@ class Blinky : Ghost(
 }
 
 class Clyde : Ghost(
+        "Clyde",
         color = 0xFFB950,
         initialState = InGhostHouse,
         initialDirection = Direction.UP,
@@ -35,6 +37,7 @@ class Clyde : Ghost(
 }
 
 class Inky : Ghost(
+        "Inky",
         color = 0x00D4D4,
         initialState = InGhostHouse,
         initialDirection = Direction.UP,
@@ -57,6 +60,7 @@ class Inky : Ghost(
 }
 
 class Pinky : Ghost(
+        "Pinky",
         color = 0xFFBBFF,
         initialState = InGhostHouse,
         initialDirection = Direction.DOWN,
