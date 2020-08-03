@@ -126,7 +126,6 @@ class GhostBehaviorController(private val world: World) {
 
     private fun switchAllGhostsToState(newState: GhostState, reverseDirection: Boolean = true) = forEachGhost { ghost ->
         if (ghost.state.canSwitchToState(newState)) {
-            //console.log("Switching $ghost to state: $newState")
             if (reverseDirection) ghost.reverseDirection()
             ghost.state = newState
         }

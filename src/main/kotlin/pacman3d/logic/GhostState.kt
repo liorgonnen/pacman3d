@@ -13,7 +13,7 @@ enum class GhostState(val movementStrategy: GhostMovementStrategy) {
 
     val canBeFrightened get() = isAnyOf(InGhostHouse, Chase, Scatter)
 
-    val canBeEaten get() = this == Frightened
+    val isFrightened get() = this == Frightened
 
     val canEatPacman get() = isAnyOf(Chase, Scatter)
 

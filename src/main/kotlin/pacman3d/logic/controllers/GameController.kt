@@ -74,6 +74,8 @@ class GameController {
         val dotEaten = mazeValue.isDotOrEnergizer
         val isEnergizer = mazeValue.isEnergizer
 
+        handleEatenGhosts()
+
         if (dotEaten) {
             SoundPlayer.play(Sound.Chomp)
 
@@ -87,6 +89,12 @@ class GameController {
         }
         else {
             timeElapsedSinceLastDotEaten += time
+        }
+    }
+
+    private fun handleEatenGhosts() = with (world) {
+        ghosts.firstOrNull { it.state.isFrightened && it.position.mazeIndex == pacman.position.mazeIndex }?.let {
+
         }
     }
 

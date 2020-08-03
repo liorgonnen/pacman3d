@@ -16,6 +16,8 @@ class World {
 
     val readyText = ReadyText()
 
+    val bonusPoints = BonusPoints()
+
     val pacman = PacMan(
         initialDirection = RIGHT,
         initialPosition = Position(15.0, 26.5)
@@ -41,6 +43,7 @@ class World {
         dots,
         score,
         pacman,
+        bonusPoints,
         readyText,
         *ghosts,
     )
@@ -62,7 +65,7 @@ class World {
     fun update(time: Double) = with (entities) {
         forEach { if (it.isActive) it.update(this@World, time) }
 
-        forEach { with (it.renderable) { if (sceneObject.visible) update(this@World, time) } }
+        forEach { if (it.isVisible) it.renderable.update(this@World, time) }
     }
 
     fun setPacmanAndGhostsActive(active: Boolean) {
@@ -72,5 +75,13 @@ class World {
 
     fun resetState() {
         entities.forEach { it.resetState(this) }
+    }
+
+    fun onVisualEffectBegin() {
+        setPacmanAndGhostsActive(false)
+    }
+
+    fun onVisualEffectEnd() {
+        setPacmanAndGhostsActive(true)
     }
 }
