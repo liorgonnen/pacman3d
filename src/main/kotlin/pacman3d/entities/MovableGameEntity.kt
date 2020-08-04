@@ -23,7 +23,6 @@ abstract class MovableGameEntity<R : Renderable>(
     var nextDirection = initialDirection
 
     var speed = 5.0
-        protected set
 
     override fun resetState(world: World) {
         super.resetState(world)

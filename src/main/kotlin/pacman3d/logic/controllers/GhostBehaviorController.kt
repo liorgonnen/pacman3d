@@ -64,6 +64,20 @@ class GhostBehaviorController(private val world: World) {
         }
     }
 
+    fun onGhostEaten(ghost: Ghost) {
+        ghost.state = Eaten
+    }
+
+    fun onVisualEffectBegin() {
+        scatterChaseTimer.pause()
+        frightenedTimer?.pause()
+    }
+
+    fun onVisualEffectEnd() {
+        scatterChaseTimer.resume()
+        frightenedTimer?.resume()
+    }
+
     /**
      * Order of preferred ghost to leave house: Pinky, then Inky, and then Clyde
      */

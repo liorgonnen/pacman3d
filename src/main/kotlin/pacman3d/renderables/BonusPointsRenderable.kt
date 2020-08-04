@@ -48,7 +48,10 @@ class BonusPointsRenderable : Renderable {
     }
 
     private fun createPointsMesh(points: Int, textParams: TextParameters)
-        = Mesh(textGeometry(points.toString(), textParams), MATERIAL).apply { visible = false }
+        = Mesh(textGeometry(points.toString(), textParams), MATERIAL).apply {
+            rotateX(-HALF_PI)
+            visible = false
+        }
 
     override fun update(world: World, time: Double) = Unit
 
@@ -59,8 +62,8 @@ class BonusPointsRenderable : Renderable {
         currentActivePoints = points
 
         pointsObjects.getValue(points).apply {
-            //position.set(where.x - boundingBox.max.x.toDouble() / 2, -boundingBox.min.y.toDouble(), where.y)
-            position.set(where.x, 2.0, where.y)
+            console.log(boundingBox)
+            position.set(where.worldX - boundingBox.width / 2 - boundingBox.min.x, 2.0, where.worldY + boundingBox.height / 2)
             visible = true
         }
 

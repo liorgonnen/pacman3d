@@ -13,3 +13,7 @@ val Mesh.boundingBox: Box3
             else -> null
         } ?: error("No bounding box")
     }
+
+val Box3.width get() = max.x - min.x.toDouble()
+
+val Box3.height get() = max.y - min.y.toDouble()
