@@ -6,6 +6,7 @@ import pacman3d.ext.*
 import pacman3d.logic.Direction
 import pacman3d.logic.Direction.RIGHT
 import pacman3d.logic.GhostState
+import pacman3d.logic.GhostState.Eaten
 import pacman3d.logic.GhostState.Frightened
 import pacman3d.maze.MazeConst
 import three.js.*
@@ -124,8 +125,10 @@ class GhostRenderable(private val entity: Ghost, private val color: Int) : Rende
 
     private val mouth = Mesh(mouthGeometry, whiteMaterial)
 
+    private val body = Mesh(bodyGeometry, bodyMaterial)
+
     override val sceneObject = Group().add(
-            Mesh(bodyGeometry, bodyMaterial),
+            body,
             Mesh(eyeballGeometry, whiteMaterial).apply {
                 position.set(
                     x = -EYE_SPACING,
@@ -191,5 +194,11 @@ class GhostRenderable(private val entity: Ghost, private val color: Int) : Rende
     fun onStateChanged(newState: GhostState, previousState: GhostState) {
         if (newState == Frightened && previousState != Frightened) setFrightened(true)
         if (newState != Frightened && previousState == Frightened) setFrightened(false)
+        if (newState == Eaten) setEaten(true)
+        if (previousState == Eaten) setEaten(false)
+    }
+
+    private fun setEaten(eaten: Boolean) {
+        body.visible = !eaten
     }
 }

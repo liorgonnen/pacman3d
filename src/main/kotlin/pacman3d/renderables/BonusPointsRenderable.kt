@@ -62,7 +62,6 @@ class BonusPointsRenderable : Renderable {
         currentActivePoints = points
 
         pointsObjects.getValue(points).apply {
-            console.log(boundingBox)
             position.set(where.worldX - boundingBox.width / 2 - boundingBox.min.x, 2.0, where.worldY + boundingBox.height / 2)
             visible = true
         }

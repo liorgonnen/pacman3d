@@ -118,10 +118,16 @@ class GhostBehaviorController(private val world: World) {
         scatterChaseTimer.update(time)
         frightenedTimer?.update(time)
 
-        forEachGhost { ghost ->
-            if (ghost.state == LeaveGhostHouse && ghost.hasReachedTarget) {
-                ghost.state = globalChaseScatterState
-                ghost.mandatoryDirectionOverride = ghostExitDirection
+        forEachGhost {  ghost ->
+            with (ghost) {
+                if (state == LeaveGhostHouse && hasReachedTarget) {
+                    state = globalChaseScatterState
+                    mandatoryDirectionOverride = ghostExitDirection
+                }
+                // An eaten ghost that reaches back to the ghost house is resurrected at immediately goes back out
+                else if (state == Eaten && hasReachedTarget) {
+                    state = LeaveGhostHouse
+                }
             }
         }
 

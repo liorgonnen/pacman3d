@@ -98,8 +98,11 @@ abstract class MovableGameEntity<R : Renderable>(
     fun isLegalMove(maze: Maze, fromPosition: Position, direction: Direction)
         = isLegalMove(maze, fromPosition, direction.x, direction.y)
 
-    fun isLegalMove(maze: Maze, fromPosition: Position, xDir: Int, yDir: Int)
-        = isLegalMove(maze, fromPosition, xDir.toDouble(), yDir.toDouble())
+    private fun isLegalMove(maze: Maze, fromPosition: Position, xDir: Int, yDir: Int): Boolean
+        = isLegalMove(maze, fromPosition.mazeX, fromPosition.mazeY, fromPosition.mazeX + xDir, fromPosition.mazeY + yDir)
 
-    abstract fun isLegalMove(maze: Maze, fromPosition: Position, xDir: Double, yDir: Double): Boolean
+    private fun isLegalMove(maze: Maze, fromPosition: Position, xDir: Double, yDir: Double): Boolean
+        = isLegalMove(maze, fromPosition.mazeX, fromPosition.mazeY, (fromPosition.x + xDir).toInt(), (fromPosition.y + yDir).toInt())
+
+    abstract fun isLegalMove(maze: Maze, fromX: Int, fromY: Int, toX: Int, toY: Int): Boolean
 }

@@ -1,5 +1,7 @@
 package pacman3d.entities
 
+import pacman3d.entities.Maze.Companion.isGhostHouse
+import pacman3d.entities.Maze.Companion.isValid
 import pacman3d.renderables.PacManRenderable
 import pacman3d.logic.Position
 import pacman3d.logic.Direction
@@ -23,9 +25,9 @@ class PacMan(
         oneShotTurnThreshold = CORNERING_THRESHOLD
     }
 
-    override fun isLegalMove(maze: Maze, fromPosition: Position, xDir: Double, yDir: Double): Boolean {
-        val mazeValue = maze[fromPosition.x + xDir, fromPosition.y + yDir]
-        return mazeValue != Maze.INVALID && mazeValue != Maze.GHOST_HOUSE
+    override fun isLegalMove(maze: Maze, fromX: Int, fromY: Int, toX: Int, toY: Int): Boolean {
+        val mazeValue = maze[toX, toY]
+        return mazeValue.isValid && !mazeValue.isGhostHouse
     }
 
     override fun createRenderable() = PacManRenderable(this)

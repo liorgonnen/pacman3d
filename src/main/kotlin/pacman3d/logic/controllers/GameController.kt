@@ -3,13 +3,13 @@ package pacman3d.logic.controllers
 import pacman3d.Sound
 import pacman3d.SoundPlayer
 import pacman3d.entities.AbsGameEntity
-import pacman3d.entities.Maze
+import pacman3d.entities.Maze.Companion.isDot
 import pacman3d.entities.Maze.Companion.isDotOrEnergizer
 import pacman3d.entities.Maze.Companion.isEnergizer
 import pacman3d.entities.World
 import pacman3d.ext.levelValue
 import pacman3d.logic.states.GameStateMachine
-import three.js.*
+import three.js.Scene
 
 /**
  * For each ghost:
@@ -68,7 +68,7 @@ class GameController {
         world.resetState()
 
         pacman.speed = 7.0
-        ghosts.forEach { it.speed = 2.0 }
+        ghosts.forEach { it.speed = 5.0 }
     }
 
     fun update(time: Double) {
@@ -152,9 +152,9 @@ class GameController {
         world.addRenderablesToScene(scene)
     }
 
-    private fun valueOf(mazeValue: Byte) = when (mazeValue) {
-        Maze.DOT -> 10
-        Maze.ENERGIZER -> 50
+    private fun valueOf(mazeValue: Byte) = when {
+        mazeValue.isDot -> 10
+        mazeValue.isEnergizer -> 50
         else -> 0
     }
 }

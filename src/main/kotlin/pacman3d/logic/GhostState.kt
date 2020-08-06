@@ -28,7 +28,7 @@ enum class GhostState(val movementStrategy: GhostMovementStrategy) {
         InGhostHouse -> true
     }
 
-    fun isAnyOf(vararg states: GhostState) = states.any { it === this }
+    private fun isAnyOf(vararg states: GhostState) = states.any { it === this }
 
-    fun isNotAnyOf(vararg states: GhostState) = states.none { it === this }
+    private fun isNotAnyOf(vararg states: GhostState) = states.none { it === this }
 }

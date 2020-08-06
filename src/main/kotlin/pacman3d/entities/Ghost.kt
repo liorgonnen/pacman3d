@@ -1,8 +1,14 @@
 package pacman3d.entities
 
+import pacman3d.entities.Maze.Companion.EMPTY
+import pacman3d.entities.Maze.Companion.GHOST_HOUSE
+import pacman3d.entities.Maze.Companion.isGhostHouse
+import pacman3d.entities.Maze.Companion.isValid
 import pacman3d.ext.truncate
 import pacman3d.renderables.GhostRenderable
 import pacman3d.logic.*
+import pacman3d.logic.GhostState.Eaten
+import pacman3d.logic.GhostState.Frightened
 import pacman3d.logic.behaviors.*
 
 class DotCounter(var count: Int = 0, var limit: Int = 0) {
@@ -20,10 +26,8 @@ abstract class Ghost(
     initialDirection: Direction,
     val scatterTargetTile: Position
 ) : MovableGameEntity<GhostRenderable>(initialPosition, initialDirection) {
-    
-    var lookAheadDirection: Direction = Direction.LEFT
 
-    val lookAheadPosition = Position()
+    var movementStrategyStep = 0
 
     val dotCounter = DotCounter()
 
@@ -42,7 +46,8 @@ abstract class Ghost(
     private var movementStrategy: GhostMovementStrategy = state.movementStrategy
         set(value) {
             field = value
-            lookAheadPosition.reset()
+            nextDirection = currentDirection
+            movementStrategyStep = 0
         }
 
     val hasReachedTarget get() = movementStrategy.hasReachedTarget(this)
@@ -70,14 +75,16 @@ abstract class Ghost(
     }
 
     // TODO: Implement zones where the ghosts cannot turn upward (these are ignored in Frightened mode)
-    override fun isLegalMove(maze: Maze, fromPosition: Position, xDir: Double, yDir: Double): Boolean {
-        val currentMazeValue = maze[fromPosition]
-        val nextMazeValue = maze[fromPosition.x + xDir, fromPosition.y + yDir]
+    override fun isLegalMove(maze: Maze, fromX: Int, fromY: Int, toX: Int, toY: Int): Boolean {
+        require(maze[fromX, fromY].isValid) { "isLegalMove called with invalid position: $fromX, $fromY" }
 
-        // Cannot re-enter the ghost house for now
-        if (currentMazeValue == Maze.EMPTY && nextMazeValue == Maze.GHOST_HOUSE) return false
+        val currentMazeValue = maze[fromX, fromY]
+        val nextMazeValue = maze[toX, toY]
 
-        return nextMazeValue != Maze.INVALID
+        // Ghosts can only re-enter the ghost house when eaten
+        if (currentMazeValue == EMPTY && nextMazeValue.isGhostHouse) return state == Eaten
+
+        return nextMazeValue.isValid
     }
 
     override fun createRenderable() = GhostRenderable(this, color)

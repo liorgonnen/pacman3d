@@ -54,8 +54,23 @@ object InGhostHouseMovementStrategy: GhostMovementStrategy {
     }
 }
 
-object ReturnToGhostHouseMovementStrategy : GhostMovementStrategy {
+object ReturnToGhostHouseMovementStrategy : GhostMovementStrategyWithLookAhead() {
 
+    override fun updateTargetTile(world: World, ghost: Ghost, targetTile: Position) = with (ghost) {
+        when {
+            movementStrategyStep == 0 -> {
+                targetTile.set(14.5, 14.5)
+                movementStrategyStep = 1
+            }
+
+            movementStrategyStep == 1 && position.isAt(14.5, 14.5) -> {
+                targetTile.set(14.5, 17.0)
+                movementStrategyStep = 2
+            }
+        }
+    }
+
+    override fun hasReachedTarget(ghost: Ghost) = ghost.position.isAt(14.5, 17.0, xRange = 1.0)
 }
 
 object LeaveGhostHouseMovementStrategy: GhostMovementStrategy {

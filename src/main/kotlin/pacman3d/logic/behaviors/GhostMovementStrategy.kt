@@ -2,6 +2,8 @@ package pacman3d.logic.behaviors
 
 import pacman3d.entities.World
 import pacman3d.entities.Ghost
+import pacman3d.entities.Maze.Companion.isValid
+import pacman3d.ext.sqr
 import pacman3d.logic.Direction
 import pacman3d.logic.Direction.*
 import pacman3d.logic.Position
@@ -30,37 +32,30 @@ abstract class GhostMovementStrategyWithLookAhead : GhostMovementStrategy {
     abstract fun updateTargetTile(world: World, ghost: Ghost, targetTile: Position)
 
     override fun onPositionUpdated(world: World, ghost: Ghost, mazePositionChanged: Boolean) = with (ghost) {
-        if (!mazePositionChanged) return
 
-        updateTargetTile(world, ghost, targetTile)
-
-        if (position.mazeIndex == lookAheadPosition.mazeIndex) {
-            if (isLegalMove(world.maze, position, lookAheadDirection)) {
-                ghost.nextDirection = lookAheadDirection
-                lookAheadPosition.move(lookAheadDirection, limitToMazeBounds = true)
-                lookAheadDirection = findBestDirection(lookAheadPosition, lookAheadDirection, ghost, world)
-                return
-            }
+        // Switched to a trivial implementation with no look-ahead.
+        // TODO: Reimplement look-ahead.
+        if (world.maze.isIntersection(position)) {
+            updateTargetTile(world, ghost, targetTile)
+            nextDirection = findBestDirection(position.mazeX, position.mazeY, currentDirection, ghost, world)
         }
-
-        lookAheadPosition.copy(position)
-        val immediateBestDirection = findBestDirection(position, nextDirection, ghost, world)
-        lookAheadPosition.move(immediateBestDirection)
-        ghost.nextDirection = immediateBestDirection
     }
 
     private fun findBestDirection(
-            fromPosition: Position,
+            fromX: Int,
+            fromY: Int,
             currentDirection: Direction,
             ghost: Ghost,
             world: World): Direction = with (ghost) {
 
         fun Direction.targetTileDistance(): Int {
-            if (this == currentDirection.oppositeDirection || !isLegalMove(world.maze, fromPosition, this)) {
+            val toX = fromX + this.x
+            val toY = fromY + this.y
+            if (this == currentDirection.oppositeDirection || !isLegalMove(world.maze, fromX, fromY, toX, toY)) {
                 return Int.MAX_VALUE
             }
 
-            return lookAheadPosition.sqrDistanceFromDirectionTo(this, targetTile)
+            return (fromX - targetTile.mazeX + this.x).sqr + (fromY - targetTile.mazeY + this.y).sqr
         }
 
         fun Int.smallerOrEqualTo(d1: Int, d2: Int, d3: Int) = this <= d1 && this <= d2 && this <= d3

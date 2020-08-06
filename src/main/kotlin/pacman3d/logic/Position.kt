@@ -25,9 +25,17 @@ class Position(var x: Double = 0.0, var y: Double = 0.0) {
 
     val isReset get() = mazeX == 0 && mazeY == 0
 
+    fun isAt(xPos: Double, yPos: Double, xRange: Double = 0.5, yRange: Double = 0.5)
+        = x > xPos - xRange / 2 && x < xPos + xRange / 2 && y > yPos - yRange / 2 && y < yPos + yRange / 2
+
     fun reset() {
         x = 0.0
         y = 0.0
+    }
+
+    fun set(x: Double, y: Double) {
+        this.x = x
+        this.y = y
     }
 
     fun copy(other: Position) = apply {
