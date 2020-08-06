@@ -16,4 +16,6 @@ abstract class AbsGameEntity<R : Renderable> : GameEntity<R> {
     }
 
     open fun resetState(world: World) = Unit
+
+    override fun update(world: World, time: Double) = Unit
 }

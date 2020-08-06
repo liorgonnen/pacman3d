@@ -13,8 +13,6 @@ class BonusPoints : AbsGameEntity<BonusPointsRenderable>() {
         isActive = false
     }
 
-    override fun update(world: World, time: Double) = Unit
-
     fun show(points: Int, where: Position) = renderable.show(points, where)
 
     fun hide() = renderable.hide()

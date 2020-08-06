@@ -20,6 +20,4 @@ class MazeRenderable : Renderable {
     override val sceneObject = Group().add(plane, maze)
 
     override fun setup(world: World) = Unit
-
-    override fun update(world: World, time: Double) = Unit
 }

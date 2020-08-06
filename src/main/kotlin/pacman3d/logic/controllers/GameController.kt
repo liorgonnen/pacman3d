@@ -1,14 +1,18 @@
 package pacman3d.logic.controllers
 
-import pacman3d.Sound
-import pacman3d.SoundPlayer
+import kotlinx.browser.document
+import org.w3c.dom.events.KeyboardEvent
+import pacman3d.*
 import pacman3d.entities.AbsGameEntity
+import pacman3d.entities.GameStateBanner
 import pacman3d.entities.Maze.Companion.isDot
 import pacman3d.entities.Maze.Companion.isDotOrEnergizer
 import pacman3d.entities.Maze.Companion.isEnergizer
 import pacman3d.entities.World
 import pacman3d.ext.levelValue
-import pacman3d.logic.states.GameStateMachine
+import pacman3d.logic.Direction
+import pacman3d.logic.controllers.GameState.Playing
+import pacman3d.logic.controllers.GameState.WaitingForPlayer
 import three.js.Scene
 
 /**
@@ -33,11 +37,28 @@ import three.js.Scene
  * points, respectively. If all four ghosts are captured at all four energizers, an additional 12,000 points can be
  * earned on these earlier levels
  */
-// TODO: Move this to a better location
+
+private enum class GameState {
+    WaitingForPlayer,
+    Playing,
+}
+
 class GameController {
 
     companion object {
         private const val VISUAL_EFFECT_TIME = 1.2
+
+        private const val KEY_ARROW_LEFT = 37
+        private const val KEY_ARROW_RIGHT = 39
+        private const val KEY_ARROW_UP = 38
+        private const val KEY_ARROW_DOWN = 40
+
+        private val ALLOWED_KEYS = arrayOf(
+            KEY_ARROW_LEFT,
+            KEY_ARROW_RIGHT,
+            KEY_ARROW_UP,
+            KEY_ARROW_DOWN
+        )
     }
 
     private val inkyDotLimit = arrayOf(30, 0)
@@ -48,7 +69,7 @@ class GameController {
 
     private val level = 0
 
-    private val stateMachine = GameStateMachine(world)
+    private var gameState = WaitingForPlayer
 
     private var timeElapsedSinceLastDotEaten = 0.0
 
@@ -69,26 +90,57 @@ class GameController {
 
         pacman.speed = 7.0
         ghosts.forEach { it.speed = 5.0 }
+
+        waitForPlayer()
+    }
+
+    private fun waitForPlayer() {
+        gameState = WaitingForPlayer
+
+        world.gameStateBanner.show(GameStateBanner.READY)
+        world.setPacmanAndGhostsActive(false)
     }
 
     fun update(time: Double) {
 
-        visualEffectTimer?.update(time)
+        // When an effect is in progress we don't update the game logic
+        visualEffectTimer?.let { timer ->
+            timer.update(time)
+            world.update(time)
+            return
+        }
 
         updateGameLogic(time)
 
         ghostBehaviorController.update(time)
 
-        stateMachine.update(time)
-
         world.update(time)
     }
 
-    private fun updateGameLogic(time: Double) = with (world) {
+    private fun updateGameLogic(time: Double) {
+        with (world) {
+            if (maze[pacman.position].isDotOrEnergizer) handleDotEaten() else handleNoDotEaten(time)
 
-        if (maze[pacman.position].isDotOrEnergizer) handleDotEaten() else handleNoDotEaten(time)
+            ghosts.firstOrNull { it.position.mazeIndexEquals(pacman.position) }?.also { ghost ->
+                when {
+                    // Handle eaten ghosts
+                    ghost.state.isFrightened -> {
+                        ghostBehaviorController.onGhostEaten(ghost)
+                        bonusPoints.show(pointsForEatenGhost, pacman.position)
+                        pointsForEatenGhost *= 2
+                        beginVisualEffect(pacman, ghost)
+                        return
+                    }
 
-        handleEatenGhosts()
+                    // Handle captured pacman
+                    ghost.state.canEatPacman -> {
+                        pacman.resetState(world)
+                        beginVisualEffect(pacman, ghost)
+                        return
+                    }
+                }
+            }
+        }
     }
 
     private fun handleDotEaten() = with (world) {
@@ -103,23 +155,14 @@ class GameController {
         timeElapsedSinceLastDotEaten = 0.0
 
         score += valueOf(mazeValue)
-        dots.eat(pacman.position)
-        maze.eatDot(pacman.position)
 
+        dots.onDotEaten(pacman.position)
+        maze.onDotEaten(pacman.position)
         ghostBehaviorController.onDotEaten(isEnergizer)
     }
 
     private fun handleNoDotEaten(time: Double) {
         timeElapsedSinceLastDotEaten += time
-    }
-
-    private fun handleEatenGhosts() = with (world) {
-        ghosts.firstOrNull { it.state.isFrightened && it.position.mazeIndex == pacman.position.mazeIndex }?.let { eatenGhost ->
-            ghostBehaviorController.onGhostEaten(eatenGhost)
-            bonusPoints.show(pointsForEatenGhost, pacman.position)
-            pointsForEatenGhost *= 2
-            beginVisualEffect(pacman, eatenGhost)
-        }
     }
 
     private fun beginVisualEffect(vararg participants: AbsGameEntity<*>) {
@@ -145,7 +188,28 @@ class GameController {
         // TODO: Until I properly handle levels
         initLevel()
 
-        stateMachine.start()
+        document.onkeydown = ::handleKeyboardEvent
+    }
+
+    private fun handleKeyboardEvent(event: KeyboardEvent) {
+
+        if (!ALLOWED_KEYS.contains(event.keyCode)) return
+
+        if (gameState == WaitingForPlayer) {
+            gameState = Playing
+
+            world.gameStateBanner.isVisible = false
+            world.setPacmanAndGhostsActive(true)
+        }
+
+        with (world.pacman) {
+            when (event.keyCode) {
+                KEY_ARROW_UP -> requestDirection(Direction.UP)
+                KEY_ARROW_DOWN -> requestDirection(Direction.DOWN)
+                KEY_ARROW_LEFT -> requestDirection(Direction.LEFT)
+                KEY_ARROW_RIGHT -> requestDirection(Direction.RIGHT)
+            }
+        }
     }
 
     fun setup(scene: Scene) {

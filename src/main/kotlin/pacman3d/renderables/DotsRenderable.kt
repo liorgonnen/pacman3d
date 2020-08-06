@@ -51,8 +51,6 @@ class DotsRenderable(private val dots: Dots) : Renderable {
         }
     }
 
-    override fun update(world: World, time: Double) = Unit
-
     fun eat(position: Position) {
         mazeCoordinatesToDotMap.remove(position.mazeIndex)?.let { group.remove(it) }
     }

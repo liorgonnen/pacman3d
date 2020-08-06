@@ -23,6 +23,6 @@ object AssetLoader {
     }
 
     fun onFontLoaded(callback: Callback) {
-        if (this::font.isInitialized) callback(font) else fontLoadedCallbacks += callback
+        if (::font.isInitialized) callback(font) else fontLoadedCallbacks += callback
     }
 }

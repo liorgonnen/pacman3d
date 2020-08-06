@@ -13,7 +13,5 @@ class Dots : AbsGameEntity<DotsRenderable>() {
 
     override fun createRenderable() = DotsRenderable(this)
 
-    override fun update(world: World, time: Double) = Unit
-
-    fun eat(position: Position) = renderable.eat(position)
+    fun onDotEaten(position: Position) = renderable.eat(position)
 }

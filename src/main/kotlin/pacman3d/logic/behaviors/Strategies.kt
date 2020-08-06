@@ -64,13 +64,13 @@ object ReturnToGhostHouseMovementStrategy : GhostMovementStrategyWithLookAhead()
             }
 
             movementStrategyStep == 1 && position.isAt(14.5, 14.5) -> {
-                targetTile.set(14.5, 17.0)
+                targetTile.set(14.5, 16.0)
                 movementStrategyStep = 2
             }
         }
     }
 
-    override fun hasReachedTarget(ghost: Ghost) = ghost.position.isAt(14.5, 17.0, xRange = 1.0)
+    override fun hasReachedTarget(ghost: Ghost) = ghost.position.isAt(14.5, 16.0, xRange = 1.0)
 }
 
 object LeaveGhostHouseMovementStrategy: GhostMovementStrategy {

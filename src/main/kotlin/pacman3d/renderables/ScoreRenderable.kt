@@ -34,7 +34,7 @@ class ScoreRenderable(private val score: Score) : Renderable {
     }
 
     override fun update(world: World, time: Double) {
-        if (this::digitGeometries.isInitialized) setScore(score.points)
+        if (::digitGeometries.isInitialized) setScore(score.points)
     }
 
     private fun setScore(points: Int) {

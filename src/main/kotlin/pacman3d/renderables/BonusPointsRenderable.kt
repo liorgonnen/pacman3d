@@ -53,10 +53,8 @@ class BonusPointsRenderable : Renderable {
             visible = false
         }
 
-    override fun update(world: World, time: Double) = Unit
-
     fun show(points: Int, where: Position) {
-        if (!this::pointsObjects.isInitialized) return
+        if (!::pointsObjects.isInitialized) return
 
         currentActivePoints?.let { pointsObjects.getValue(it).visible = false }
         currentActivePoints = points
@@ -70,7 +68,7 @@ class BonusPointsRenderable : Renderable {
     }
 
     fun hide() {
-        if (!this::pointsObjects.isInitialized) return
+        if (!::pointsObjects.isInitialized) return
 
         currentActivePoints?.let { pointsObjects.getValue(it).visible = false }
         currentActivePoints = null

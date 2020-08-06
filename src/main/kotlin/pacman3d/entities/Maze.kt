@@ -33,7 +33,7 @@ class Maze : AbsGameEntity<MazeRenderable>() {
     fun isIntersection(position: Position, direction: Direction)
         = isIntersection(position.mazeX + direction.x, position.mazeY + direction.y)
 
-    fun eatDot(position: Position) {
+    fun onDotEaten(position: Position) {
         this[position] = EMPTY
         dotsLeft--
     }
@@ -95,6 +95,4 @@ class Maze : AbsGameEntity<MazeRenderable>() {
     }
 
     override fun createRenderable() = MazeRenderable()
-
-    override fun update(world: World, time: Double) = Unit
 }

@@ -4,7 +4,6 @@ import pacman3d.ext.plusAssign
 import pacman3d.logic.Direction.RIGHT
 import pacman3d.logic.Position
 import three.js.Scene
-import three.js.Vector3
 
 class World {
 
@@ -14,7 +13,7 @@ class World {
 
     val score = Score()
 
-    val readyText = ReadyText()
+    val gameStateBanner = GameStateBanner()
 
     val bonusPoints = BonusPoints()
 
@@ -44,7 +43,7 @@ class World {
         score,
         pacman,
         bonusPoints,
-        readyText,
+        gameStateBanner,
         *ghosts,
     )
 

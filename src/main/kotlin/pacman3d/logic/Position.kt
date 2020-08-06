@@ -64,5 +64,7 @@ class Position(var x: Double = 0.0, var y: Double = 0.0) {
     fun sqrDistanceFromDirectionTo(direction: Direction, other: Position): Int
         = (mazeX + direction.x - other.mazeX).sqr + (mazeY + direction.y - other.mazeY).sqr
 
+    fun mazeIndexEquals(other: Position) = mazeIndex == other.mazeIndex
+
     override fun toString() = "[${x.truncate(2)}, ${y.truncate(2)}] ($mazeIndex)]"
 }
