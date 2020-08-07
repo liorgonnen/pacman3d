@@ -5,14 +5,14 @@ import org.w3c.dom.events.KeyboardEvent
 import pacman3d.*
 import pacman3d.entities.AbsGameEntity
 import pacman3d.entities.GameStateBanner
+import pacman3d.entities.GameStateBanner.Companion.GAME_OVER
 import pacman3d.entities.Maze.Companion.isDot
 import pacman3d.entities.Maze.Companion.isDotOrEnergizer
 import pacman3d.entities.Maze.Companion.isEnergizer
 import pacman3d.entities.World
 import pacman3d.ext.levelValue
 import pacman3d.logic.Direction
-import pacman3d.logic.controllers.GameState.Playing
-import pacman3d.logic.controllers.GameState.WaitingForPlayer
+import pacman3d.logic.controllers.GameState.*
 import three.js.Scene
 
 /**
@@ -41,6 +41,7 @@ import three.js.Scene
 private enum class GameState {
     WaitingForPlayer,
     Playing,
+    GameOver,
 }
 
 class GameController {
@@ -77,6 +78,8 @@ class GameController {
 
     private var pointsForEatenGhost = 200
 
+    private var livesLeft = 3
+
     private val ghostBehaviorController = GhostBehaviorController(world)
 
     private var visualEffectTimer: Timer? = null
@@ -88,6 +91,7 @@ class GameController {
 
         world.resetState()
 
+        pacmanLives.setLives(livesLeft)
         pacman.speed = 7.0
         ghosts.forEach { it.speed = 5.0 }
 
@@ -106,6 +110,12 @@ class GameController {
         // When an effect is in progress we don't update the game logic
         visualEffectTimer?.let { timer ->
             timer.update(time)
+            world.update(time)
+            return
+        }
+
+        // TODO: Just temporary
+        if (gameState == GameOver) {
             world.update(time)
             return
         }
@@ -134,13 +144,21 @@ class GameController {
 
                     // Handle captured pacman
                     ghost.state.canEatPacman -> {
-                        pacman.resetState(world)
-                        beginVisualEffect(pacman, ghost)
-                        return
+                        if (livesLeft == 0) gameOver() else {
+                            pacmanLives.setLives(--livesLeft)
+                            pacman.resetState(world)
+                            beginVisualEffect(pacman, ghost)
+                            return
+                        }
                     }
                 }
             }
         }
+    }
+
+    private fun gameOver() {
+        world.setPacmanAndGhostsActive(false)
+        world.gameStateBanner.show(GAME_OVER)
     }
 
     private fun handleDotEaten() = with (world) {
@@ -195,11 +213,14 @@ class GameController {
 
         if (!ALLOWED_KEYS.contains(event.keyCode)) return
 
-        if (gameState == WaitingForPlayer) {
-            gameState = Playing
+        when (gameState) {
+            WaitingForPlayer -> {
+                gameState = Playing
+                world.gameStateBanner.hide()
+                world.setPacmanAndGhostsActive(true)
+            }
 
-            world.gameStateBanner.isVisible = false
-            world.setPacmanAndGhostsActive(true)
+            GameOver -> return
         }
 
         with (world.pacman) {

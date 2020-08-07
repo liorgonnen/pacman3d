@@ -54,6 +54,6 @@ class GameStateBannerRenderer : Renderable {
 
         if (currentActiveBanner != NONE) banners[currentActiveBanner].visible = false
         currentActiveBanner = bannerIndex
-        banners[bannerIndex].visible = true
+        if (currentActiveBanner != NONE) banners[bannerIndex].visible = true
     }
 }

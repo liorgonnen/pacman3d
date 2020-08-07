@@ -15,6 +15,8 @@ class World {
 
     val gameStateBanner = GameStateBanner()
 
+    val pacmanLives = PacManLives()
+
     val bonusPoints = BonusPoints()
 
     val pacman = PacMan(
@@ -44,6 +46,7 @@ class World {
         pacman,
         bonusPoints,
         gameStateBanner,
+        pacmanLives,
         *ghosts,
     )
 

@@ -17,4 +17,6 @@ class GameStateBanner : AbsGameEntity<GameStateBannerRenderer>() {
     override fun createRenderable() = GameStateBannerRenderer()
 
     fun show(banner: Int) = renderable.show(banner)
+
+    fun hide() = renderable.show(NONE)
 }
