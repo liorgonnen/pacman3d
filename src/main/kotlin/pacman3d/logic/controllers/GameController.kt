@@ -47,7 +47,8 @@ private enum class GameState {
 class GameController {
 
     companion object {
-        private const val VISUAL_EFFECT_TIME = 1.2
+        private const val PACMAN_EATEN_TIME_TIME = 1.4
+        private const val GHOST_EATEN_EFFECT_TIME = 0.8
 
         private const val KEY_ARROW_LEFT = 37
         private const val KEY_ARROW_RIGHT = 39
@@ -135,19 +136,21 @@ class GameController {
                 when {
                     // Handle eaten ghosts
                     ghost.state.isFrightened -> {
+                        SoundPlayer.play(Sound.EatGhost)
                         ghostBehaviorController.onGhostEaten(ghost)
                         bonusPoints.show(pointsForEatenGhost, pacman.position)
                         pointsForEatenGhost *= 2
-                        beginVisualEffect(pacman, ghost)
+                        beginVisualEffect(GHOST_EATEN_EFFECT_TIME, pacman, ghost)
                         return
                     }
 
                     // Handle captured pacman
                     ghost.state.canEatPacman -> {
+                        SoundPlayer.play(Sound.LifeLost)
                         if (livesLeft == 0) gameOver() else {
                             pacmanLives.setLives(--livesLeft)
                             pacman.resetState(world)
-                            beginVisualEffect(pacman, ghost)
+                            beginVisualEffect(PACMAN_EATEN_TIME_TIME, pacman, ghost)
                             return
                         }
                     }
@@ -157,6 +160,7 @@ class GameController {
     }
 
     private fun gameOver() {
+        gameState = GameOver
         world.setPacmanAndGhostsActive(false)
         world.gameStateBanner.show(GAME_OVER)
     }
@@ -183,11 +187,13 @@ class GameController {
         timeElapsedSinceLastDotEaten += time
     }
 
-    private fun beginVisualEffect(vararg participants: AbsGameEntity<*>) {
+    private fun beginVisualEffect(effectTime: Double, vararg participants: AbsGameEntity<*>) {
         world.onVisualEffectBegin()
         ghostBehaviorController.onVisualEffectBegin()
 
-        visualEffectTimer = Timer(VISUAL_EFFECT_TIME) { endVisualEffect(participants) }
+        visualEffectTimer = Timer(effectTime) {
+            endVisualEffect(participants)
+        }
 
         participants.forEach { it.isVisible = false }
     }

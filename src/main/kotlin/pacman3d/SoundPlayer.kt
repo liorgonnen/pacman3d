@@ -1,6 +1,7 @@
 package pacman3d
 
 import kotlinx.browser.window
+import pacman3d.Sound.*
 import three.js.*
 
 fun Camera.add(soundPlayer: SoundPlayer) {
@@ -8,7 +9,10 @@ fun Camera.add(soundPlayer: SoundPlayer) {
 }
 
 enum class Sound(val filename: String) {
+    Intro("sounds/intro.mp3"),
     Chomp("sounds/chomp.mp3"),
+    LifeLost("sounds/life-lost.mp3"),
+    EatGhost("sounds/eat-ghost.mp3"),
 }
 
 object SoundPlayer {
@@ -18,12 +22,15 @@ object SoundPlayer {
     private val audioLoader = AudioLoader()
 
     private val sounds = arrayOf(
-        newSound(Sound.Chomp).apply { offset = 0.139 }
+        newSound(Intro),
+        newSound(Chomp).apply { offset = 0.139 },
+        newSound(LifeLost),
+        newSound(EatGhost),
     )
 
     init {
         window.addEventListener("keydown", {
-            audioListener.context.asDynamic().resume()
+            audioListener.context.asDynamic().resume() as Unit
         })
     }
 
@@ -33,8 +40,8 @@ object SoundPlayer {
     }
 
     fun play(sound: Sound): Unit = sounds[sound.ordinal].run {
-//        buffer?.also {
-//            if (!isPlaying) play()
-//        }
+        buffer?.also {
+            if (!isPlaying) play()
+        }
     }
 }

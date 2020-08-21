@@ -54,7 +54,7 @@ class PacManMesh : Group() {
         }
     }
 
-    private var mouthOpenSpeed = 1.0
+    private var mouthOpenSpeed = 10.0
     private var mouthOpenInfluence = 0.0 // range: 0 - 1.0
 
     private val insideMesh = Mesh(geometry, insideMaterial)
@@ -73,7 +73,8 @@ class PacManMesh : Group() {
     }
 
     fun updateMouthOpen(time: Double) {
-        mouthOpenInfluence += time
+        mouthOpenInfluence += time * mouthOpenSpeed
+
         if (mouthOpenInfluence >= 1.0) {
             mouthOpenInfluence = 1.0
             mouthOpenSpeed = -mouthOpenSpeed

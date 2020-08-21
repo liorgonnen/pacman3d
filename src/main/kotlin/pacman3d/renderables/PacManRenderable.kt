@@ -21,7 +21,7 @@ class PacManRenderable(private val entity: PacMan) : Renderable {
     override fun update(world: World, time: Double) = with (pacmanObject) {
         val entityPosition = entity.position
 
-        updateMouthOpen(time)
+        if (entity.isActive) updateMouthOpen(time)
 
         opacity = when {
             entityPosition.x < 2.0 -> entityPosition.x - 1
