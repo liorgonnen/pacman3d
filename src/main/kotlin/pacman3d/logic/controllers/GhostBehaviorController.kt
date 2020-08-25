@@ -5,6 +5,13 @@ import pacman3d.entities.World
 import pacman3d.ext.levelValue
 import pacman3d.logic.Direction
 import pacman3d.logic.Direction.LEFT
+import pacman3d.logic.GameData
+import pacman3d.logic.GameData.CLYDE_DOT_LIMIT
+import pacman3d.logic.GameData.FRIGHTENED_TIME
+import pacman3d.logic.GameData.INKY_DOT_LIMIT
+import pacman3d.logic.GameData.LEAVE_GHOST_HOUSE_TIMES
+import pacman3d.logic.GameData.PINKY_DOT_LIMIT
+import pacman3d.logic.GameData.SCATTER_CHASE_TIME_TABLE
 import pacman3d.logic.GhostState
 import pacman3d.logic.GhostState.*
 
@@ -19,20 +26,6 @@ import pacman3d.logic.GhostState.*
  */
 class GhostBehaviorController(private val world: World) {
 
-    companion object {
-        private const val INDEFINITE = 0.0
-        private const val ONE_FRAME = 1.0 / 60
-    }
-
-    private val scatterChaseTimeTable = arrayOf(
-        /* Level 1    */ arrayOf(7.0, 20.0, 7.0, 20.0, 5.0, 20.0, 5.0, INDEFINITE),
-        /* Levels 2-4 */ *Array(3) { arrayOf(7.0, 20.0, 7.0, 20.0, 5.0, 1033.0, ONE_FRAME, INDEFINITE) },
-        /* Levels 5+  */ arrayOf(5.0, 20.0, 5.0, 20.0, 5.0, 1037.0, ONE_FRAME, INDEFINITE),
-    )
-
-    private val frightenedTime  = arrayOf(6, 5, 4, 3, 2, 5, 2, 2, 1, 5, 2, 1, 1, 3, 1, 1, 0, 1, 0)
-    private val numberOfFlashes = arrayOf(5, 5, 5, 5, 5, 5, 5, 5, 3, 5, 5, 3, 3, 5, 3, 3, 0, 3, 0)
-
     // TODO: Reset this timer when a life is lost
     private var scatterChaseTimer: Timer
 
@@ -43,16 +36,25 @@ class GhostBehaviorController(private val world: World) {
     // The direction to which the ghost turns upon leaving the ghost house
     private var ghostExitDirection: Direction = LEFT
 
-    private var timeTableIndex = 0
+    private var gameLevel = 0
 
-    var gameLevel = 0
-        set(value) {
-            field = value
-            timeTableIndex = 0
-        }
+    private var timeElapsedSinceLastDotEaten = 0.0
+
+    private var timeUntilNextGhostLeavesHouse = 0
 
     init {
         scatterChaseTimer = createNewScatterChaseTimer()
+    }
+
+    fun initLevel(level: Int) = with (world) {
+        gameLevel = level
+        inky.dotCounter.limit = INKY_DOT_LIMIT.levelValue(level)
+        pinky.dotCounter.limit = PINKY_DOT_LIMIT.levelValue(level)
+        clyde.dotCounter.limit = CLYDE_DOT_LIMIT.levelValue(level)
+
+        timeUntilNextGhostLeavesHouse = LEAVE_GHOST_HOUSE_TIMES.levelValue(level)
+
+        ghosts.forEach { it.speed = 5.0 }
     }
 
     fun onDotEaten(isEnergizer: Boolean) {
@@ -61,6 +63,19 @@ class GhostBehaviorController(private val world: World) {
         nextGhostToLeaveGhostHouse?.let { ghost ->
             ghost.dotCounter.count++
             if (ghost.dotCounter.reachedLimit) ghost.state = LeaveGhostHouse
+        }
+
+        timeElapsedSinceLastDotEaten = 0.0
+    }
+
+    fun onNoDotEaten(time: Double) {
+        timeElapsedSinceLastDotEaten += time
+
+        // Anytime Pac-Man avoids eating dots long enough for the timer to reach its limit, the most-preferred ghost
+        // waiting in the ghost house (if any) is forced to leave immediately and the timer is reset to zero
+        if (timeElapsedSinceLastDotEaten >= timeUntilNextGhostLeavesHouse) {
+            timeElapsedSinceLastDotEaten = 0.0
+            nextGhostToLeaveGhostHouse?.let { ghost -> ghost.state = LeaveGhostHouse }
         }
     }
 
@@ -85,7 +100,7 @@ class GhostBehaviorController(private val world: World) {
         = world.preferredOrderToLeaveHouse.firstOrNull { it.state == InGhostHouse }
 
     private fun setFrightened() {
-        val time = frightenedTime.levelValue(gameLevel)
+        val time = FRIGHTENED_TIME.levelValue(gameLevel)
 
         if (time == 0) return // The level may not support a frightened time at all
 
@@ -103,7 +118,7 @@ class GhostBehaviorController(private val world: World) {
     }
 
     private fun createNewScatterChaseTimer(): Timer {
-        val time = scatterChaseTimeTable.levelValue(gameLevel)[timeTableIndex++]
+        val time = SCATTER_CHASE_TIME_TABLE.levelValue(gameLevel)[gameLevel++]
         return Timer(time, ::onScatterChaseTimerElapsed)
     }
 

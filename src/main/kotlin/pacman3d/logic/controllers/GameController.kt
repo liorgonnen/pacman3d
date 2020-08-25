@@ -10,7 +10,6 @@ import pacman3d.entities.Maze.Companion.isDot
 import pacman3d.entities.Maze.Companion.isDotOrEnergizer
 import pacman3d.entities.Maze.Companion.isEnergizer
 import pacman3d.entities.World
-import pacman3d.ext.levelValue
 import pacman3d.logic.Direction
 import pacman3d.logic.controllers.GameState.*
 import three.js.Scene
@@ -63,19 +62,11 @@ class GameController {
         )
     }
 
-    private val inkyDotLimit = arrayOf(30, 0)
-    private val pinkyDotLimit = arrayOf(0)
-    private val clydeDotLimit = arrayOf(60, 50, 0)
-
     private val world = World()
 
     private val level = 0
 
     private var gameState = WaitingForPlayer
-
-    private var timeElapsedSinceLastDotEaten = 0.0
-
-    private var lastPacmanMazeIndex = 0
 
     private var pointsForEatenGhost = 200
 
@@ -86,15 +77,12 @@ class GameController {
     private var visualEffectTimer: Timer? = null
 
     private fun initLevel() = with (world) {
-        inky.dotCounter.limit = inkyDotLimit.levelValue(level)
-        pinky.dotCounter.limit = pinkyDotLimit.levelValue(level)
-        clyde.dotCounter.limit = clydeDotLimit.levelValue(level)
-
         world.resetState()
+
+        ghostBehaviorController.initLevel(level)
 
         pacmanLives.setLives(livesLeft)
         pacman.speed = 7.0
-        ghosts.forEach { it.speed = 5.0 }
 
         waitForPlayer()
     }
@@ -174,8 +162,6 @@ class GameController {
         // The first ghost captured after an energizer has been eaten is always worth 200 points
         if (isEnergizer) pointsForEatenGhost = 200
 
-        timeElapsedSinceLastDotEaten = 0.0
-
         score += valueOf(mazeValue)
 
         dots.onDotEaten(pacman.position)
@@ -184,7 +170,7 @@ class GameController {
     }
 
     private fun handleNoDotEaten(time: Double) {
-        timeElapsedSinceLastDotEaten += time
+        ghostBehaviorController.onNoDotEaten(time)
     }
 
     private fun beginVisualEffect(effectTime: Double, vararg participants: AbsGameEntity<*>) {
