@@ -1,7 +1,12 @@
 ## PacMan 3D
 
-This is going to be a 3D Pacman implementation in Kotlin/JS.
+This is a 3D PacMan game implementation using Kotlin/JS and three.js
 
-Nothing to see here yet. Please star the repo to get updates! 
+It is a tribute to the original PacMan game and and re-creating a gameplay this close to the original was made possible by the awesome [Pac-Man Dossier](https://www.gamasutra.com/view/feature/3938/the_pacman_dossier.php?print=1) by Jamey Pittman.
 
+It's still a work-in-progress, but already completely playable.
+
+A live version will be uploaded soon.
+
+![](readme/pacman3d.jpg)
 
