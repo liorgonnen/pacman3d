@@ -6,7 +6,6 @@ It is a tribute to the original PacMan game and and re-creating a gameplay this 
 
 It's still a work-in-progress, but already completely playable.
 
-A live version will be uploaded soon.
 
 ![](readme/pacman3d.jpg)
 
